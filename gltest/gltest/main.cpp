@@ -10,6 +10,12 @@
 #include "Mesh.hpp"
 #include <iostream>
 
+#ifdef _WIN32
+#include <GL/freeglut.h>
+#else
+
+#endif
+
 Engine* engine;
 ShaderProgram* program;
 

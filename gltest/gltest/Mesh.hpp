@@ -10,8 +10,14 @@
 #define Mesh_hpp
 
 #include <stdio.h>
-#include <OpenGL/gl3.h>
-#include <OpenGL/glu.h>
+
+#ifdef _WIN32
+	#include <GL/glew.h>
+#else
+	#include <OpenGL/gl3.h>
+	#include <OpenGL/glu.h>
+#endif
+
 
 class Mesh
 {
