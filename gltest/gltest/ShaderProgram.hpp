@@ -12,7 +12,6 @@
 #include <stdio.h>
 #include <fstream>
 #include <OpenGL/gl3.h>
-#include <OpenGL/glu.h>
 #include <GLUT/glut.h>
 
 class ShaderProgram

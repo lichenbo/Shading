@@ -11,7 +11,6 @@
 
 #include <stdio.h>
 #include <OpenGL/gl3.h>
-#include <OpenGL/glu.h>
 
 class Mesh
 {

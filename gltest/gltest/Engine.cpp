@@ -9,7 +9,6 @@
 #include "Engine.hpp"
 #include <iostream>
 #include <OpenGL/gl3.h>
-#include <OpenGL/glu.h>
 #include <GLUT/glut.h>
 
 Engine::Engine(int argc, char ** argv)
