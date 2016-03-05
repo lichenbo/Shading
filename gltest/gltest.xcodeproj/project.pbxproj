@@ -35,8 +35,6 @@
 		EB0C4B571C7DBDAC00AF0BA6 /* Engine.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Engine.hpp; sourceTree = "<group>"; };
 		EB0C4B591C7DBF4A00AF0BA6 /* ShaderProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShaderProgram.cpp; sourceTree = "<group>"; };
 		EB0C4B5A1C7DBF4A00AF0BA6 /* ShaderProgram.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ShaderProgram.hpp; sourceTree = "<group>"; };
-		EB0C4B5C1C7DD07200AF0BA6 /* basic.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = basic.vert; sourceTree = "<group>"; };
-		EB0C4B5D1C7DD07E00AF0BA6 /* basic.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = basic.frag; sourceTree = "<group>"; };
 		EB166A1A1BE788B700ED754D /* gltest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = gltest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB166A1D1BE788B700ED754D /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		EB6D56701C79C8ED000E35E6 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
@@ -85,8 +83,6 @@
 				EB0C4B591C7DBF4A00AF0BA6 /* ShaderProgram.cpp */,
 				EBA252BD1C8AF74E0025CD64 /* Model_PLY.h */,
 				EB0C4B5A1C7DBF4A00AF0BA6 /* ShaderProgram.hpp */,
-				EB0C4B5C1C7DD07200AF0BA6 /* basic.vert */,
-				EB0C4B5D1C7DD07E00AF0BA6 /* basic.frag */,
 			);
 			path = gltest;
 			sourceTree = "<group>";
