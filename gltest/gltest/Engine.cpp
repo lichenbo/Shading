@@ -30,10 +30,11 @@ Engine::Engine(int argc, char ** argv)
     glutInitDisplayMode(GLUT_3_2_CORE_PROFILE|GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
 #endif
 
-
     glutInitWindowPosition(100, 100);
     glutInitWindowSize(320, 320);
-    glutCreateWindow("OSX GL Demo");
+	//glutInitContextVersion(4, 3);
+	//glutInitContextProfile(GLUT_CORE_PROFILE);
+    glutCreateWindow("Windows/OSX GL Demo");
 
 
 #ifdef _WIN32
