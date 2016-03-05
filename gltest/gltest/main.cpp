@@ -10,6 +10,12 @@
 #include "Mesh.hpp"
 #include <iostream>
 
+#ifdef _WIN32
+#include <GL/freeglut.h>
+#else
+
+#endif
+
 Engine* engine;
 ShaderProgram* program;
 
@@ -17,12 +23,13 @@ void Draw();
 
 int main(int argc, char * argv[]) {
     
-    const char * SHADER_PATH = "/Users/lichenbo/Library/Mobile Documents/com~apple~CloudDocs/Develop/CS562/Shader/";
+    const char * SHADER_PATH = "Shader/";
     
     engine = new Engine(argc, argv);
     program = new ShaderProgram();
     
     char path[256];
+    memset(path, 0, 256);
     strcat(path, SHADER_PATH);
     strcat(path, "basic.vert");
     

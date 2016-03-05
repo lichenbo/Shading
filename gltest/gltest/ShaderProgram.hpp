@@ -11,8 +11,15 @@
 
 #include <stdio.h>
 #include <fstream>
-#include <OpenGL/gl3.h>
-#include <GLUT/glut.h>
+
+
+#ifdef _WIN32
+	#include <GL/glew.h>
+#else
+	#include <OpenGL/gl3.h>
+	#include <GLUT/glut.h>
+#endif
+
 
 class ShaderProgram
 {

@@ -9,8 +9,11 @@
 #ifndef Mesh_hpp
 #define Mesh_hpp
 
-#include <stdio.h>
-#include <OpenGL/gl3.h>
+#ifdef _WIN32
+	#include <GL/glew.h>
+#else
+	#include <OpenGL/gl3.h>
+#endif
 
 class Mesh
 {

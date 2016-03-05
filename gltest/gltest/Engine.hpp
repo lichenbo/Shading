@@ -9,8 +9,6 @@
 #ifndef Engine_hpp
 #define Engine_hpp
 
-
-#include <stdio.h>
 #include <list>
 #include "Mesh.hpp"
 #include "ShaderProgram.hpp"
