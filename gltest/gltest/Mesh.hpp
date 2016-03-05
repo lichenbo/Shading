@@ -9,8 +9,6 @@
 #ifndef Mesh_hpp
 #define Mesh_hpp
 
-#include <stdio.h>
-
 #ifdef _WIN32
 	#include <GL/glew.h>
 #else

@@ -22,15 +22,27 @@
 Engine::Engine(int argc, char ** argv)
 {
     glutInit(&argc, argv);
+
 #ifdef _WIN32
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 #else
 	// OSX needs core profile support
     glutInitDisplayMode(GLUT_3_2_CORE_PROFILE|GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
 #endif
+
+
     glutInitWindowPosition(100, 100);
     glutInitWindowSize(320, 320);
     glutCreateWindow("OSX GL Demo");
+
+
+#ifdef _WIN32
+	glewExperimental = true; // Needed in core profile
+	GLenum glew_status = glewInit();
+	if (glew_status != GLEW_OK) {
+		fprintf(stderr, "Error: %s\n", glewGetErrorString(glew_status));
+	}
+#endif
 }
 
 void Engine::render(ShaderProgram* shader)
