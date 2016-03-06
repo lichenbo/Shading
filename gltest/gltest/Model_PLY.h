@@ -19,21 +19,26 @@
  *
  */
 
-#include <windows.h>
+#ifdef _WIN32
+    #include <windows.h>
+    #include <GL/glew.h>
+#elif defined __APPLE__
+    #include <OpenGL/gl3.h>
+#endif
+
 #include <stdio.h>
 #include <string.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
 #include <cmath>
 #include <string>
+#include <stdlib.h>
 
 
 class Model_PLY
 {
 public:
-    int Model_PLY::Load(char *filename);
-    void Model_PLY::Draw();
-    float* Model_PLY::calculateNormal( float *coord1, float *coord2, float *coord3 );
+    int Load(char *filename);
+    void Draw();
+    float* calculateNormal( float *coord1, float *coord2, float *coord3 );
     Model_PLY();
     
     float* Faces_Triangles;
@@ -237,16 +242,16 @@ int Model_PLY::Load(char* filename)
     }   
     return 0;
 }
-
-void Model_PLY::Draw()
-{
-    glEnableClientState(GL_VERTEX_ARRAY);	
-    glEnableClientState(GL_NORMAL_ARRAY);
-    glVertexPointer(3,GL_FLOAT,	0,Faces_Triangles);	
-    glNormalPointer(GL_FLOAT, 0, Normals);
-    glDrawArrays(GL_TRIANGLES, 0, TotalConnectedTriangles);	
-    glDisableClientState(GL_VERTEX_ARRAY);    
-    glDisableClientState(GL_NORMAL_ARRAY);
-}
+//
+//void Model_PLY::Draw()
+//{
+//    glEnableClientState(GL_VERTEX_ARRAY);	
+//    glEnableClientState(GL_NORMAL_ARRAY);
+//    glVertexPointer(3,GL_FLOAT,	0,Faces_Triangles);	
+//    glNormalPointer(GL_FLOAT, 0, Normals);
+//    glDrawArrays(GL_TRIANGLES, 0, TotalConnectedTriangles);	
+//    glDisableClientState(GL_VERTEX_ARRAY);    
+//    glDisableClientState(GL_NORMAL_ARRAY);
+//}
 
 #endif /* Model_PLY_h */

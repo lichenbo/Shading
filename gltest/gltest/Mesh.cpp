@@ -7,6 +7,7 @@
 //
 
 #include "Mesh.hpp"
+#include "Model_PLY.h"
 
 Mesh::Mesh(): vao(0)
 {

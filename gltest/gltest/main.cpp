@@ -6,6 +6,7 @@
 //  Copyright © 2015 binarythink. All rights reserved.
 //
 
+#include "Path.h"
 #include "Engine.hpp"
 #include "Mesh.hpp"
 #include <iostream>
@@ -22,8 +23,6 @@ ShaderProgram* program;
 void Draw();
 
 int main(int argc, char * argv[]) {
-    
-    const char * SHADER_PATH = "Shader/";
     
     engine = new Engine(argc, argv);
     program = new ShaderProgram();

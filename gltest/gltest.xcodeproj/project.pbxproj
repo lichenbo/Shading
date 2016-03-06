@@ -39,6 +39,7 @@
 		EB166A1D1BE788B700ED754D /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		EB6D56701C79C8ED000E35E6 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		EBA252BD1C8AF74E0025CD64 /* Model_PLY.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Model_PLY.h; sourceTree = "<group>"; };
+		EBA252BE1C8BAC440025CD64 /* Path.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Path.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +84,7 @@
 				EB0C4B591C7DBF4A00AF0BA6 /* ShaderProgram.cpp */,
 				EBA252BD1C8AF74E0025CD64 /* Model_PLY.h */,
 				EB0C4B5A1C7DBF4A00AF0BA6 /* ShaderProgram.hpp */,
+				EBA252BE1C8BAC440025CD64 /* Path.h */,
 			);
 			path = gltest;
 			sourceTree = "<group>";
