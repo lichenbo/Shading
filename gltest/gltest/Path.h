@@ -13,11 +13,13 @@
 #ifdef _WIN32
 
 const char* SHADER_PATH = "Shader/";
+const char* MODEL_PATH = "Model/";
 
 
 #elif defined __APPLE__
 
 const char* SHADER_PATH = "../../gltest/Shader/"; // Shader path in OSX debug mode
+const char* MODEL_PATH = "../../gltest/Model/";
 
 
 #endif

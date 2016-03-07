@@ -23,6 +23,7 @@
 
 class ShaderProgram
 {
+    friend class Mesh;
 public:
     ShaderProgram();
     bool AddVertexShaderPath(const char* path);
@@ -30,6 +31,8 @@ public:
     bool Link();
     void Bind();
     void Unbind();
+    void BindAttribute();
+    void BindUniform();
     
 private:
     GLuint vertexShaderId;
@@ -39,6 +42,9 @@ private:
     bool compileShader(GLuint shaderId);
     
     GLuint programId;
+    
+    GLint vertexLoc;
+    GLint normalLoc;
 };
 
 #endif /* ShaderProgram_hpp */

@@ -9,21 +9,22 @@
 #ifndef Engine_hpp
 #define Engine_hpp
 
-#include <list>
-#include "Mesh.hpp"
+#include <vector>
 #include "ShaderProgram.hpp"
 
+
+class Scene;
 
 class Engine
 {
 public:
     Engine(int argc, char ** argv);
     
-    void render(ShaderProgram* shader);
-    void addMesh(Mesh* mesh);
+    void render();
+    void setScene(Scene* scene);
     
 private:
-    std::list<Mesh*> meshes;
+    Scene* scene;
     
 };
 

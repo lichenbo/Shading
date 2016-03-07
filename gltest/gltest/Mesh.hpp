@@ -15,13 +15,22 @@
 	#include <OpenGL/gl3.h>
 #endif
 
+class ShaderProgram;
+
 class Mesh
 {
 public:
     Mesh();
-    void Load();
+    void Load(const char* filename);
+    void Draw(ShaderProgram* shader);
 private:
-    GLuint vao;
+    GLuint vao; // contains multiple vbos
+    int numberOfVertices;
+    
+    // Buffers
+    GLuint vbo_coord; // buffer stores vertices info
+    GLuint vbo_normal; // buffer stores normal info
+        
 };
 
 

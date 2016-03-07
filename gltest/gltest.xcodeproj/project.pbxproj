@@ -13,6 +13,7 @@
 		EB0C4B5B1C7DBF4A00AF0BA6 /* ShaderProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB0C4B591C7DBF4A00AF0BA6 /* ShaderProgram.cpp */; };
 		EB166A1E1BE788B700ED754D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB166A1D1BE788B700ED754D /* main.cpp */; };
 		EB6D56711C79C8ED000E35E6 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB6D56701C79C8ED000E35E6 /* OpenGL.framework */; };
+		EBA252C11C8C69280025CD64 /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EBA252BF1C8C69280025CD64 /* Scene.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -40,6 +41,10 @@
 		EB6D56701C79C8ED000E35E6 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		EBA252BD1C8AF74E0025CD64 /* Model_PLY.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Model_PLY.h; sourceTree = "<group>"; };
 		EBA252BE1C8BAC440025CD64 /* Path.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Path.h; sourceTree = "<group>"; };
+		EBA252BF1C8C69280025CD64 /* Scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Scene.cpp; sourceTree = "<group>"; };
+		EBA252C01C8C69280025CD64 /* Scene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Scene.hpp; sourceTree = "<group>"; };
+		EBA252C41C8C71030025CD64 /* Model */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Model; path = gltest/Model; sourceTree = "<group>"; };
+		EBA252C51C8C71240025CD64 /* Shader */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Shader; path = gltest/Shader; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +63,8 @@
 		EB166A111BE788B700ED754D = {
 			isa = PBXGroup;
 			children = (
+				EBA252C51C8C71240025CD64 /* Shader */,
+				EBA252C41C8C71030025CD64 /* Model */,
 				EB0C4B511C79DB6B00AF0BA6 /* GLUT.framework */,
 				EB6D56701C79C8ED000E35E6 /* OpenGL.framework */,
 				EB166A1C1BE788B700ED754D /* gltest */,
@@ -85,6 +92,8 @@
 				EBA252BD1C8AF74E0025CD64 /* Model_PLY.h */,
 				EB0C4B5A1C7DBF4A00AF0BA6 /* ShaderProgram.hpp */,
 				EBA252BE1C8BAC440025CD64 /* Path.h */,
+				EBA252BF1C8C69280025CD64 /* Scene.cpp */,
+				EBA252C01C8C69280025CD64 /* Scene.hpp */,
 			);
 			path = gltest;
 			sourceTree = "<group>";
@@ -148,6 +157,7 @@
 				EB0C4B551C7DBD8300AF0BA6 /* Mesh.cpp in Sources */,
 				EB0C4B5B1C7DBF4A00AF0BA6 /* ShaderProgram.cpp in Sources */,
 				EB0C4B581C7DBDAC00AF0BA6 /* Engine.cpp in Sources */,
+				EBA252C11C8C69280025CD64 /* Scene.cpp in Sources */,
 				EB166A1E1BE788B700ED754D /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

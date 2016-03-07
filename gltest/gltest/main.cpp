@@ -9,6 +9,7 @@
 #include "Path.h"
 #include "Engine.hpp"
 #include "Mesh.hpp"
+#include "Scene.hpp"
 #include <iostream>
 
 #ifdef _WIN32
@@ -41,17 +42,23 @@ int main(int argc, char * argv[]) {
     strcat(path, SHADER_PATH);
     strcat(path, "basic.frag");
     
-    if (!program->AddFragmentShaderPath(path))
-    {
-        return 0;
-    }
-    if (!program->Link())
-    {
-        return 0;
-    }
+    if (!program->AddFragmentShaderPath(path)) return 0;
+    if (!program->Link()) return 0;
+    program->BindAttribute();
+    program->BindUniform();
     
-    Mesh m;
-    engine->addMesh(&m);
+    memset(path, 0, 256);
+    strcat(path, MODEL_PATH);
+    strcat(path, "bunny.ply");
+    
+    Mesh bunny;
+    bunny.Load(path);
+    
+    Scene testScene;
+    testScene.addObject(&bunny);
+    testScene.setShader(program);
+    
+    engine->setScene(&testScene);
     
     glutDisplayFunc(Draw);
     glutMainLoop();
@@ -61,5 +68,5 @@ int main(int argc, char * argv[]) {
 
 void Draw()
 {
-    engine->render(program);
+    engine->render();
 }

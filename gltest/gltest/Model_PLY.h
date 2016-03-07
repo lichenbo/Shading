@@ -36,7 +36,7 @@
 class Model_PLY
 {
 public:
-    int Load(char *filename);
+    int Load(const char *filename);
     void Draw();
     float* calculateNormal( float *coord1, float *coord2, float *coord3 );
     Model_PLY();
@@ -62,6 +62,7 @@ Model_PLY::Model_PLY()
 }
 
 
+// Normal of a triangle on the surface, just calculate the cross product of the 2 vector of the triangle
 float* Model_PLY::calculateNormal( float *coord1, float *coord2, float *coord3 )
 {
     /* calculate Vector1 and Vector2 */
@@ -93,7 +94,7 @@ float* Model_PLY::calculateNormal( float *coord1, float *coord2, float *coord3 )
 
 
 
-int Model_PLY::Load(char* filename)
+int Model_PLY::Load(const char* filename)
 {
     this->TotalConnectedTriangles = 0;
     this->TotalConnectedQuads = 0;
@@ -195,7 +196,7 @@ int Model_PLY::Load(char* filename)
                      */
                     //  vertex == punt van vertex lijst
                     // vertex_buffer -> xyz xyz xyz xyz
-                    printf("%f %f %f ", Vertex_Buffer[3*vertex1], Vertex_Buffer[3*vertex1+1], Vertex_Buffer[3*vertex1+2]);
+                    //printf("%f %f %f ", Vertex_Buffer[3*vertex1], Vertex_Buffer[3*vertex1+1], Vertex_Buffer[3*vertex1+2]);
                     
                     Faces_Triangles[triangle_index] = Vertex_Buffer[3*vertex1];
                     Faces_Triangles[triangle_index+1] = Vertex_Buffer[3*vertex1+1];
@@ -239,7 +240,8 @@ int Model_PLY::Load(char* filename)
         else { printf("File can't be openedn"); }
     } else {
         printf("File does not have a .PLY extension. ");    
-    }   
+    }
+    printf("File %s loaded.", filename);
     return 0;
 }
 //

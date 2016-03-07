@@ -8,7 +8,7 @@
 
 #include "Engine.hpp"
 #include <iostream>
-
+#include "Scene.hpp"
 
 #ifdef _WIN32
 	#include <GL/glew.h>
@@ -46,25 +46,16 @@ Engine::Engine(int argc, char ** argv)
 #endif
 }
 
-void Engine::render(ShaderProgram* shader)
+void Engine::render()
 {
-    glClear(GL_COLOR_BUFFER_BIT);
     
-    shader->Bind();
-    
-    for (auto mesh : meshes)
-    {
-        mesh->Load();
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-    }
-    
-    shader->Unbind();
+    scene->Draw();
     
     glutSwapBuffers();
     glutPostRedisplay();
 }
 
-void Engine::addMesh(Mesh* mesh)
+void Engine::setScene(Scene* scene)
 {
-    meshes.push_back(mesh);
+    this->scene = scene;
 }

@@ -72,6 +72,11 @@ bool ShaderProgram::Link()
         delete logBuffer;
         return false;
     }
+    
+    // Detach shader after linking successfully
+    glDetachShader(programId, fragmentShaderId);
+    glDetachShader(programId, vertexShaderId);
+    
     return true;
 }
 
@@ -100,6 +105,20 @@ char* ShaderProgram::readFile(const char * path)
 void ShaderProgram::Bind()
 {
     glUseProgram(programId);
+}
+
+void ShaderProgram::BindAttribute()
+{
+    vertexLoc = glGetAttribLocation(programId, "vertex_coord");
+    if (vertexLoc == -1)
+    {
+        std::cout << "vertex_coord is invalid" << std::endl;
+    }
+}
+
+void ShaderProgram::BindUniform()
+{
+    return;
 }
 
 void ShaderProgram::Unbind()
