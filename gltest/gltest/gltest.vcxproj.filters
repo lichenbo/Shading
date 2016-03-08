@@ -27,6 +27,12 @@
     <ClInclude Include="Engine.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Scene.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Path.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderProgram.cpp">
@@ -41,9 +47,14 @@
     <ClCompile Include="Engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="basic.vert" />
-    <None Include="basic.frag" />
+    <None Include="Shader\basic.vert" />
+    <None Include="Shader\basic.frag" />
+    <None Include="Model\dragon.ply" />
+    <None Include="Model\bunny.ply" />
   </ItemGroup>
 </Project>

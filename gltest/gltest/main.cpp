@@ -52,7 +52,7 @@ int main(int argc, char * argv[]) {
     strcat(path, "bunny.ply");
     
     Mesh bunny;
-    bunny.Load(path);
+    bunny.Load(path, program);
     
     Scene testScene;
     testScene.addObject(&bunny);

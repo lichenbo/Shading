@@ -21,8 +21,8 @@ class Mesh
 {
 public:
     Mesh();
-    void Load(const char* filename);
-    void Draw(ShaderProgram* shader);
+    void Load(const char* filename, ShaderProgram* shader);
+    void Draw();
 private:
     GLuint vao; // contains multiple vbos
     int numberOfVertices;

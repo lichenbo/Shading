@@ -100,7 +100,7 @@ int Model_PLY::Load(const char* filename)
     this->TotalConnectedQuads = 0;
     this->TotalConnectedPoints = 0;
     
-    char* pch = strstr(filename,".ply");
+    const char* pch = strstr(filename,".ply");
     
     if (pch != NULL)
     {

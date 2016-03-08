@@ -23,7 +23,7 @@ void Scene::Draw()
     shader->Bind();
     for (auto mesh : objects)
     {
-        mesh->Draw(shader);
+        mesh->Draw();
     }
     shader->Unbind();
 }
