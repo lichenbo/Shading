@@ -1,8 +1,19 @@
 #version 330 core
 
-out vec4 output1;
+in vec3 NormalVec;
+in vec3 LightVec;
+in vec3 EyeVec;
 
 void main(void)
 {
-    output1 = vec4(1.0, 0, 0, 1.0);
+	vec3 N = normalize(NormalVec);
+	vec3 L = normalize(LightVec);
+
+	vec3 diffuse = vec3(0.5f, 0.2f, 0.3f);
+	vec3 Kd = diffuse;
+	
+	vec3 lightValue = vec3(1.0f, 1.0f, 1.0f);
+	vec3 I = lightValue;
+
+	gl_FragColor.xyz = max(0.0, dot(L, N))*Kd*I + 0.5f*Kd; // Phong Lighting Diffuse
 }

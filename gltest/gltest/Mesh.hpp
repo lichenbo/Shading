@@ -8,6 +8,7 @@
 
 #ifndef Mesh_hpp
 #define Mesh_hpp
+#include "glm.hpp"
 
 #ifdef _WIN32
 	#include <GL/glew.h>
@@ -22,7 +23,8 @@ class Mesh
 public:
     Mesh();
     void Load(const char* filename, ShaderProgram* shader);
-    void Draw();
+	
+    void Draw(ShaderProgram* shader);
 private:
     GLuint vao; // contains multiple vbos
     int numberOfVertices;
@@ -30,6 +32,10 @@ private:
     // Buffers
     GLuint vbo_coord; // buffer stores vertices info
     GLuint vbo_normal; // buffer stores normal info
+
+	// Uniform
+	glm::mat4 modelMatrix;
+	glm::mat4 normalMatrix;
         
 };
 

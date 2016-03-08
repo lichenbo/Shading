@@ -48,7 +48,6 @@ Engine::Engine(int argc, char ** argv)
 
 void Engine::render()
 {
-    
     scene->Draw();
     
     glutSwapBuffers();

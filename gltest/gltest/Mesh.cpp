@@ -9,9 +9,18 @@
 #include "Mesh.hpp"
 #include "Model_PLY.h"
 #include "ShaderProgram.hpp"
+#include "gtc/matrix_transform.hpp"
+#include "gtc/type_ptr.hpp"
 
 Mesh::Mesh(): vao(0)
 {
+	//
+	modelMatrix = glm::mat4(1.0f);
+	modelMatrix = glm::scale(modelMatrix, glm::vec3(20.0f));
+	modelMatrix = glm::rotate(modelMatrix, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+
+	normalMatrix = glm::inverse(modelMatrix);
+
     // Generate VAO
     glGenVertexArrays(1, &vao);
 
@@ -29,22 +38,13 @@ void Mesh::Load(const char* filename, ShaderProgram* shader)
     model->Load(filename);
     
     // Load Vertex Coord Data
-    numberOfVertices = model->TotalConnectedPoints;
-    const GLfloat* vertex_buffer_data = model->Vertex_Buffer;
+    numberOfVertices = model->TotalConnectedTriangles;
+	const GLfloat* vertex_buffer_data = model->Vertex_Buffer;
 
+	// -------------  VERTEX INPUT ATTRIBUTE -----------------
     glBindBuffer(GL_ARRAY_BUFFER, vbo_coord);
     // Copy data from main memory to GPU memory, be aware of the result of sizeof()
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * model->TotalConnectedPoints, vertex_buffer_data, GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    
-    // Load Normal Data
-    const GLfloat* normal_buffer_data = model->Normals;
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_normal);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * model->TotalConnectedPoints, normal_buffer_data, GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	glBindBuffer(GL_ARRAY_BUFFER, vbo_coord);
-
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * model->TotalConnectedTriangles, vertex_buffer_data, GL_STATIC_DRAW);
 	// Always refer to GL_ARRAY_BUFFER
 	glVertexAttribPointer(
 		shader->vertexLoc, // attribute 0, matching layout in shader
@@ -54,16 +54,30 @@ void Mesh::Load(const char* filename, ShaderProgram* shader)
 		0, // stride
 		(void*)0 // array buffer offset
 		);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glEnableVertexAttribArray(shader->vertexLoc);
+	// --------------  VERTEX INPUT ATTRIBUTE ----------------
+
+
+    // Load Normal Data
+    const GLfloat* normal_buffer_data = model->Normals;
+
+	// -------------  NORMAL INPUT ATTRIBUTE -----------------
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_normal);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * model->TotalConnectedTriangles, normal_buffer_data, GL_STATIC_DRAW);
+	glVertexAttribPointer(shader->normalLoc, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glEnableVertexAttribArray(shader->normalLoc);
+	// --------------  NORMAL INPUT ATTRIBUTE ----------------
 
 	glBindVertexArray(0);
     
 }
 
-void Mesh::Draw()
+void Mesh::Draw(ShaderProgram* shader)
 {
+	glUniformMatrix4fv(shader->ModelMatrixLoc, 1, GL_TRUE, glm::value_ptr(modelMatrix));
+
 	glBindVertexArray(vao);
     glDrawArrays(GL_TRIANGLES, 0, numberOfVertices);
 	glBindVertexArray(0);

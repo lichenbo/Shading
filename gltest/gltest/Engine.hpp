@@ -12,7 +12,6 @@
 #include <vector>
 #include "ShaderProgram.hpp"
 
-
 class Scene;
 
 class Engine

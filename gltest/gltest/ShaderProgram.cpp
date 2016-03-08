@@ -110,14 +110,32 @@ void ShaderProgram::Bind()
 void ShaderProgram::BindAttribute()
 {
     vertexLoc = glGetAttribLocation(programId, "vertex_coord");
-    if (vertexLoc == -1)
-    {
-        std::cout << "vertex_coord is invalid" << std::endl;
-    }
+    if (vertexLoc == -1) std::cout << "vertex_coord is invalid" << std::endl;
+
+	normalLoc = glGetAttribLocation(programId, "normal_coord");
+	if (normalLoc == -1) std::cout << "normal_coord is invalid" << std::endl;
 }
 
 void ShaderProgram::BindUniform()
 {
+	ModelMatrixLoc = glGetUniformLocation(programId, "ModelMatrix");
+	if (ModelMatrixLoc== -1) std::cout << "ModelMatrixLoc is invalid" << std::endl;
+
+	NormalMatrixLoc = glGetUniformLocation(programId, "NormalMatrix");
+	if (NormalMatrixLoc== -1) std::cout << "NormalMatrixLoc is invalid" << std::endl;
+
+	ViewMatrixLoc = glGetUniformLocation(programId, "ViewMatrix");
+	if (ViewMatrixLoc == -1) std::cout << "ViewMatrixLoc is invalid" << std::endl;
+
+	ViewInverseMatrixLoc = glGetUniformLocation(programId, "ViewInverseMatrix");
+	if (ViewInverseMatrixLoc == -1) std::cout << "ViewInverseMatrixLoc is invalid" << std::endl;
+
+	ProjectionMatrixLoc = glGetUniformLocation(programId, "ProjectionMatrix");
+	if (ProjectionMatrixLoc == -1) std::cout << "ProjectionMatrixLoc is invalid" << std::endl;
+
+	EyePosLoc = glGetUniformLocation(programId, "EyePos");
+	if (EyePosLoc == -1) std::cout << "EyePosLoc is invalid" << std::endl;
+
     return;
 }
 

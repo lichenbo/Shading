@@ -24,6 +24,7 @@
 class ShaderProgram
 {
     friend class Mesh;
+	friend class Scene;
 public:
     ShaderProgram();
     bool AddVertexShaderPath(const char* path);
@@ -43,8 +44,18 @@ private:
     
     GLuint programId;
     
+	// Attribute
     GLint vertexLoc;
     GLint normalLoc;
+
+
+	// Uniform
+	GLint ModelMatrixLoc;
+	GLint NormalMatrixLoc;
+	GLint ViewMatrixLoc;
+	GLint ViewInverseMatrixLoc;
+	GLint ProjectionMatrixLoc;
+	GLint EyePosLoc;
 };
 
 #endif /* ShaderProgram_hpp */

@@ -244,16 +244,6 @@ int Model_PLY::Load(const char* filename)
     printf("File %s loaded.", filename);
     return 0;
 }
-//
-//void Model_PLY::Draw()
-//{
-//    glEnableClientState(GL_VERTEX_ARRAY);	
-//    glEnableClientState(GL_NORMAL_ARRAY);
-//    glVertexPointer(3,GL_FLOAT,	0,Faces_Triangles);	
-//    glNormalPointer(GL_FLOAT, 0, Normals);
-//    glDrawArrays(GL_TRIANGLES, 0, TotalConnectedTriangles);	
-//    glDisableClientState(GL_VERTEX_ARRAY);    
-//    glDisableClientState(GL_NORMAL_ARRAY);
-//}
+
 
 #endif /* Model_PLY_h */

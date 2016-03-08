@@ -71,7 +71,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>../glm/include;../glew/include;../freeglut/include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>../glm;../glew/include;../freeglut/include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)../glew/lib;$(SolutionDir)../freeglut/lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -151,6 +151,7 @@
   <ItemGroup>
     <ClInclude Include="Engine.hpp" />
     <ClInclude Include="Mesh.hpp" />
+    <ClInclude Include="model_ply.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="Scene.hpp" />
     <ClInclude Include="ShaderProgram.hpp" />

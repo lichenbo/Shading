@@ -33,6 +33,9 @@
     <ClInclude Include="Path.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="model_ply.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderProgram.cpp">
