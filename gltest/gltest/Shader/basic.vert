@@ -22,13 +22,10 @@ void main(void)
 	homo_vertex.w = 1.0;
 
 	vec3 LightPos = vec3(10.0f, 10.0f, -10.0f);
-	//vec3 worldVertex = vec3(ModelMatrix * homo_vertex);
-
-	vec3 worldVertex = vec3(0.0f, 0.0f, 0.0f);
+	vec3 worldVertex = vec3(ModelMatrix * homo_vertex);
 
 	LightVec = LightPos - worldVertex; 
 
-	LightVec = vec3(0.0f, 0.0f, 0.0f);
 	EyeVec = (ViewInverseMatrix*vec4(0,0,0,1)).xyz - worldVertex;
 	NormalVec = normalize(mat3(NormalMatrix)*normal_coord);    
 

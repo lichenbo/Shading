@@ -39,12 +39,12 @@ void Mesh::Load(const char* filename, ShaderProgram* shader)
     
     // Load Vertex Coord Data
     numberOfVertices = model->TotalConnectedTriangles;
-	const GLfloat* vertex_buffer_data = model->Vertex_Buffer;
+	const GLfloat* vertex_buffer_data = model->Faces_Triangles;
 
 	// -------------  VERTEX INPUT ATTRIBUTE -----------------
     glBindBuffer(GL_ARRAY_BUFFER, vbo_coord);
     // Copy data from main memory to GPU memory, be aware of the result of sizeof()
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * model->TotalConnectedTriangles, vertex_buffer_data, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * model->TotalConnectedTriangles * 3, vertex_buffer_data, GL_STATIC_DRAW);
 	// Always refer to GL_ARRAY_BUFFER
 	glVertexAttribPointer(
 		shader->vertexLoc, // attribute 0, matching layout in shader
@@ -64,7 +64,7 @@ void Mesh::Load(const char* filename, ShaderProgram* shader)
 
 	// -------------  NORMAL INPUT ATTRIBUTE -----------------
     glBindBuffer(GL_ARRAY_BUFFER, vbo_normal);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * model->TotalConnectedTriangles, normal_buffer_data, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * model->TotalConnectedTriangles * 3, normal_buffer_data, GL_STATIC_DRAW);
 	glVertexAttribPointer(shader->normalLoc, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glEnableVertexAttribArray(shader->normalLoc);
