@@ -33,6 +33,7 @@ private:
 	glm::vec3 EyePos;
 	glm::vec3 LightPos;
 	glm::vec3 UpPos;
+	glm::vec3 WatchPos;
 };
 
 

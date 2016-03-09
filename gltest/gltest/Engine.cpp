@@ -25,7 +25,7 @@ Engine::Engine(int argc, char ** argv)
 
 #ifdef _WIN32
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
-#else
+#elif defined __APPLE__
 	// OSX needs core profile support
     glutInitDisplayMode(GLUT_3_2_CORE_PROFILE|GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
 #endif
@@ -44,6 +44,8 @@ Engine::Engine(int argc, char ** argv)
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(glew_status));
 	}
 #endif
+
+	glEnable(GL_CULL_FACE);
 }
 
 void Engine::render()
