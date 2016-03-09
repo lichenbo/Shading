@@ -20,6 +20,10 @@ public:
     void addObject(Mesh* mesh);
     void setShader(ShaderProgram* shader);
     void Draw();
+	void addSpin(float delta_x);
+	void addTilt(float delta_y);
+	void addZoom(float delta_z);
+	void addTrans(float delta_move);
 private:
     std::list<Mesh*> objects;
     ShaderProgram* shader;
@@ -28,6 +32,7 @@ private:
 	glm::mat4 ProjectionMatrix;
 	glm::vec3 EyePos;
 	glm::vec3 LightPos;
+	glm::vec3 UpPos;
 };
 
 

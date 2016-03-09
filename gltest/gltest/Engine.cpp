@@ -30,8 +30,8 @@ Engine::Engine(int argc, char ** argv)
     glutInitDisplayMode(GLUT_3_2_CORE_PROFILE|GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
 #endif
 
-    glutInitWindowPosition(100, 100);
-    glutInitWindowSize(320, 320);
+    glutInitWindowPosition(100, 300);
+    glutInitWindowSize(800, 800);
 	//glutInitContextVersion(4, 3);
 	//glutInitContextProfile(GLUT_CORE_PROFILE);
     glutCreateWindow("Windows/OSX GL Demo");
@@ -58,3 +58,44 @@ void Engine::setScene(Scene* scene)
 {
     this->scene = scene;
 }
+
+void Engine::UpdateMouseStatus(int x, int y)
+{
+	float deltaX = x - lastX;
+	float deltaY = y - lastY;
+
+	scene->addSpin(deltaX);
+	scene->addTilt(deltaY);
+
+	lastX = x;
+	lastY = y;
+}
+
+void Engine::MouseClick(int button, int state, int x, int y)
+{
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+	{
+		lastX = x;
+		lastY = y;
+	}
+}
+
+void Engine::MouseWheel(int dir)
+{
+	scene->addZoom(dir);
+}
+
+void Engine::keyRelease(unsigned char c)
+{
+	float delta_move;
+	if (c == 'a')
+	{
+		delta_move = -1;
+	}
+	if (c == 'd')
+	{
+		delta_move = 1;
+	}
+	scene->addTrans(delta_move);
+}
+

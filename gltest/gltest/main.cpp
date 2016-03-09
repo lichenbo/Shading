@@ -22,6 +22,10 @@ Engine* engine;
 ShaderProgram* program;
 
 void Draw();
+void mouseMove(int x, int y);
+void mouseClick(int button, int state, int x, int y);
+void mouseWheel(int, int dir, int, int);
+void keyboardPress(unsigned char c, int x, int y);
 
 int main(int argc, char * argv[]) {
     
@@ -61,6 +65,10 @@ int main(int argc, char * argv[]) {
     engine->setScene(&testScene);
     
     glutDisplayFunc(Draw);
+	glutMouseFunc(mouseClick);
+	glutMotionFunc(mouseMove);
+	glutMouseWheelFunc(mouseWheel);
+	glutKeyboardUpFunc(keyboardPress);
     glutMainLoop();
     
     return 0;
@@ -69,4 +77,24 @@ int main(int argc, char * argv[]) {
 void Draw()
 {
     engine->render();
+}
+
+void mouseMove(int x, int y)
+{
+	engine->UpdateMouseStatus(x, y);
+}
+
+void mouseClick(int button, int state, int x, int y)
+{
+	engine->MouseClick(button, state, x, y);
+}
+
+void mouseWheel(int, int dir, int, int)
+{
+	engine->MouseWheel(dir);
+}
+
+void keyboardPress(unsigned char c, int, int)
+{
+	engine->keyRelease(c);
 }

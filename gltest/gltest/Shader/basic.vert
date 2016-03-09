@@ -29,7 +29,6 @@ void main(void)
 	EyeVec = (ViewInverseMatrix*vec4(0,0,0,1)).xyz - worldVertex;
 	NormalVec = normalize(mat3(NormalMatrix)*normal_coord);    
 
-
 	gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * homo_vertex;
 
 }

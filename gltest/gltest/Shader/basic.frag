@@ -16,4 +16,5 @@ void main(void)
 	vec3 I = lightValue;
 
 	gl_FragColor.xyz = max(0.0, dot(L, N))*Kd*I + 0.5f*Kd; // Phong Lighting Diffuse
+
 }

@@ -21,9 +21,13 @@ public:
     
     void render();
     void setScene(Scene* scene);
-    
+	void UpdateMouseStatus(int x, int y);
+	void MouseClick(int button, int state, int x, int y);
+	void MouseWheel(int dir);
+	void keyRelease(unsigned char c);
 private:
     Scene* scene;
+	int lastX, lastY;
     
 };
 
