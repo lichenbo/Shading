@@ -64,10 +64,14 @@ int main(int argc, char * argv[]) {
     
     engine->setScene(&testScene);
     
+    #ifdef _Win32
+    glutMouseWheelFunc(mouseWheel);
+    #endif
+    
     glutDisplayFunc(Draw);
 	glutMouseFunc(mouseClick);
 	glutMotionFunc(mouseMove);
-	glutMouseWheelFunc(mouseWheel);
+
 	glutKeyboardUpFunc(keyboardPress);
     glutMainLoop();
     

@@ -80,6 +80,16 @@ void Engine::MouseClick(int button, int state, int x, int y)
 		lastX = x;
 		lastY = y;
 	}
+    if (button == 3)
+    {
+        // Scroll up for OSX
+        MouseWheel(1);
+    }
+    if (button == 4)
+    {
+        // Scroll down for OSX
+        MouseWheel(-1);
+    }
 }
 
 void Engine::MouseWheel(int dir)
