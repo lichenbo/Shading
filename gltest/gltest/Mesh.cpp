@@ -14,13 +14,9 @@
 
 Mesh::Mesh(): vao(0)
 {
-	//
 	modelMatrix = glm::mat4(1.0f);
-	modelMatrix = glm::scale(modelMatrix, glm::vec3(20.0f));
-	//modelMatrix = glm::rotate(modelMatrix, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
 	normalMatrix = glm::transpose(glm::inverse(modelMatrix));
-	//normalMatrix = glm::inverse(modelMatrix);
 
     // Generate VAO
     glGenVertexArrays(1, &vao);
@@ -28,7 +24,12 @@ Mesh::Mesh(): vao(0)
     // Generate VBOs
     glGenBuffers(1, &vbo_coord);
     glGenBuffers(1, &vbo_normal);
+}
 
+void Mesh::SetModelTrans(const glm::mat4& modelMatrix)
+{
+    this->modelMatrix = modelMatrix;
+    this->normalMatrix = glm::transpose(glm::inverse(modelMatrix));
 }
 
 void Mesh::Load(const char* filename, ShaderProgram* shader)

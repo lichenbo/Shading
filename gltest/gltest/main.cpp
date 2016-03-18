@@ -11,6 +11,7 @@
 #include "Mesh.hpp"
 #include "Scene.hpp"
 #include <iostream>
+#include "gtc/matrix_transform.hpp"
 
 #ifdef _WIN32
 #include <GL/freeglut.h>
@@ -57,6 +58,8 @@ int main(int argc, char * argv[]) {
     
     Mesh bunny;
     bunny.Load(path, program);
+    bunny.SetModelTrans(glm::scale(glm::mat4(1.0f),glm::vec3(20.0f)));
+
     
     Scene testScene;
     testScene.addObject(&bunny);

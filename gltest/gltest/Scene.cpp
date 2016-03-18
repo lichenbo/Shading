@@ -69,7 +69,7 @@ void Scene::addTrans(float delta_move)
 
 void Scene::addZoom(float dir)
 {
-	EyePos = glm::vec3(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, dir)) * glm::vec4(EyePos, 1.0f));
+	EyePos = glm::vec3(glm::translate(glm::mat4(1.0f), glm::vec3(dir, dir, dir)) * glm::vec4(EyePos, 1.0f));
 }
 
 

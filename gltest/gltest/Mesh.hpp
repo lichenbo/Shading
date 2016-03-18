@@ -25,6 +25,8 @@ public:
     void Load(const char* filename, ShaderProgram* shader);
 	
     void Draw(ShaderProgram* shader);
+    
+    void SetModelTrans(const glm::mat4& modelMatrix);
 private:
     GLuint vao; // contains multiple vbos
     int numberOfVertices;

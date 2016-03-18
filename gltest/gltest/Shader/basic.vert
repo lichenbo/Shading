@@ -21,7 +21,7 @@ void main(void)
 	homo_vertex.xyz = vertex_coord;
 	homo_vertex.w = 1.0;
 
-	vec3 LightPos = vec3(10.0f, 10.0f, -10.0f);
+	vec3 LightPos = vec3(10.0, 10.0, -10.0);
 	vec3 worldVertex = vec3(ModelMatrix * homo_vertex);
 
 	LightVec = LightPos - worldVertex; 
@@ -29,6 +29,5 @@ void main(void)
 	EyeVec = (ViewInverseMatrix*vec4(0,0,0,1)).xyz - worldVertex;
 	NormalVec = normalize(mat3(NormalMatrix)*normal_coord);    
 
-	gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * homo_vertex;
-
+    gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * homo_vertex;
 }
