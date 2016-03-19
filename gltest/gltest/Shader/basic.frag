@@ -18,18 +18,18 @@ void main(void)
     vec3 H = normalize(L+V);
     //vec3 T = normalize(TanVec);
 
-	vec3 diffuse = vec3(0.5, 0.2, 0.3);
+	vec3 diffuse = vec3(1.0, 1.0, 1.0); // Color of the object
 	vec3 Kd = diffuse;
 	
-	vec3 lightValue = vec3(1.0, 1.0, 1.0);
+	vec3 lightValue = vec3(1.0, 1.0, 1.0); // Color of the light
 	vec3 I = lightValue;
     
-    vec3 lightAmbient = vec3(0.2, 0.2, 0.2);
+    vec3 lightAmbient = vec3(1.0, 0.2, 0.2); // Color of the ambient
     
-    vec3 specular = vec3(1.0, 1.0, 1.0);
+    vec3 specular = vec3(1.0, 1.0, 1.0); // Color of the Highlight
     vec3 Ks = specular;
     
-    float g = 0.5;
+    float g = 0.3; // The smaller the larger of the highlight spot
     float alpha = pow(8192, g);
     vec3 F = Ks + (1 - Ks) * pow((1-dot(L, H)), 5);
     float D = ((alpha + 2)/(2 * M_PI))*pow(max(0.0, dot(N,H)), alpha);
@@ -42,6 +42,6 @@ void main(void)
         outputColor.xyz += (Kd/M_PI+0.25*F*D*G)*dot(L,N)*I;
     }
 
-	outputColor.xyz = max(0.0, dot(L, N))*Kd*I + 0.5*Kd; // Phong Lighting Diffuse
+	//outputColor.xyz = max(0.0, dot(L, N))*Kd*I + 0.5*Kd; // Phong Lighting Diffuse
 
 }
