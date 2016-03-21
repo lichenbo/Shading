@@ -10,13 +10,15 @@
 #include "Engine.hpp"
 #include "Mesh.hpp"
 #include "Scene.hpp"
+#include "Pass.hpp"
+#include "FBO.hpp"
 #include <iostream>
 #include "gtc/matrix_transform.hpp"
 
 #ifdef _WIN32
 #include <GL/freeglut.h>
 #else
-
+#include <GLUT/glut.h>
 #endif
 
 Engine* engine;
@@ -63,9 +65,14 @@ int main(int argc, char * argv[]) {
     
     Scene testScene;
     testScene.addObject(&bunny);
-    testScene.setShader(program);
     
-    engine->setScene(&testScene);
+    Pass directPass(program, &testScene);
+    
+    FBO fbo(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT), 1);
+    
+    directPass.SetTarget(&fbo);
+    
+    engine->addPass(&directPass);
     
     #ifdef _Win32
     glutMouseWheelFunc(mouseWheel);

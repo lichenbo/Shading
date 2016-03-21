@@ -9,6 +9,7 @@
 #include "Engine.hpp"
 #include <iostream>
 #include "Scene.hpp"
+#include "Pass.hpp"
 
 #ifdef _WIN32
 	#include <GL/glew.h>
@@ -46,20 +47,24 @@ Engine::Engine(int argc, char ** argv)
 #endif
 
 	//glEnable(GL_CULL_FACE|GL_DEPTH_TEST);
-    glEnable(GL_DEPTH_TEST);
+    glCullFace(GL_BACK);
+    glEnable(GL_CULL_FACE|GL_DEPTH_TEST);
 }
 
 void Engine::render()
 {
-    scene->Draw();
+    for (Pass* p : passes)
+    {
+        p->Draw();
+    }
     
     glutSwapBuffers();
     glutPostRedisplay();
 }
 
-void Engine::setScene(Scene* scene)
+void Engine::addPass(Pass* pass)
 {
-    this->scene = scene;
+    passes.push_back(pass);
 }
 
 void Engine::UpdateMouseStatus(int x, int y)
@@ -67,8 +72,11 @@ void Engine::UpdateMouseStatus(int x, int y)
 	float deltaX = x - lastX;
 	float deltaY = y - lastY;
 
-	scene->addSpin(deltaX);
-	scene->addTilt(deltaY);
+    for (Pass* p : passes)
+    {
+        p->addSpin(deltaX);
+        p->addTilt(deltaY);
+    }
 
 	lastX = x;
 	lastY = y;
@@ -95,7 +103,10 @@ void Engine::MouseClick(int button, int state, int x, int y)
 
 void Engine::MouseWheel(int dir)
 {
-	scene->addZoom(dir);
+    for (Pass* p : passes)
+    {
+        p->addZoom(dir);
+    }
 }
 
 void Engine::keyRelease(unsigned char c)
@@ -109,6 +120,14 @@ void Engine::keyRelease(unsigned char c)
 	{
 		delta_move = 1;
 	}
-	scene->addTrans(delta_move);
+    else
+    {
+        return;
+    }
+    
+    for (Pass* p : passes)
+    {
+        p->addTrans(delta_move);
+    }
 }
 

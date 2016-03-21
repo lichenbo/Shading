@@ -9,10 +9,10 @@
 #ifndef Engine_hpp
 #define Engine_hpp
 
-#include <vector>
+#include <list>
 #include "ShaderProgram.hpp"
 
-class Scene;
+class Pass;
 
 class Engine
 {
@@ -20,13 +20,13 @@ public:
     Engine(int argc, char ** argv);
     
     void render();
-    void setScene(Scene* scene);
+    void addPass(Pass* pass);
 	void UpdateMouseStatus(int x, int y);
 	void MouseClick(int button, int state, int x, int y);
 	void MouseWheel(int dir);
 	void keyRelease(unsigned char c);
 private:
-    Scene* scene;
+    std::list<Pass*> passes;
 	int lastX, lastY;
     
 };

@@ -15,18 +15,17 @@ class Mesh;
 class ShaderProgram;
 
 class Scene {
+    friend class Pass;
 public:
 	Scene();
     void addObject(Mesh* mesh);
-    void setShader(ShaderProgram* shader);
-    void Draw();
+    void Draw(ShaderProgram* shader);
 	void addSpin(float delta_x);
 	void addTilt(float delta_y);
 	void addZoom(float delta_z);
 	void addTrans(float delta_move);
 private:
     std::list<Mesh*> objects;
-    ShaderProgram* shader;
 
 	glm::mat4 ViewMatrix;
 	glm::mat4 ProjectionMatrix;

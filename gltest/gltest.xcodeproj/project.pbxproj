@@ -15,6 +15,8 @@
 		EB6D56711C79C8ED000E35E6 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB6D56701C79C8ED000E35E6 /* OpenGL.framework */; };
 		EBA252C11C8C69280025CD64 /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EBA252BF1C8C69280025CD64 /* Scene.cpp */; };
 		EBA25ABD1C9D8F260025CD64 /* FBO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EBA25ABB1C9D8F260025CD64 /* FBO.cpp */; };
+		EBA25AC01C9E17A60025CD64 /* Pass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EBA25ABE1C9E17A60025CD64 /* Pass.cpp */; };
+		EBA25AC31CA022140025CD64 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EBA25AC11CA022140025CD64 /* Texture.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -48,6 +50,10 @@
 		EBA252C51C8C71240025CD64 /* Shader */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Shader; path = gltest/Shader; sourceTree = "<group>"; };
 		EBA25ABB1C9D8F260025CD64 /* FBO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FBO.cpp; sourceTree = "<group>"; };
 		EBA25ABC1C9D8F260025CD64 /* FBO.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FBO.hpp; sourceTree = "<group>"; };
+		EBA25ABE1C9E17A60025CD64 /* Pass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Pass.cpp; sourceTree = "<group>"; };
+		EBA25ABF1C9E17A60025CD64 /* Pass.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Pass.hpp; sourceTree = "<group>"; };
+		EBA25AC11CA022140025CD64 /* Texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Texture.cpp; sourceTree = "<group>"; };
+		EBA25AC21CA022140025CD64 /* Texture.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Texture.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +105,10 @@
 				EBA252C01C8C69280025CD64 /* Scene.hpp */,
 				EBA25ABB1C9D8F260025CD64 /* FBO.cpp */,
 				EBA25ABC1C9D8F260025CD64 /* FBO.hpp */,
+				EBA25ABE1C9E17A60025CD64 /* Pass.cpp */,
+				EBA25ABF1C9E17A60025CD64 /* Pass.hpp */,
+				EBA25AC11CA022140025CD64 /* Texture.cpp */,
+				EBA25AC21CA022140025CD64 /* Texture.hpp */,
 			);
 			path = gltest;
 			sourceTree = "<group>";
@@ -164,7 +174,9 @@
 				EB0C4B581C7DBDAC00AF0BA6 /* Engine.cpp in Sources */,
 				EBA25ABD1C9D8F260025CD64 /* FBO.cpp in Sources */,
 				EBA252C11C8C69280025CD64 /* Scene.cpp in Sources */,
+				EBA25AC31CA022140025CD64 /* Texture.cpp in Sources */,
 				EB166A1E1BE788B700ED754D /* main.cpp in Sources */,
+				EBA25AC01C9E17A60025CD64 /* Pass.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

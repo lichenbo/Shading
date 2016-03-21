@@ -9,7 +9,7 @@
 #ifndef ShaderProgram_hpp
 #define ShaderProgram_hpp
 
-#include <stdio.h>
+#include <list>
 #include <fstream>
 
 
@@ -24,7 +24,7 @@
 class ShaderProgram
 {
     friend class Mesh;
-	friend class Scene;
+    friend class Pass;
 public:
     ShaderProgram();
     bool AddVertexShaderPath(const char* path);
@@ -43,6 +43,9 @@ private:
     bool compileShader(GLuint shaderId);
     
     GLuint programId;
+    
+    std::list<GLint> attributesLoc;
+    std::list<GLint> uniformsLoc;
     
 	// Attribute
     GLint vertexLoc;

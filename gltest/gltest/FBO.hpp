@@ -18,12 +18,13 @@
 class FBO
 {
 public:
-    FBO(const int w, const int h);
+    FBO(const int w, const int h, const int numOfTex);
     void Bind();
     void Unbind();
 private:
     GLuint fbo;
     int w,h;
+    int numOfTex;
 };
 
 
