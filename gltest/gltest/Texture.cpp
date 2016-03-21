@@ -41,3 +41,8 @@ void Texture::Unbind()
     glActiveTexture(GL_TEXTURE0 + unit);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
+
+GLuint Texture::textureId() const
+{
+    return renderedTexture;
+}

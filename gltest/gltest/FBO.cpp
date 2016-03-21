@@ -8,7 +8,7 @@
 
 #include "FBO.hpp"
 #include <iostream>
-
+#include "Texture.hpp"
 
 FBO::FBO(const int w, const int h, const int numOfTex):w(w), h(h), numOfTex(numOfTex)
 {
@@ -19,15 +19,9 @@ FBO::FBO(const int w, const int h, const int numOfTex):w(w), h(h), numOfTex(numO
     GLenum* DrawBuffers = new GLenum[numOfTex];
     for (int i = 0; i < numOfTex; ++i)
     {
-        GLuint renderedTexture;
-        glGenTextures(1, &renderedTexture);
-        glBindTexture(GL_TEXTURE_2D, renderedTexture);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, w, h, 0, GL_RGBA, GL_FLOAT, 0);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        Texture tex(w,h);
+        GLuint renderedTexture = tex.textureId();
+        
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, renderedTexture, 0);
         DrawBuffers[i] = GL_COLOR_ATTACHMENT0+i;
     }

@@ -21,6 +21,7 @@ public:
     void LoadData(char* data);
     void BindToUnit(const int unit);
     void Unbind();
+    GLuint textureId() const;
 private:
     GLuint renderedTexture;
     int w, h;
