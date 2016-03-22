@@ -10,21 +10,23 @@
 #define Mesh_hpp
 #include "glm.hpp"
 
-#ifdef _WIN32
-	#include <GL/glew.h>
-#else
-	#include <OpenGL/gl3.h>
-#endif
+#include "gl.h"
 
-class ShaderProgram;
+class Model_PLY;
 
 class Mesh
 {
 public:
     Mesh();
-    void Load(const char* filename, ShaderProgram* shader);
-	
-    void Draw(ShaderProgram* shader);
+    void Load(const char* filename);
+    void LoadSquare();
+    void Draw();
+    void BindVertexAttribute(GLint loc);
+    void BindNormalAttribute(GLint loc);
+    void BindTextureAttribute(GLint loc);
+    void BindTangentAttribute(GLint loc);
+    void BindModelUniform(GLint loc);
+    void BindNormalUniform(GLint loc);
     
     void SetModelTrans(const glm::mat4& modelMatrix);
 private:
@@ -38,6 +40,8 @@ private:
 	// Uniform
 	glm::mat4 modelMatrix;
 	glm::mat4 normalMatrix;
+    
+    Model_PLY* model;
         
 };
 

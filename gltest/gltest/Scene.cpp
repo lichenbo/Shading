@@ -8,10 +8,7 @@
 
 #include "Scene.hpp"
 #include "Mesh.hpp"
-#include "ShaderProgram.hpp"
-#include "gtc/type_ptr.hpp"
-#include "gtc/matrix_transform.hpp";
-#include "gtc/matrix_inverse.hpp"
+#include "gl.h"
 
 Scene::Scene()
 {
@@ -22,13 +19,12 @@ Scene::Scene()
 	ProjectionMatrix = glm::perspective(45.0f, 1.0f, 0.5f, 100.0f);
 }
 
-
 void Scene::addObject(Mesh* mesh)
 {
     objects.push_back(mesh);
 }
 
-void Scene::Draw(ShaderProgram* shader)
+void Scene::Draw(GLint modelLoc, GLint normalLoc)
 {
 	ViewMatrix = glm::lookAt(EyePos, WatchPos, UpPos);
 
@@ -37,32 +33,43 @@ void Scene::Draw(ShaderProgram* shader)
     
     for (auto mesh : objects)
     {
-        mesh->Draw(shader);
+        if (modelLoc != -1)
+            mesh->BindModelUniform(modelLoc);
+        if (normalLoc != -1)
+            mesh->BindNormalUniform(normalLoc);
+        mesh->Draw();
     }
 }
 
-void Scene::addSpin(float delta_x)
+void Scene::BindVertex(GLint loc)
 {
-	delta_x *= 0.01;
-	EyePos = glm::vec3(glm::rotate(glm::mat4(1.0f), (float)delta_x, glm::vec3(0.0f, 1.0f, 0.0f)) * glm::vec4(EyePos,1.0f));
-
+    for (Mesh* m : objects)
+    {
+        m->BindVertexAttribute(loc);
+    }
 }
 
-void Scene::addTilt(float delta_y)
+void Scene::BindNormal(GLint loc)
 {
-	delta_y *= 0.01;
-	EyePos = glm::vec3(glm::rotate(glm::mat4(1.0f), (float)delta_y, glm::vec3(1.0f, 0.0f, 0.0f)) * glm::vec4(EyePos,1.0f));
-
+    for (Mesh* m : objects)
+    {
+        m->BindNormalAttribute(loc);
+    }
 }
 
-void Scene::addTrans(float delta_move)
+void Scene::BindTexture(GLint loc)
 {
-	EyePos += glm::vec3(delta_move, 0.0f, 0.0f);
-	WatchPos += glm::vec3(delta_move, 0.0f, 0.0f);
+    for (Mesh* m : objects)
+    {
+        m->BindTextureAttribute(loc);
+    }
 }
 
-void Scene::addZoom(float dir)
+void Scene::BindTangent(GLint loc)
 {
-	EyePos = glm::vec3(glm::translate(glm::mat4(1.0f), glm::vec3(dir, dir, dir)) * glm::vec4(EyePos, 1.0f));
+    for (Mesh* m : objects)
+    {
+        m->BindTangentAttribute(loc);
+    }
 }
 

@@ -11,15 +11,7 @@
 
 #include <list>
 #include <fstream>
-
-
-#ifdef _WIN32
-	#include <GL/glew.h>
-#else
-	#include <OpenGL/gl3.h>
-	#include <GLUT/glut.h>
-#endif
-
+#include "gl.h"
 
 class ShaderProgram
 {
@@ -30,10 +22,18 @@ public:
     bool AddVertexShaderPath(const char* path);
     bool AddFragmentShaderPath(const char* path);
     bool Link();
-    void Bind();
-    void Unbind();
-    void BindAttribute();
-    void BindUniform();
+    void Use();
+    void Unuse();
+
+    GLint GetAttribute(const char* attr_name);
+    GLint GetUniform(const char* uniform_name);
+    void SetAttribVertex(const char* attr_vertex_name);
+    void SetAttribNormal(const char* attr_normal_name);
+    void SetAttribTangent(const char* attr_tangent_name);
+    void SetAttribTexture(const char* attr_texture_name);
+    void SetUniformModel(const char* uniform_model_name);
+    void SetUniformView(const char* uniform_view_name);
+    void SetUniformPerspective(const char* uniform_perspective_name);
     
 private:
     GLuint vertexShaderId;
@@ -44,21 +44,13 @@ private:
     
     GLuint programId;
     
-    std::list<GLint> attributesLoc;
-    std::list<GLint> uniformsLoc;
-    
-	// Attribute
-    GLint vertexLoc;
-    GLint normalLoc;
-
-
-	// Uniform
-	GLint ModelMatrixLoc;
-	GLint NormalMatrixLoc;
-	GLint ViewMatrixLoc;
-	GLint ViewInverseMatrixLoc;
-	GLint ProjectionMatrixLoc;
-	GLint EyePosLoc;
+    GLint attribVertexLoc;
+    GLint attribNormalLoc;
+    GLint attribTangentLoc;
+    GLint attribTextureLoc;
+    GLint uniformModelLoc;
+    GLint uniformViewLoc;
+    GLint uniformPerspectiveLoc;
 };
 
 #endif /* ShaderProgram_hpp */

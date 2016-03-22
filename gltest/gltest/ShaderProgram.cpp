@@ -9,7 +9,7 @@
 #include "ShaderProgram.hpp"
 #include <iostream>
 
-ShaderProgram::ShaderProgram()
+ShaderProgram::ShaderProgram():attribNormalLoc(-1), attribVertexLoc(-1), attribTangentLoc(-1), attribTextureLoc(-1), uniformModelLoc(-1), uniformViewLoc(-1), uniformPerspectiveLoc(-1)
 {
     programId = glCreateProgram();
 }
@@ -102,44 +102,65 @@ char* ShaderProgram::readFile(const char * path)
     return content;
 }
 
-void ShaderProgram::Bind()
+void ShaderProgram::Use()
 {
     glUseProgram(programId);
 }
 
-void ShaderProgram::BindAttribute()
+GLint ShaderProgram::GetAttribute(const char* attr_name)
 {
-    vertexLoc = glGetAttribLocation(programId, "vertex_coord");
-    if (vertexLoc == -1) std::cout << "vertex_coord is invalid" << std::endl;
+    GLint attributeLoc;
+    attributeLoc = glGetAttribLocation(programId, attr_name);
+    if (attributeLoc == -1) std::cout << attr_name << " is invalid in shader" << std::endl;
 
-	normalLoc = glGetAttribLocation(programId, "normal_coord");
-	if (normalLoc == -1) std::cout << "normal_coord is invalid" << std::endl;
+    return attributeLoc;
 }
 
-void ShaderProgram::BindUniform()
+GLint ShaderProgram::GetUniform(const char* uniform_name)
 {
-	ModelMatrixLoc = glGetUniformLocation(programId, "ModelMatrix");
-	if (ModelMatrixLoc== -1) std::cout << "ModelMatrixLoc is invalid" << std::endl;
-
-	NormalMatrixLoc = glGetUniformLocation(programId, "NormalMatrix");
-	if (NormalMatrixLoc== -1) std::cout << "NormalMatrixLoc is invalid" << std::endl;
-
-	ViewMatrixLoc = glGetUniformLocation(programId, "ViewMatrix");
-	if (ViewMatrixLoc == -1) std::cout << "ViewMatrixLoc is invalid" << std::endl;
-
-	ViewInverseMatrixLoc = glGetUniformLocation(programId, "ViewInverseMatrix");
-	if (ViewInverseMatrixLoc == -1) std::cout << "ViewInverseMatrixLoc is invalid" << std::endl;
-
-	ProjectionMatrixLoc = glGetUniformLocation(programId, "ProjectionMatrix");
-	if (ProjectionMatrixLoc == -1) std::cout << "ProjectionMatrixLoc is invalid" << std::endl;
-
-	EyePosLoc = glGetUniformLocation(programId, "EyePos");
-	if (EyePosLoc == -1) std::cout << "EyePosLoc is invalid" << std::endl;
-
-    return;
+    GLint uniformLoc;
+    uniformLoc = glGetUniformLocation(programId, uniform_name);
+    if (uniformLoc == -1) std::cout << uniform_name << " is invalid in shader" << std::endl;
+    
+    return uniformLoc;
 }
 
-void ShaderProgram::Unbind()
+void ShaderProgram::Unuse()
 {
     glUseProgram(0);
+}
+
+void ShaderProgram::SetAttribNormal(const char *attr_normal_name)
+{
+    attribNormalLoc = GetAttribute(attr_normal_name);
+}
+
+void ShaderProgram::SetAttribVertex(const char *attr_vertex_name)
+{
+    attribVertexLoc = GetAttribute(attr_vertex_name);
+}
+
+void ShaderProgram::SetAttribTangent(const char *attr_tangent_name)
+{
+    attribTangentLoc = GetAttribute(attr_tangent_name);
+}
+
+void ShaderProgram::SetAttribTexture(const char *attr_texture_name)
+{
+    attribTextureLoc = GetAttribute(attr_texture_name);
+}
+
+void ShaderProgram::SetUniformModel(const char *uniform_model_name)
+{
+    uniformModelLoc = GetUniform(uniform_model_name);
+}
+
+void ShaderProgram::SetUniformView(const char *uniform_view_name)
+{
+    uniformViewLoc = GetUniform(uniform_view_name);
+}
+
+void ShaderProgram::SetUniformPerspective(const char* uniform_perspective_name)
+{
+    uniformPerspectiveLoc = GetUniform(uniform_perspective_name);
 }

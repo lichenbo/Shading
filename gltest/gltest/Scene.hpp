@@ -10,20 +10,24 @@
 #define Scene_hpp
 #include <list>
 #include "glm.hpp"
+#include "gl.h"
 
 class Mesh;
-class ShaderProgram;
 
 class Scene {
     friend class Pass;
 public:
 	Scene();
     void addObject(Mesh* mesh);
-    void Draw(ShaderProgram* shader);
-	void addSpin(float delta_x);
-	void addTilt(float delta_y);
-	void addZoom(float delta_z);
-	void addTrans(float delta_move);
+    
+    // pass -1 is don't have
+    void Draw(GLint modelLoc, GLint normalLoc);
+    
+    void BindVertex(GLint loc);
+    void BindNormal(GLint loc);
+    void BindTexture(GLint loc);
+    void BindTangent(GLint loc);
+    
 private:
     std::list<Mesh*> objects;
 

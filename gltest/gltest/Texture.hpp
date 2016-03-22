@@ -8,11 +8,8 @@
 
 #ifndef Texture_hpp
 #define Texture_hpp
-#ifdef _WIN32
-#include <GL/glew.h>
-#else
-#include <OpenGL/gl3.h>
-#endif
+
+#include "gl.h"
 
 class Texture
 {

@@ -11,13 +11,7 @@
 #include "Scene.hpp"
 #include "Pass.hpp"
 
-#ifdef _WIN32
-	#include <GL/glew.h>
-	#include <GL/freeglut.h>
-#else
-	#include <OpenGL/gl3.h>
-	#include <GLUT/glut.h>
-#endif
+#include "gl.h"
 
 
 Engine::Engine(int argc, char ** argv)
@@ -67,17 +61,14 @@ void Engine::addPass(Pass* pass)
     passes.push_back(pass);
 }
 
-void Engine::UpdateMouseStatus(int x, int y)
+void Engine::UpdateMouseStatus(int x, int y, void(*spin)(float), void(*tilt)(float))
 {
 	float deltaX = x - lastX;
 	float deltaY = y - lastY;
 
-    for (Pass* p : passes)
-    {
-        p->addSpin(deltaX);
-        p->addTilt(deltaY);
-    }
-
+    spin(deltaX);
+    tilt(deltaY);
+    
 	lastX = x;
 	lastY = y;
 }
@@ -89,27 +80,14 @@ void Engine::MouseClick(int button, int state, int x, int y)
 		lastX = x;
 		lastY = y;
 	}
-    if (button == 3)
-    {
-        // Scroll up for OSX
-        MouseWheel(1);
-    }
-    if (button == 4)
-    {
-        // Scroll down for OSX
-        MouseWheel(-1);
-    }
 }
 
-void Engine::MouseWheel(int dir)
+void Engine::MouseWheel(int dir, void(*zoom)(float))
 {
-    for (Pass* p : passes)
-    {
-        p->addZoom(dir);
-    }
+    zoom(dir);
 }
 
-void Engine::keyRelease(unsigned char c)
+void Engine::keyRelease(unsigned char c, void(*trans)(float))
 {
 	float delta_move;
 	if (c == 'a')
@@ -125,9 +103,6 @@ void Engine::keyRelease(unsigned char c)
         return;
     }
     
-    for (Pass* p : passes)
-    {
-        p->addTrans(delta_move);
-    }
+    trans(delta_move);
 }
 

@@ -18,7 +18,7 @@ Pass::Pass(ShaderProgram* shader, Scene* scene): shader(shader), scene(scene)
 
 void Pass::Draw()
 {
-    shader->Bind();
+    shader->Use();
     
     BindUniformMatrix4(shader->ViewMatrixLoc, scene->ViewMatrix);
     BindUniformMatrix4(shader->ViewInverseMatrixLoc, glm::inverse(scene->ViewMatrix));
@@ -27,34 +27,35 @@ void Pass::Draw()
     if (targetFBO)
         targetFBO->Bind();
         
-    scene->Draw(shader);
+    scene->Draw();
     
     if (targetFBO)
         targetFBO->Unbind();
     
-    shader->Unbind();
+    shader->Unuse();
 }
 
-
-void Pass::addSpin(float deltaX)
+void Pass::BindAttribVertex(const char* attr_name)
 {
-    scene->addSpin(deltaX);
+    GLint loc = shader->GetAttribute(attr_name);
+    scene->BindVertex(loc);
+}
+void Pass::BindAttribNormal(const char* attr_name)
+{
+    GLint loc = shader->GetAttribute(attr_name);
+    scene->BindNormal(loc);
+}
+void Pass::BindAttribTangent(const char* attr_name)
+{
+    GLint loc = shader->GetAttribute(attr_name);
+    scene->BindTangent(loc);
+}
+void Pass::BindAttribTexture(const char* attr_name)
+{
+    GLint loc = shader->GetAttribute(attr_name);
+    scene->BindTexture(loc);
 }
 
-void Pass::addTilt(float deltaY)
-{
-    scene->addTilt(deltaY);
-}
-
-void Pass::addZoom(int dir)
-{
-    scene->addZoom(dir);
-}
-
-void Pass::addTrans(float delta_move)
-{
-    scene->addTrans(delta_move);
-}
 
 void Pass::SetTarget(FBO *fbo)
 {

@@ -9,11 +9,7 @@
 #ifndef FBO_hpp
 #define FBO_hpp
 
-#ifdef _WIN32
-#include <GL/glew.h>
-#else
-#include <OpenGL/gl3.h>
-#endif
+#include "gl.h"
 
 class FBO
 {

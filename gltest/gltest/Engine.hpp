@@ -21,10 +21,10 @@ public:
     
     void render();
     void addPass(Pass* pass);
-	void UpdateMouseStatus(int x, int y);
+	void UpdateMouseStatus(int x, int y, void(*spin)(float), void(*tilt)(float));
 	void MouseClick(int button, int state, int x, int y);
-	void MouseWheel(int dir);
-	void keyRelease(unsigned char c);
+	void MouseWheel(int dir, void(*zoom)(float));
+	void keyRelease(unsigned char c, void(*trans)(float));
 private:
     std::list<Pass*> passes;
 	int lastX, lastY;
