@@ -36,6 +36,18 @@
     <ClInclude Include="model_ply.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Texture.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pass.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gl.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FBO.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderProgram.cpp">
@@ -51,6 +63,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Pass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FBO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

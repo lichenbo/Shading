@@ -10,8 +10,9 @@
 #include "Scene.hpp"
 #include "ShaderProgram.hpp"
 #include "FBO.hpp"
+#include "Texture.hpp"
 
-Pass::Pass(ShaderProgram* shader, Scene* scene): shader(shader), scene(scene)
+Pass::Pass(ShaderProgram* shader, Scene* scene): shader(shader), scene(scene), targetFBO(NULL), numOfTexture(0)
 {
     
 }
@@ -33,6 +34,14 @@ void Pass::RebindUniforms()
     }
 }
 
+void Pass::BindTexture(const char* uniform_texture_name,Texture* texture)
+{
+	numOfTexture++;
+	texture->BindToUnit(numOfTexture);
+	BindUniformInt1(uniform_texture_name, numOfTexture);
+	TextureUnitMapper[texture] = numOfTexture;
+}
+
 void Pass::Draw()
 {
     shader->Use();
@@ -41,9 +50,15 @@ void Pass::Draw()
         targetFBO->Bind();
     
     RebindUniforms();
+
+	for (auto item: TextureUnitMapper)
+		item.first->BindToUnit(item.second);
         
     scene->Draw(shader->GetUniformModel(), shader->GetUniformNormal());
     
+	for (auto item: TextureUnitMapper)
+		item.first->Unbind();
+
     if (targetFBO)
         targetFBO->Unbind();
     

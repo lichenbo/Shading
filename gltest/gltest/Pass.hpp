@@ -14,6 +14,7 @@
 #include "ShaderProgram.hpp"
 #include <unordered_map>
 
+class Texture;
 class Scene;
 class FBO;
 class ShaderProgram;
@@ -42,15 +43,20 @@ public:
     void BindAttribTexture();
 
     void RebindUniforms();
+
+	void BindTexture(const char* uniform_texture_name, Texture* texture);
     
 private:
     Scene* scene;
     ShaderProgram* shader;
     FBO* targetFBO;
+	int numOfTexture;
+	
     
     std::unordered_map<GLint, GLfloat**> UniformMatrix4Mapper;
     std::unordered_map<GLint, GLfloat**> UniformVec3Mapper;
     std::unordered_map<GLint, GLint> UniformInt1Mapper;
+	std::unordered_map<Texture*, int> TextureUnitMapper;
 };
 
 // Using glm

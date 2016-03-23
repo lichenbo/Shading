@@ -150,18 +150,25 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.hpp" />
+    <ClInclude Include="FBO.hpp" />
+    <ClInclude Include="gl.h" />
     <ClInclude Include="Mesh.hpp" />
     <ClInclude Include="model_ply.h" />
+    <ClInclude Include="Pass.hpp" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="Scene.hpp" />
     <ClInclude Include="ShaderProgram.hpp" />
+    <ClInclude Include="Texture.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="FBO.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Pass.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
+    <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Model\bunny.ply" />

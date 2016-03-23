@@ -126,12 +126,9 @@ int main(int argc, char * argv[]) {
     renderPass.BindAttribTexture();
     
     Texture* texture = fbo.GetTexture(0);
-    texture->BindToUnit(1);
-    renderPass.BindUniformInt1("texture2D", 1);
-    //texture->Unbind();
+	renderPass.BindTexture("texture2D", texture);
     
     // ---------------PASS CONFIG --------------------------
-    
     
     engine->addPass(&directPass);
     engine->addPass(&renderPass);
