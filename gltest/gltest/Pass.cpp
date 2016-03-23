@@ -16,18 +16,33 @@ Pass::Pass(ShaderProgram* shader, Scene* scene): shader(shader), scene(scene)
     
 }
 
+// Refresh Pass-Scope Uniforms on Every Pass Draw
+void Pass::RebindUniforms()
+{
+    for (auto item : UniformMatrix4Mapper)
+    {
+        glUniformMatrix4fv(item.first, 1, GL_FALSE, *(item.second));
+    }
+    for (auto item : UniformVec3Mapper)
+    {
+        glUniform3fv(item.first, 1, *(item.second));
+    }
+    for (auto item : UniformInt1Mapper)
+    {
+        glUniform1i(item.first, item.second);
+    }
+}
+
 void Pass::Draw()
 {
     shader->Use();
     
-    BindUniformMatrix4(shader->ViewMatrixLoc, scene->ViewMatrix);
-    BindUniformMatrix4(shader->ViewInverseMatrixLoc, glm::inverse(scene->ViewMatrix));
-    BindUniformMatrix4(shader->ProjectionMatrixLoc, scene->ProjectionMatrix);
-    
     if (targetFBO)
         targetFBO->Bind();
+    
+    RebindUniforms();
         
-    scene->Draw();
+    scene->Draw(shader->GetUniformModel(), shader->GetUniformNormal());
     
     if (targetFBO)
         targetFBO->Unbind();
@@ -35,24 +50,24 @@ void Pass::Draw()
     shader->Unuse();
 }
 
-void Pass::BindAttribVertex(const char* attr_name)
+void Pass::BindAttribVertex()
 {
-    GLint loc = shader->GetAttribute(attr_name);
+    GLint loc = shader->GetAttribVertex();
     scene->BindVertex(loc);
 }
-void Pass::BindAttribNormal(const char* attr_name)
+void Pass::BindAttribNormal()
 {
-    GLint loc = shader->GetAttribute(attr_name);
+    GLint loc = shader->GetAttribNormal();
     scene->BindNormal(loc);
 }
-void Pass::BindAttribTangent(const char* attr_name)
+void Pass::BindAttribTangent()
 {
-    GLint loc = shader->GetAttribute(attr_name);
+    GLint loc = shader->GetAttribTangent();
     scene->BindTangent(loc);
 }
-void Pass::BindAttribTexture(const char* attr_name)
+void Pass::BindAttribTexture()
 {
-    GLint loc = shader->GetAttribute(attr_name);
+    GLint loc = shader->GetAttribTexture();
     scene->BindTexture(loc);
 }
 

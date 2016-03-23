@@ -36,12 +36,15 @@ private:
     // Buffers
     GLuint vbo_coord; // buffer stores vertices info
     GLuint vbo_normal; // buffer stores normal info
+    GLuint vbo_texture;
 
 	// Uniform
 	glm::mat4 modelMatrix;
 	glm::mat4 normalMatrix;
     
-    Model_PLY* model;
+    GLfloat* vertex_data;
+    GLfloat* normal_data;
+    GLfloat* texture_data;
         
 };
 

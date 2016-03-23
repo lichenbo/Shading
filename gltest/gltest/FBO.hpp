@@ -10,6 +10,9 @@
 #define FBO_hpp
 
 #include "gl.h"
+#include <vector>
+
+class Texture;
 
 class FBO
 {
@@ -17,10 +20,12 @@ public:
     FBO(const int w, const int h, const int numOfTex);
     void Bind();
     void Unbind();
+    Texture* GetTexture(int index);
 private:
     GLuint fbo;
     int w,h;
     int numOfTex;
+    std::vector<Texture*> textures;
 };
 
 

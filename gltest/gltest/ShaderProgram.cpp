@@ -165,6 +165,11 @@ void ShaderProgram::SetUniformPerspective(const char* uniform_perspective_name)
     uniformPerspectiveLoc = GetUniform(uniform_perspective_name);
 }
 
+void ShaderProgram::SetUniformNormal(const char *uniform_normal_name)
+{
+    uniformNormalLoc = GetUniform(uniform_normal_name);
+}
+
 GLint ShaderProgram::GetAttribNormal()
 {
     return attribNormalLoc;
@@ -192,4 +197,8 @@ GLint ShaderProgram::GetUniformView()
 GLint ShaderProgram::GetUniformPerspective()
 {
     return uniformPerspectiveLoc;
+}
+GLint ShaderProgram::GetUniformNormal()
+{
+    return uniformNormalLoc;
 }

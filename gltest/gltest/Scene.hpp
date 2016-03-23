@@ -31,12 +31,6 @@ public:
 private:
     std::list<Mesh*> objects;
 
-	glm::mat4 ViewMatrix;
-	glm::mat4 ProjectionMatrix;
-	glm::vec3 EyePos;
-	glm::vec3 LightPos;
-	glm::vec3 UpPos;
-	glm::vec3 WatchPos;
 };
 
 

@@ -14,6 +14,7 @@
 #include "Scene.hpp"
 #include "Pass.hpp"
 #include "FBO.hpp"
+#include "Texture.hpp"
 #include <iostream>
 
 
@@ -24,7 +25,6 @@
 #endif
 
 Engine* engine;
-ShaderProgram* program;
 
 void Draw();
 void mouseMove(int x, int y);
@@ -32,49 +32,111 @@ void mouseClick(int button, int state, int x, int y);
 void mouseWheel(int, int dir, int, int);
 void keyboardPress(unsigned char c, int x, int y);
 
+
+// ----------------- VARIABLE ZONE --------------------------
+
+auto EyePos = glm::vec3(0.0f, 0.0f, 10.0f);
+auto UpPos = glm::vec3(0.0f, 1.0f, 0.0f);
+auto LightPos = glm::vec3(10.0f, 10.0f, 10.0f);
+auto WatchPos = glm::vec3(0.0f, 0.0f, 0.0f);
+auto ProjectionMatrix = glm::perspective(45.0f, 1.0f, 0.5f, 100.0f);
+auto ViewMatrix = glm::lookAt(EyePos, WatchPos, UpPos);
+auto ViewInverseMatrix = glm::inverse(ViewMatrix);
+
+auto EyePosPtr = glm::value_ptr(EyePos);
+auto UpPosPtr = glm::value_ptr(UpPos);
+auto LightPosPtr = glm::value_ptr(LightPos);
+auto WatchPosPtr = glm::value_ptr(WatchPos);
+auto ProjectionMatrixPtr = glm::value_ptr(ProjectionMatrix);
+auto ViewMatrixPtr = glm::value_ptr(ViewMatrix);
+auto ViewInverseMatrixPtr = glm::value_ptr(ViewInverseMatrix);
+// --------------------------------------------------------
+
+
 int main(int argc, char * argv[]) {
     
-    engine = new Engine(argc, argv);
-    program = new ShaderProgram();
-    
     char path[256];
-    memset(path, 0, 256);
-    strcat(path, SHADER_PATH);
-    strcat(path, "basic.vert");
+    engine = new Engine(argc, argv);
     
-    if (!program->AddVertexShaderPath(path))
-    {
-        return 0;
-    }
+    ShaderProgram* basicShader = new ShaderProgram();
     
-    memset(path, 0, 256);
-    strcat(path, SHADER_PATH);
-    strcat(path, "basic.frag");
+    GET_SHADER_PATH(path, 256, "basic.vert");
+    if (!basicShader->AddVertexShaderPath(path)) return 0;
+    GET_SHADER_PATH(path, 256, "basic.frag");
+    if (!basicShader->AddFragmentShaderPath(path)) return 0;
+    if (!basicShader->Link()) return 0;
     
-    if (!program->AddFragmentShaderPath(path)) return 0;
-    if (!program->Link()) return 0;
-    program->BindAttribute();
-    program->BindUniform();
+    basicShader->SetAttribVertex("vertex_coord");
+    basicShader->SetAttribNormal("normal_coord");
     
-    memset(path, 0, 256);
-    strcat(path, MODEL_PATH);
-    strcat(path, "bunny.ply");
+    basicShader->SetUniformModel("ModelMatrix");
+    basicShader->SetUniformNormal("NormalMatrix");
+    basicShader->SetUniformView("ViewMatrix");
+    basicShader->SetUniformPerspective("ProjectionMatrix");
     
+    //
+    
+    ShaderProgram* displayTexShader = new ShaderProgram();
+    GET_SHADER_PATH(path, 256, "displayTexture.vert");
+    if (!displayTexShader->AddVertexShaderPath(path)) return 0;
+    GET_SHADER_PATH(path, 256, "displayTexture.frag");
+    if (!displayTexShader->AddFragmentShaderPath(path)) return 0;
+    if (!displayTexShader->Link()) return 0;
+    
+    displayTexShader->SetAttribVertex("vertex_coord");
+    displayTexShader->SetAttribTexture("texture_coord");
+    
+    // --------------SHADER LOADING--------------------------
+    
+    GET_MODEL_PATH(path, 256, "bunny.ply");
     Mesh bunny;
-    bunny.Load(path, program);
+    bunny.Load(path);
+    // BindUniformModel and BindNormalMatrix
     bunny.SetModelTrans(glm::scale(glm::mat4(1.0f),glm::vec3(20.0f)));
-
     
-    Scene testScene;
-    testScene.addObject(&bunny);
+    Mesh Square;
+    Square.LoadSquare();
+    Square.SetModelTrans(glm::mat4(1.0f));
+    // ---------------MODEL LOADING--------------------------
     
-    Pass directPass(program, &testScene);
+    Scene bunnyScene;
+    bunnyScene.addObject(&bunny);
+    
+    Scene canvasScene;
+    canvasScene.addObject(&Square);
+    // --------------SCENE LOADING --------------------------
+    
+    Pass directPass(basicShader, &bunnyScene);
+    
+    directPass.BindAttribNormal();
+    directPass.BindAttribVertex();
+    
+    directPass.BindUniformVec3("EyePos", &EyePosPtr);
+    directPass.BindUniformMatrix4("ViewMatrix", &ViewMatrixPtr);
+    directPass.BindUniformMatrix4("ViewInverseMatrix", &ViewInverseMatrixPtr);
+    directPass.BindUniformMatrix4("ProjectionMatrix", &ProjectionMatrixPtr);
+    
     
     FBO fbo(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT), 1);
     
     directPass.SetTarget(&fbo);
     
+    Pass renderPass(displayTexShader, &canvasScene);
+    renderPass.BindAttribVertex();
+    renderPass.BindAttribTexture();
+    
+    Texture* texture = fbo.GetTexture(0);
+    texture->BindToUnit(1);
+    renderPass.BindUniformInt1("texture2D", 1);
+    //texture->Unbind();
+    
+    // ---------------PASS CONFIG --------------------------
+    
+    
     engine->addPass(&directPass);
+    engine->addPass(&renderPass);
+    
+    // ----------------ENGINE------------------------------
     
     #ifdef _Win32
     glutMouseWheelFunc(mouseWheel);
@@ -90,8 +152,15 @@ int main(int argc, char * argv[]) {
     return 0;
 }
 
+void Update()
+{
+    ViewMatrix = glm::lookAt(EyePos, WatchPos, UpPos);
+    ViewInverseMatrix = glm::inverse(ViewMatrix);
+}
+
 void Draw()
 {
+    Update();
     engine->render();
 }
 

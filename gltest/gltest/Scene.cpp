@@ -12,11 +12,6 @@
 
 Scene::Scene()
 {
-	EyePos = glm::vec3(0.0f, 0.0f, 10.0f);
-	UpPos = glm::vec3(0.0f, 1.0f, 0.0f);
-	LightPos = glm::vec3(10.0f, 10.0f, 10.0f);
-	WatchPos = glm::vec3(0.0f, 0.0f, 0.0f);
-	ProjectionMatrix = glm::perspective(45.0f, 1.0f, 0.5f, 100.0f);
 }
 
 void Scene::addObject(Mesh* mesh)
@@ -26,7 +21,7 @@ void Scene::addObject(Mesh* mesh)
 
 void Scene::Draw(GLint modelLoc, GLint normalLoc)
 {
-	ViewMatrix = glm::lookAt(EyePos, WatchPos, UpPos);
+
 
     glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

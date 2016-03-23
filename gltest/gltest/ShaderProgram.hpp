@@ -34,6 +34,7 @@ public:
     void SetUniformModel(const char* uniform_model_name);
     void SetUniformView(const char* uniform_view_name);
     void SetUniformPerspective(const char* uniform_perspective_name);
+    void SetUniformNormal(const char* uniform_normal_name);
     GLint GetAttribVertex();
     GLint GetAttribNormal();
     GLint GetAttribTangent();
@@ -41,6 +42,7 @@ public:
     GLint GetUniformModel();
     GLint GetUniformView();
     GLint GetUniformPerspective();
+    GLint GetUniformNormal();
     
 private:
     GLuint vertexShaderId;
@@ -58,6 +60,7 @@ private:
     GLint uniformModelLoc;
     GLint uniformViewLoc;
     GLint uniformPerspectiveLoc;
+    GLint uniformNormalLoc;
 };
 
 #endif /* ShaderProgram_hpp */

@@ -19,11 +19,13 @@ FBO::FBO(const int w, const int h, const int numOfTex):w(w), h(h), numOfTex(numO
     GLenum* DrawBuffers = new GLenum[numOfTex];
     for (int i = 0; i < numOfTex; ++i)
     {
-        Texture tex(w,h);
-        GLuint renderedTexture = tex.textureId();
+        Texture* tex = new Texture(w,h);
+        GLuint renderedTexture = tex->textureId();
         
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, renderedTexture, 0);
         DrawBuffers[i] = GL_COLOR_ATTACHMENT0+i;
+        
+        textures.push_back(tex);
     }
     glDrawBuffers(numOfTex, DrawBuffers);
     
@@ -39,6 +41,16 @@ FBO::FBO(const int w, const int h, const int numOfTex):w(w), h(h), numOfTex(numO
         std::cout << "FBO Error:" << status << std::endl;
     
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+Texture* FBO::GetTexture(int index)
+{
+    if (index < textures.size())
+        return textures[index];
+    else{
+        std::cout << "texture index error" << std::endl;
+        return NULL;
+    }
 }
 
 void FBO::Bind()

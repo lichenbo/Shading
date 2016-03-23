@@ -21,7 +21,16 @@ const char* MODEL_PATH = "Model/";
 const char* SHADER_PATH = "../../gltest/Shader/"; // Shader path in OSX debug mode
 const char* MODEL_PATH = "../../gltest/Model/";
 
-
 #endif
+
+#define GET_SHADER_PATH(path, n, str) \
+    memset(path, 0, n); \
+    strcat(path, SHADER_PATH); \
+    strcat(path, str);
+
+#define GET_MODEL_PATH(path, n, str) \
+    memset(path, 0, n); \
+    strcat(path, MODEL_PATH); \
+    strcat(path, str);
 
 #endif /* Path_h */
