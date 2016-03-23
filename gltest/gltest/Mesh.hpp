@@ -37,6 +37,7 @@ private:
     GLuint vbo_coord; // buffer stores vertices info
     GLuint vbo_normal; // buffer stores normal info
     GLuint vbo_texture;
+	GLuint vbo_tangent;
 
 	// Uniform
 	glm::mat4 modelMatrix;

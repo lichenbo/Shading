@@ -37,6 +37,7 @@ void Pass::RebindUniforms()
 void Pass::BindTexture(const char* uniform_texture_name,Texture* texture)
 {
 	numOfTexture++;
+	if (numOfTexture > 16)
 	texture->BindToUnit(numOfTexture);
 	BindUniformInt1(uniform_texture_name, numOfTexture);
 	TextureUnitMapper[texture] = numOfTexture;
