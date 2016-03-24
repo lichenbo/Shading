@@ -50,6 +50,15 @@ auto WatchPosPtr = glm::value_ptr(WatchPos);
 auto ProjectionMatrixPtr = glm::value_ptr(ProjectionMatrix);
 auto ViewMatrixPtr = glm::value_ptr(ViewMatrix);
 auto ViewInverseMatrixPtr = glm::value_ptr(ViewInverseMatrix);
+
+auto BunnyModelMatrix = glm::scale(glm::mat4(1.0f),glm::vec3(20.0f));
+auto BunnyNormalMatrix = glm::transpose(glm::inverse(BunnyModelMatrix));
+auto BunnyModelMatrixPtr = glm::value_ptr(BunnyModelMatrix);
+auto BunnyNormalMatrixPtr = glm::value_ptr(BunnyNormalMatrix);
+
+auto SquareModelMatrix = glm::mat4(1.0f);
+auto SquareNormalMatrix = glm::transpose(glm::inverse(SquareModelMatrix));
+
 // --------------------------------------------------------
 
 
@@ -91,12 +100,10 @@ int main(int argc, char * argv[]) {
     GET_MODEL_PATH(path, 256, "bunny.ply");
     Mesh bunny;
     bunny.Load(path);
-    // BindUniformModel and BindNormalMatrix
-    bunny.SetModelTrans(glm::scale(glm::mat4(1.0f),glm::vec3(20.0f)));
     
     Mesh Square;
     Square.LoadSquare();
-    Square.SetModelTrans(glm::mat4(1.0f));
+
     // ---------------MODEL LOADING--------------------------
     
     Scene bunnyScene;
@@ -115,6 +122,9 @@ int main(int argc, char * argv[]) {
     directPass.BindUniformMatrix4("ViewMatrix", &ViewMatrixPtr);
     directPass.BindUniformMatrix4("ViewInverseMatrix", &ViewInverseMatrixPtr);
     directPass.BindUniformMatrix4("ProjectionMatrix", &ProjectionMatrixPtr);
+    
+    directPass.MeshBindUniformMatrix4(&bunny, "ModelMatrix", &BunnyModelMatrixPtr);
+    directPass.MeshBindUniformMatrix4(&bunny, "NormalMatrix", &BunnyNormalMatrixPtr);
     
     
     FBO fbo(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT), 1);

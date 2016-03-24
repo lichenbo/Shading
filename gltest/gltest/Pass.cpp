@@ -32,12 +32,16 @@ void Pass::RebindUniforms()
     {
         glUniform1i(item.first, item.second);
     }
+    for (auto item : TextureUnitMapper)
+    {
+        item.first->BindToUnit(item.second);
+    }
 }
 
 void Pass::BindTexture(const char* uniform_texture_name,Texture* texture)
 {
 	numOfTexture++;
-	if (numOfTexture > 16)
+	if (numOfTexture > GL_MAX_TEXTURE_UNITS)
 	texture->BindToUnit(numOfTexture);
 	BindUniformInt1(uniform_texture_name, numOfTexture);
 	TextureUnitMapper[texture] = numOfTexture;
@@ -55,7 +59,7 @@ void Pass::Draw()
 	for (auto item: TextureUnitMapper)
 		item.first->BindToUnit(item.second);
         
-    scene->Draw(shader->GetUniformModel(), shader->GetUniformNormal());
+    scene->Draw();
     
 	for (auto item: TextureUnitMapper)
 		item.first->Unbind();

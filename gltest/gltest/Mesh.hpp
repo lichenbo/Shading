@@ -9,10 +9,11 @@
 #ifndef Mesh_hpp
 #define Mesh_hpp
 #include "glm.hpp"
-
+#include <unordered_map>
 #include "gl.h"
 
 class Model_PLY;
+class Texture;
 
 class Mesh
 {
@@ -25,11 +26,17 @@ public:
     void BindNormalAttribute(GLint loc);
     void BindTextureAttribute(GLint loc);
     void BindTangentAttribute(GLint loc);
-    void BindModelUniform(GLint loc);
-    void BindNormalUniform(GLint loc);
     
-    void SetModelTrans(const glm::mat4& modelMatrix);
+    template<typename ValueType>
+    void BindUniformMatrix4(GLint loc, ValueType v);
+    template<typename ValueType>
+    void BindUniformVec3(GLint loc, ValueType v);
+    template<typename ValueType>
+    void BindUniformInt1(GLint loc, ValueType v);
+    void BindTexture(const char* uniform_texture_name, Texture* texture);
+    
 private:
+    void RebindUniforms();
     GLuint vao; // contains multiple vbos
     int numberOfVertices;
     
@@ -40,14 +47,39 @@ private:
 	GLuint vbo_tangent;
 
 	// Uniform
-	glm::mat4 modelMatrix;
-	glm::mat4 normalMatrix;
     
     GLfloat* vertex_data;
     GLfloat* normal_data;
     GLfloat* texture_data;
+    
+    std::unordered_map<GLint, GLfloat**> UniformMatrix4Mapper;
+    std::unordered_map<GLint, GLfloat**> UniformVec3Mapper;
+    std::unordered_map<GLint, GLint> UniformInt1Mapper;
+    std::unordered_map<Texture*, int> TextureUnitMapper;
         
 };
+
+// Using glm
+template<typename ValueType>
+void Mesh::BindUniformMatrix4(GLint loc, ValueType v)
+{
+    glUniformMatrix4fv(loc, 1, GL_FALSE, *v);
+    UniformMatrix4Mapper[loc] = (GLfloat**)v;
+}
+
+template<typename ValueType>
+void Mesh::BindUniformVec3(GLint loc, ValueType v)
+{
+    glUniform3fv(loc, 1, *v);
+    UniformVec3Mapper[loc] = (GLfloat**)v;
+}
+
+template<typename ValueType>
+void Mesh::BindUniformInt1(GLint loc, ValueType v)
+{
+    glUniform1i(loc, v);
+    UniformInt1Mapper[loc] = (GLint)v;
+}
 
 
 #endif /* Mesh_hpp */

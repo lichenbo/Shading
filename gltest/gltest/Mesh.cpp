@@ -13,21 +13,9 @@
 
 Mesh::Mesh(): vao(0)
 {
-	modelMatrix = glm::mat4(1.0f);
-
-	normalMatrix = glm::transpose(glm::inverse(modelMatrix));
-
     // Generate VAO
     glGenVertexArrays(1, &vao);
 
-    // Generate VBOs
-    glGenBuffers(1, &vbo_normal);
-}
-
-void Mesh::SetModelTrans(const glm::mat4& modelMatrix)
-{
-    this->modelMatrix = modelMatrix;
-    this->normalMatrix = glm::transpose(glm::inverse(modelMatrix));
 }
 
 
@@ -87,16 +75,6 @@ void Mesh::BindTextureAttribute(GLint loc)
 void Mesh::BindTangentAttribute(GLint loc)
 {
     
-}
-
-void Mesh::BindModelUniform(GLint loc)
-{
-    glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(modelMatrix));
-}
-
-void Mesh::BindNormalUniform(GLint loc)
-{
-    glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(normalMatrix));
 }
 
 void Mesh::Load(const char* filename)
@@ -161,7 +139,25 @@ void Mesh::LoadSquare()
 
 void Mesh::Draw()
 {
+    RebindUniforms();
 	glBindVertexArray(vao);
     glDrawArrays(GL_TRIANGLES, 0, numberOfVertices);
 	glBindVertexArray(0);
+}
+
+void Mesh::RebindUniforms()
+{
+    for (auto item : UniformMatrix4Mapper)
+    {
+        glUniformMatrix4fv(item.first, 1, GL_FALSE, *(item.second));
+    }
+    for (auto item : UniformVec3Mapper)
+    {
+        glUniform3fv(item.first, 1, *(item.second));
+    }
+    for (auto item : UniformInt1Mapper)
+    {
+        glUniform1i(item.first, item.second);
+    }
+    
 }

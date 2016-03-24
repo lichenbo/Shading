@@ -13,7 +13,7 @@
 #include "gl.h"
 #include "ShaderProgram.hpp"
 #include <unordered_map>
-
+#include "Mesh.hpp"
 class Texture;
 class Scene;
 class FBO;
@@ -42,11 +42,19 @@ public:
     void BindAttribTangent();
     void BindAttribTexture();
 
-    void RebindUniforms();
-
 	void BindTexture(const char* uniform_texture_name, Texture* texture);
     
+    template<typename ValueType>
+    void MeshBindUniformMatrix4(Mesh* mesh, const char* uniform_name, ValueType v);
+    template<typename ValueType>
+    void MeshBindUniformVec3(Mesh* mesh, const char* uniform_name, ValueType v);
+    template<typename ValueType>
+    void MeshBindUniformInt1(Mesh* mesh, const char* uniform_name, ValueType v);
+
+    
 private:
+    void RebindUniforms();
+
     Scene* scene;
     ShaderProgram* shader;
     FBO* targetFBO;
@@ -57,6 +65,7 @@ private:
     std::unordered_map<GLint, GLfloat**> UniformVec3Mapper;
     std::unordered_map<GLint, GLint> UniformInt1Mapper;
 	std::unordered_map<Texture*, int> TextureUnitMapper;
+    
 };
 
 // Using glm
@@ -82,6 +91,25 @@ void Pass::BindUniformInt1(const char* uniform_name, ValueType v)
     GLint loc = shader->GetUniform(uniform_name);
     glUniform1i(loc, v);
     UniformInt1Mapper[loc] = (GLint)v;
+}
+
+template<typename ValueType>
+void Pass::MeshBindUniformMatrix4(Mesh* mesh, const char* uniform_name, ValueType v)
+{
+    GLint loc = shader->GetUniform(uniform_name);
+    mesh->BindUniformMatrix4(loc, v);
+}
+template<typename ValueType>
+void Pass::MeshBindUniformVec3(Mesh* mesh, const char* uniform_name, ValueType v)
+{
+    GLint loc = shader->GetUniform(uniform_name);
+    mesh->BindUniformVec3(loc, v);
+}
+template<typename ValueType>
+void Pass::MeshBindUniformInt1(Mesh* mesh, const char* uniform_name, ValueType v)
+{
+    GLint loc = shader->GetUniform(uniform_name);
+    mesh->BindUniformInt1(loc, v);
 }
 
 #endif /* Pass_hpp */

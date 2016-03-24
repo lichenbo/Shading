@@ -20,8 +20,7 @@ public:
 	Scene();
     void addObject(Mesh* mesh);
     
-    // pass -1 is don't have
-    void Draw(GLint modelLoc, GLint normalLoc);
+    void Draw();
     
     void BindVertex(GLint loc);
     void BindNormal(GLint loc);
