@@ -117,11 +117,11 @@ void Mesh::LoadSquare()
     vertex_data[1] = -1.0f;
     vertex_data[2] = 0.0f;
     
-    vertex_data[3] = -1.0f;
+    vertex_data[3] = 1.0f;
     vertex_data[4] = 1.0f;
     vertex_data[5] = 0.0f;
     
-    vertex_data[6] = 1.0f;
+    vertex_data[6] = -1.0f;
     vertex_data[7] = 1.0f;
     vertex_data[8] = 0.0f;
     
@@ -142,10 +142,10 @@ void Mesh::LoadSquare()
     texture_data[0] = 0.0f;
     texture_data[1] = 0.0f;
     
-    texture_data[2] = 0.0f;
+    texture_data[2] = 1.0f;
     texture_data[3] = 1.0f;
     
-    texture_data[4] = 1.0f;
+    texture_data[4] = 0.0f;
     texture_data[5] = 1.0f;
     
     texture_data[6] = 1.0f;
