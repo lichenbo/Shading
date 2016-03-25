@@ -127,5 +127,11 @@
     <None Include="Shader\defergbuffer.vert">
       <Filter>Shader\Defershading</Filter>
     </None>
+    <None Include="Shader\deferAmbientLight.frag">
+      <Filter>Shader\Defershading</Filter>
+    </None>
+    <None Include="Shader\deferAmbientLight.vert">
+      <Filter>Shader\Defershading</Filter>
+    </None>
   </ItemGroup>
 </Project>

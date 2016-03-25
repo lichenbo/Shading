@@ -179,6 +179,8 @@
     <None Include="Model\dragon.ply" />
     <None Include="Shader\basic.frag" />
     <None Include="Shader\basic.vert" />
+    <None Include="Shader\deferAmbientLight.frag" />
+    <None Include="Shader\deferAmbientLight.vert" />
     <None Include="Shader\defergbuffer.frag" />
     <None Include="Shader\defergbuffer.vert" />
     <None Include="Shader\displayTexture.frag" />
