@@ -9,7 +9,7 @@
 #include "ShaderProgram.hpp"
 #include <iostream>
 
-ShaderProgram::ShaderProgram():attribNormalLoc(-1), attribVertexLoc(-1), attribTangentLoc(-1), attribTextureLoc(-1), uniformModelLoc(-1), uniformViewLoc(-1), uniformPerspectiveLoc(-1)
+ShaderProgram::ShaderProgram():attribNormalLoc(-1), attribVertexLoc(-1), attribTangentLoc(-1), attribTextureLoc(-1)
 {
     programId = glCreateProgram();
 }
@@ -150,26 +150,6 @@ void ShaderProgram::SetAttribTexture(const char *attr_texture_name)
     attribTextureLoc = GetAttribute(attr_texture_name);
 }
 
-void ShaderProgram::SetUniformModel(const char *uniform_model_name)
-{
-    uniformModelLoc = GetUniform(uniform_model_name);
-}
-
-void ShaderProgram::SetUniformView(const char *uniform_view_name)
-{
-    uniformViewLoc = GetUniform(uniform_view_name);
-}
-
-void ShaderProgram::SetUniformPerspective(const char* uniform_perspective_name)
-{
-    uniformPerspectiveLoc = GetUniform(uniform_perspective_name);
-}
-
-void ShaderProgram::SetUniformNormal(const char *uniform_normal_name)
-{
-    uniformNormalLoc = GetUniform(uniform_normal_name);
-}
-
 GLint ShaderProgram::GetAttribNormal()
 {
     return attribNormalLoc;
@@ -185,20 +165,4 @@ GLint ShaderProgram::GetAttribTangent()
 GLint ShaderProgram::GetAttribTexture()
 {
     return attribTextureLoc;
-}
-GLint ShaderProgram::GetUniformModel()
-{
-    return uniformModelLoc;
-}
-GLint ShaderProgram::GetUniformView()
-{
-    return uniformViewLoc;
-}
-GLint ShaderProgram::GetUniformPerspective()
-{
-    return uniformPerspectiveLoc;
-}
-GLint ShaderProgram::GetUniformNormal()
-{
-    return uniformNormalLoc;
 }

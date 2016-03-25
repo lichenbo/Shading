@@ -56,10 +56,12 @@ Texture* FBO::GetTexture(int index)
 void FBO::Bind()
 {
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+	glViewport(0, 0, w, h);
 }
 
 void FBO::Unbind()
 {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glViewport(0, 0, glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_WIDTH));
 }
 

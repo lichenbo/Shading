@@ -13,6 +13,21 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{82a5aa02-21c9-4902-9df6-bdbc1866c5a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\BRDF">
+      <UniqueIdentifier>{937f392c-c72f-41ad-85fc-7d8c5c690291}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\RenderTexture">
+      <UniqueIdentifier>{1d4e8028-ce87-4455-927e-dca7b003f195}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Objs">
+      <UniqueIdentifier>{e56ac1a5-735d-4085-bf64-aa6267387804}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\Defershading">
+      <UniqueIdentifier>{b562325d-cb14-4ed3-a544-685df8d0a2b8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -56,9 +71,6 @@
     <ClCompile Include="Mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -74,11 +86,46 @@
     <ClCompile Include="FBO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="main_basiclighting.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main_deferredShading.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shader\basic.vert" />
-    <None Include="Shader\basic.frag" />
-    <None Include="Model\dragon.ply" />
-    <None Include="Model\bunny.ply" />
+    <None Include="Shader\basic.frag">
+      <Filter>Shader\BRDF</Filter>
+    </None>
+    <None Include="Shader\basic.vert">
+      <Filter>Shader\BRDF</Filter>
+    </None>
+    <None Include="Shader\displayTexture.frag">
+      <Filter>Shader\RenderTexture</Filter>
+    </None>
+    <None Include="Shader\displayTexture.vert">
+      <Filter>Shader\RenderTexture</Filter>
+    </None>
+    <None Include="Model\bunny.ply">
+      <Filter>Resource Files\Objs</Filter>
+    </None>
+    <None Include="Model\dragon.ply">
+      <Filter>Resource Files\Objs</Filter>
+    </None>
+    <None Include="Model\bunny_export.ply">
+      <Filter>Resource Files\Objs</Filter>
+    </None>
+    <None Include="Model\cube1.ply">
+      <Filter>Resource Files\Objs</Filter>
+    </None>
+    <None Include="Model\cube2.ply">
+      <Filter>Resource Files\Objs</Filter>
+    </None>
+    <None Include="Shader\defergbuffer.frag">
+      <Filter>Shader\Defershading</Filter>
+    </None>
+    <None Include="Shader\defergbuffer.vert">
+      <Filter>Shader\Defershading</Filter>
+    </None>
   </ItemGroup>
 </Project>

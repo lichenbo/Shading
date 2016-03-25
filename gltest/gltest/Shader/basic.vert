@@ -9,8 +9,6 @@ uniform mat4 ViewInverseMatrix;
 uniform mat4 ProjectionMatrix;
 uniform mat4 NormalMatrix;
 
-uniform vec3 EyePos;
-
 out vec3 NormalVec;
 out vec3 LightVec;
 out vec3 EyeVec;

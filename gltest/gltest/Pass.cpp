@@ -49,6 +49,7 @@ void Pass::BindTexture(const char* uniform_texture_name,Texture* texture)
 
 void Pass::Draw()
 {
+	glViewport(0, 0, glutGet(GLUT_WINDOW_HEIGHT), glutGet(GLUT_WINDOW_WIDTH));
     shader->Use();
     
     if (targetFBO)
