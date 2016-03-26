@@ -11,12 +11,13 @@
 		EB0C4B551C7DBD8300AF0BA6 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB0C4B531C7DBD8300AF0BA6 /* Mesh.cpp */; };
 		EB0C4B581C7DBDAC00AF0BA6 /* Engine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB0C4B561C7DBDAC00AF0BA6 /* Engine.cpp */; };
 		EB0C4B5B1C7DBF4A00AF0BA6 /* ShaderProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB0C4B591C7DBF4A00AF0BA6 /* ShaderProgram.cpp */; };
-		EB166A1E1BE788B700ED754D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB166A1D1BE788B700ED754D /* main.cpp */; };
 		EB6D56711C79C8ED000E35E6 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB6D56701C79C8ED000E35E6 /* OpenGL.framework */; };
 		EBA252C11C8C69280025CD64 /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EBA252BF1C8C69280025CD64 /* Scene.cpp */; };
 		EBA25ABD1C9D8F260025CD64 /* FBO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EBA25ABB1C9D8F260025CD64 /* FBO.cpp */; };
 		EBA25AC01C9E17A60025CD64 /* Pass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EBA25ABE1C9E17A60025CD64 /* Pass.cpp */; };
 		EBA25AC31CA022140025CD64 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EBA25AC11CA022140025CD64 /* Texture.cpp */; };
+		EBBFA6E31CA52BB7008C5807 /* main_basiclighting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EBBFA6E11CA52BB7008C5807 /* main_basiclighting.cpp */; };
+		EBBFA6E41CA52BB7008C5807 /* main_deferredShading.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EBBFA6E21CA52BB7008C5807 /* main_deferredShading.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -40,7 +41,6 @@
 		EB0C4B591C7DBF4A00AF0BA6 /* ShaderProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShaderProgram.cpp; sourceTree = "<group>"; };
 		EB0C4B5A1C7DBF4A00AF0BA6 /* ShaderProgram.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ShaderProgram.hpp; sourceTree = "<group>"; };
 		EB166A1A1BE788B700ED754D /* gltest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = gltest; sourceTree = BUILT_PRODUCTS_DIR; };
-		EB166A1D1BE788B700ED754D /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		EB6D56701C79C8ED000E35E6 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		EBA252BD1C8AF74E0025CD64 /* Model_PLY.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Model_PLY.h; sourceTree = "<group>"; };
 		EBA252BE1C8BAC440025CD64 /* Path.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Path.h; sourceTree = "<group>"; };
@@ -55,6 +55,8 @@
 		EBA25AC11CA022140025CD64 /* Texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Texture.cpp; sourceTree = "<group>"; };
 		EBA25AC21CA022140025CD64 /* Texture.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Texture.hpp; sourceTree = "<group>"; };
 		EBBFA6E01CA16324008C5807 /* gl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = gl.h; sourceTree = "<group>"; };
+		EBBFA6E11CA52BB7008C5807 /* main_basiclighting.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main_basiclighting.cpp; sourceTree = "<group>"; };
+		EBBFA6E21CA52BB7008C5807 /* main_deferredShading.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main_deferredShading.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,7 +95,8 @@
 		EB166A1C1BE788B700ED754D /* gltest */ = {
 			isa = PBXGroup;
 			children = (
-				EB166A1D1BE788B700ED754D /* main.cpp */,
+				EBBFA6E11CA52BB7008C5807 /* main_basiclighting.cpp */,
+				EBBFA6E21CA52BB7008C5807 /* main_deferredShading.cpp */,
 				EB0C4B531C7DBD8300AF0BA6 /* Mesh.cpp */,
 				EB0C4B541C7DBD8300AF0BA6 /* Mesh.hpp */,
 				EB0C4B561C7DBDAC00AF0BA6 /* Engine.cpp */,
@@ -172,12 +175,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB0C4B551C7DBD8300AF0BA6 /* Mesh.cpp in Sources */,
+				EBBFA6E41CA52BB7008C5807 /* main_deferredShading.cpp in Sources */,
 				EB0C4B5B1C7DBF4A00AF0BA6 /* ShaderProgram.cpp in Sources */,
 				EB0C4B581C7DBDAC00AF0BA6 /* Engine.cpp in Sources */,
+				EBBFA6E31CA52BB7008C5807 /* main_basiclighting.cpp in Sources */,
 				EBA25ABD1C9D8F260025CD64 /* FBO.cpp in Sources */,
 				EBA252C11C8C69280025CD64 /* Scene.cpp in Sources */,
 				EBA25AC31CA022140025CD64 /* Texture.cpp in Sources */,
-				EB166A1E1BE788B700ED754D /* main.cpp in Sources */,
 				EBA25AC01C9E17A60025CD64 /* Pass.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
