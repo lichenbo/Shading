@@ -36,6 +36,10 @@ public:
     void BindUniformInt1(const char* uniform_name, ValueType v);
     
     void SetTarget(FBO* fbo);
+	void SetBlend(bool status);
+	void SetDepthTest(bool status);
+	void SetCullfaceFront(bool status);
+	void SetCullfaceBack(bool status);
     
     void BindAttribVertex();
     void BindAttribNormal();
@@ -59,6 +63,10 @@ private:
     ShaderProgram* shader;
     FBO* targetFBO;
 	int numOfTexture;
+	bool isBlend;
+	bool isDepthTest;
+	bool isCullfaceFront;
+	bool isCullfaceBack;
 	
     
     std::unordered_map<GLint, GLfloat**> UniformMatrix4Mapper;

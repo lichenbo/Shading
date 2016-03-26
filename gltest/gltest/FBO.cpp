@@ -29,7 +29,7 @@ FBO::FBO(const int w, const int h, const int numOfTex):w(w), h(h), numOfTex(numO
     }
     glDrawBuffers(numOfTex, DrawBuffers);
     
-    
+	Texture* depthTex = new Texture(w, h);
     GLuint depthRenderBuffer;
     glGenRenderbuffers(1, &depthRenderBuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, depthRenderBuffer);

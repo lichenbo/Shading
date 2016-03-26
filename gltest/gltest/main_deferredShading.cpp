@@ -60,17 +60,16 @@ auto Bunny3NormalMatrix = glm::transpose(glm::inverse(Bunny1ModelMatrix));
 auto Bunny3Diffuse = glm::vec3(0.5, 0.0, 0.5);
 auto Bunny3Specular = glm::vec3(0.5, 0.5, 0.0);
 
-
-// Square
-auto SquareModelMatrix = glm::mat4(1.0f);
-auto SquareNormalMatrix = glm::transpose(glm::inverse(SquareModelMatrix));
-
-// Light1
+// Light1: Global light
 auto Light1Pos = glm::vec3(10.0f, 10.0f, 10.0f);
 auto Light1ModelMatrix = glm::translate(glm::mat4(1.0f), Light1Pos) * glm::scale(glm::mat4(1.0f), glm::vec3(0.2f));
 auto Light1NormalMatrix = glm::transpose(glm::inverse(Light1ModelMatrix));
 auto Light1Diffuse = glm::vec3(1.0, 1.0, 1.0);
 auto Light1Specular = glm::vec3(1.0, 1.0, 1.0);
+
+// For Shadow Pass
+auto Light1ViewMatrix = glm::lookAt(Light1Pos, WatchPos, UpPos);
+auto Light1ShadowMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.5f)) * ProjectionMatrix * Light1ViewMatrix;
 
 // -------------------- POINTERS ZONE ------------------------
 auto EyePosPtr = glm::value_ptr(EyePos);
@@ -92,13 +91,13 @@ auto Bunny3ModelMatrixPtr = glm::value_ptr(Bunny3ModelMatrix);
 auto Bunny3NormalMatrixPtr = glm::value_ptr(Bunny3NormalMatrix);
 auto Bunny3DiffusePtr = glm::value_ptr(Bunny3Diffuse);
 auto Bunny3SpecularPtr = glm::value_ptr(Bunny3Specular);
-auto SquareModelMatrixPtr = glm::value_ptr(SquareModelMatrix);
-auto SquareNormalMatrixPtr = glm::value_ptr(SquareNormalMatrix);
 auto Light1PosPtr = glm::value_ptr(Light1Pos);
 auto Light1ModelMatrixPtr = glm::value_ptr(Light1ModelMatrix);
 auto Light1NormalMatrixPtr = glm::value_ptr(Light1NormalMatrix);
 auto Light1DiffusePtr = glm::value_ptr(Light1Diffuse);
 auto Light1SpecularPtr = glm::value_ptr(Light1Specular);
+auto Light1ViewMatrixPtr = glm::value_ptr(Light1ViewMatrix);
+auto Light1ShadowMatrixPtr = glm::value_ptr(Light1ShadowMatrix);
 // --------------------------------------------------------
 
 
@@ -108,7 +107,8 @@ int main(int argc, char * argv[]) {
 	engine = new Engine(argc, argv);
 
 	ShaderProgram* defergbufferShader = new ShaderProgram();
-	FBO fbo(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT), 4);
+	FBO g_buffer(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT), 4);
+	FBO shadow_buffer(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_WIDTH), 1);
 
 	GET_SHADER_PATH(path, 256, "defergbuffer.vert");
 	if (!defergbufferShader->AddVertexShaderPath(path)) return 0;
@@ -128,30 +128,41 @@ int main(int argc, char * argv[]) {
 	if (!ambientShader->Link()) return 0;
 	ambientShader->SetAttribVertex("vertex_coord");
 
-	ShaderProgram* displayTexShader = new ShaderProgram();
-	GET_SHADER_PATH(path, 256, "displayTexture.vert");
-	if (!displayTexShader->AddVertexShaderPath(path)) return 0;
-	GET_SHADER_PATH(path, 256, "displayTexture.frag");
-	if (!displayTexShader->AddFragmentShaderPath(path)) return 0;
-	if (!displayTexShader->Link()) return 0;
+	ShaderProgram* shadowMapShader = new ShaderProgram();
+	GET_SHADER_PATH(path, 256, "shadow.vert");
+	if (!shadowMapShader->AddVertexShaderPath(path)) return 0;
+	GET_SHADER_PATH(path, 256, "shadow.frag");
+	if (!shadowMapShader->AddFragmentShaderPath(path)) return 0;
+	if (!shadowMapShader->Link()) return 0;
+	shadowMapShader->SetAttribVertex("vertex");
 
-	displayTexShader->SetAttribVertex("vertex_coord");
-	displayTexShader->SetAttribTexture("texture_coord");
+	ShaderProgram* shadowRenderShader = new ShaderProgram();
+	GET_SHADER_PATH(path, 256, "shadowRender.vert");
+	if (!shadowRenderShader->AddVertexShaderPath(path)) return 0;
+	GET_SHADER_PATH(path, 256, "shadowRender.frag");
+	if (!shadowRenderShader->AddFragmentShaderPath(path)) return 0;
+	if (!shadowRenderShader->Link()) return 0;
+	shadowRenderShader->SetAttribVertex("vertex");
+	shadowRenderShader->SetAttribTexture("texture_coordinate");
 
 	// --------------SHADER LOADING--------------------------
 
 	GET_MODEL_PATH(path, 256, "bunny.ply");
 	Mesh bunny1, bunny2, bunny3;
+	Mesh shadowBunny1, shadowBunny2, shadowBunny3;
 	bunny1.Load(path);
 	bunny2.Load(path);
 	bunny3.Load(path);
+	shadowBunny1.Load(path);
+	shadowBunny2.Load(path);
+	shadowBunny3.Load(path);
 
 	GET_MODEL_PATH(path, 256, "sphere.ply");
 	Mesh Light1;
 	Light1.Load(path);
 
-	Mesh Square;
-	Square.LoadSquare();
+	Mesh FSQ;
+	FSQ.LoadSquare();
 
 	// ---------------MODEL LOADING--------------------------
 
@@ -161,19 +172,27 @@ int main(int argc, char * argv[]) {
 	bunnyScene.addObject(&bunny3);
 	bunnyScene.addObject(&Light1);
 
-	Scene canvasScene;
-	canvasScene.addObject(&Square);
+	Scene fullScreen;
+	fullScreen.addObject(&FSQ);
+
+	Scene shadowMapScene;
+	shadowMapScene.addObject(&shadowBunny1);
+	shadowMapScene.addObject(&shadowBunny2);
+	shadowMapScene.addObject(&shadowBunny3);
+
 	// --------------SCENE LOADING --------------------------
 
 	Pass gbufferPass(defergbufferShader, &bunnyScene);
-	Pass ambientPass(ambientShader, &canvasScene);
-	Pass renderPass(displayTexShader, &canvasScene);
+	Pass ambientPass(ambientShader, &fullScreen);
+	Pass shadowPass(shadowMapShader, &shadowMapScene);
+	Pass shadowRenderPass(shadowRenderShader, &fullScreen);
 
 	gbufferPass.BindAttribNormal();
 	gbufferPass.BindAttribVertex();
 	ambientPass.BindAttribVertex();
-	renderPass.BindAttribVertex();
-	renderPass.BindAttribTexture();
+	shadowPass.BindAttribVertex();
+	shadowRenderPass.BindAttribVertex();
+	shadowRenderPass.BindAttribTexture();
 
 	// --------------- BIND ATTRIBUTES ---------------------
 
@@ -181,6 +200,12 @@ int main(int argc, char * argv[]) {
 	gbufferPass.BindUniformMatrix4("ViewInverseMatrix", &ViewInverseMatrixPtr);
 	gbufferPass.BindUniformMatrix4("ProjectionMatrix", &ProjectionMatrixPtr);
 	ambientPass.BindUniformVec3("ambientColor", &AmbientLightPtr);
+	shadowPass.BindUniformMatrix4("ViewMatrix", &Light1ViewMatrixPtr);
+	shadowPass.BindUniformMatrix4("ProjectionMatrix", &ProjectionMatrixPtr);
+	shadowRenderPass.BindUniformMatrix4("shadowMatrix", &Light1ShadowMatrixPtr);
+	shadowRenderPass.BindUniformVec3("lightPos", &Light1PosPtr);
+	shadowRenderPass.BindUniformVec3("eyePos", &EyePosPtr);
+	shadowRenderPass.BindUniformVec3("lightValue", &Light1DiffusePtr);
 	// ------------- BIND PASS-WISE UNIFORMS---------------
 
 	gbufferPass.MeshBindUniformMatrix4(&bunny1, "ModelMatrix", &Bunny1ModelMatrixPtr);
@@ -199,20 +224,40 @@ int main(int argc, char * argv[]) {
 	gbufferPass.MeshBindUniformMatrix4(&Light1, "NormalMatrix", &Light1NormalMatrixPtr);
 	gbufferPass.MeshBindUniformVec3(&Light1, "diffuse", &Light1DiffusePtr);
 	gbufferPass.MeshBindUniformVec3(&Light1, "specular", &Light1SpecularPtr);
-	renderPass.MeshBindUniformMatrix4(&Square, "ModelMatrix", &SquareModelMatrixPtr);
-
+	shadowPass.MeshBindUniformMatrix4(&shadowBunny1, "ModelMatrix", &Bunny1ModelMatrixPtr);
+	shadowPass.MeshBindUniformMatrix4(&shadowBunny2, "ModelMatrix", &Bunny2ModelMatrixPtr);
+	shadowPass.MeshBindUniformMatrix4(&shadowBunny3, "ModelMatrix", &Bunny3ModelMatrixPtr);
 	// ------------BIND MESH-WISE UNIFORMS----------------
 
-	gbufferPass.SetTarget(&fbo);
+	gbufferPass.SetTarget(&g_buffer);
+	shadowPass.SetTarget(&shadow_buffer);
 
-	Texture* texture = fbo.GetTexture(0);
-	renderPass.BindTexture("texture2D", texture);
+	Texture* positionTex = g_buffer.GetTexture(0);
+	Texture* normalTex = g_buffer.GetTexture(1);
+	Texture* diffuseTex = g_buffer.GetTexture(2);
+	Texture* specularTex = g_buffer.GetTexture(3);
+	Texture* shadowTex = shadow_buffer.GetTexture(0);
+
+	shadowRenderPass.BindTexture("shadowTexture", shadowTex);
+	shadowRenderPass.BindTexture("positionTexture", positionTex);
+	shadowRenderPass.BindTexture("normalTexture", normalTex);
+	shadowRenderPass.BindTexture("diffuseTexture", diffuseTex);
+	shadowRenderPass.BindTexture("specularTexture", specularTex);
+
+	gbufferPass.SetBlend(false);
+	gbufferPass.SetDepthTest(true);
+	ambientPass.SetBlend(false);
+	ambientPass.SetDepthTest(false);
+	shadowPass.SetBlend(false);
+	shadowPass.SetDepthTest(true);
+	shadowRenderPass.SetBlend(true);
+	shadowRenderPass.SetDepthTest(false);
 
 	// ---------------PASS CONFIG --------------------------
-
 	engine->addPass(&gbufferPass);
-	engine->addPass(&renderPass);
-	//engine->addPass(&ambientPass);
+	engine->addPass(&ambientPass);
+	engine->addPass(&shadowPass);
+	engine->addPass(&shadowRenderPass);
 
 	// ----------------ENGINE------------------------------
 
