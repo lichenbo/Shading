@@ -244,6 +244,8 @@ int main(int argc, char * argv[]) {
 	shadowRenderPass.BindTexture("diffuseTexture", diffuseTex);
 	shadowRenderPass.BindTexture("specularTexture", specularTex);
 
+	gbufferPass.SetBlend(false);
+	gbufferPass.SetDepthTest(true);
 	ambientPass.SetBlend(false);
 	ambientPass.SetDepthTest(false);
 	shadowPass.SetBlend(false);

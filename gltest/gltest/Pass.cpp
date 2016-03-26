@@ -12,7 +12,7 @@
 #include "FBO.hpp"
 #include "Texture.hpp"
 
-Pass::Pass(ShaderProgram* shader, Scene* scene): shader(shader), scene(scene), targetFBO(NULL), numOfTexture(0)
+Pass::Pass(ShaderProgram* shader, Scene* scene) : shader(shader), scene(scene), targetFBO(NULL), numOfTexture(0), isBlend(false), isCullfaceBack(false), isCullfaceFront(false), isDepthTest(false)
 {
     
 }
