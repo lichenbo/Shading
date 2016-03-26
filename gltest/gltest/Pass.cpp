@@ -54,6 +54,26 @@ void Pass::Draw()
     
     if (targetFBO)
         targetFBO->Bind();
+	if (isBlend)
+		glEnable(GL_BLEND);
+	else
+		glDisable(GL_BLEND);
+	if (isDepthTest)
+		glEnable(GL_DEPTH_TEST);
+	else
+		glDisable(GL_DEPTH_TEST);
+	if (!isCullfaceFront && !isCullfaceBack)
+		glDisable(GL_CULL_FACE);
+	if (isCullfaceFront)
+	{
+		glCullFace(GL_FRONT);
+		glEnable(GL_CULL_FACE);
+	}
+	if (isCullfaceBack)
+	{
+		glCullFace(GL_BACK);
+		glEnable(GL_CULL_FACE);
+	}
     
     RebindUniforms();
 
@@ -67,6 +87,7 @@ void Pass::Draw()
 
     if (targetFBO)
         targetFBO->Unbind();
+	
     
     shader->Unuse();
 }
@@ -96,4 +117,24 @@ void Pass::BindAttribTexture()
 void Pass::SetTarget(FBO *fbo)
 {
     this->targetFBO = fbo;
+}
+
+void Pass::SetBlend(bool status)
+{
+	this->isBlend = status;
+}
+
+void Pass::SetDepthTest(bool status)
+{
+	this->isDepthTest = status;
+}
+
+void Pass::SetCullfaceFront(bool status)
+{
+	this->isCullfaceFront = status;
+}
+
+void Pass::SetCullfaceBack(bool status)
+{
+	this->isCullfaceBack = status;
 }

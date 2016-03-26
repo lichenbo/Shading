@@ -185,6 +185,10 @@
     <None Include="Shader\defergbuffer.vert" />
     <None Include="Shader\displayTexture.frag" />
     <None Include="Shader\displayTexture.vert" />
+    <None Include="Shader\shadow.frag" />
+    <None Include="Shader\shadow.vert" />
+    <None Include="Shader\shadowRender.frag" />
+    <None Include="Shader\shadowRender.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

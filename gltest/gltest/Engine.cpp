@@ -39,10 +39,7 @@ Engine::Engine(int argc, char ** argv)
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(glew_status));
 	}
 #endif
-
-	glEnable(GL_DEPTH_TEST);
-    //glEnable(GL_CULL_FACE|GL_DEPTH_TEST);
-    //glCullFace(GL_BACK);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void Engine::render()

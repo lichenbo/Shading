@@ -10,15 +10,19 @@ in vec3 worldSpaceNormal;
 
 out vec4 outputColor;
 
-layout(location = 0) out vec3 gposition;
-layout(location = 1) out vec3 gnormal;
+layout(location = 0) out vec4 gposition;
+layout(location = 1) out vec4 gnormal;
 layout(location = 2) out vec3 gdiffuse;
 layout(location = 3) out vec3 gspecular;
+//layout(location = 4) out vec3 glight;
+//layout(location = 5) out vec3 geye;
 
 void main(void)
 {
-	gposition = worldSpacePosition;
-	gnormal = worldSpaceNormal;
+	gposition.xyz = worldSpacePosition;
+	gposition.w = 1.0;
+	gnormal.xyz = worldSpaceNormal;
+	gnormal.w = 0.0;
 	gdiffuse = diffuse;
 	gspecular = specular;
 
