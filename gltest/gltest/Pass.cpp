@@ -54,6 +54,7 @@ void Pass::Draw()
     
     if (targetFBO)
         targetFBO->Bind();
+    
 	if (isBlend)
 		glEnable(GL_BLEND);
 	else
