@@ -173,8 +173,8 @@ int Model_PLY::Load(const char* filename)
             {
                 fgets(buffer,300,file);
                 
-                sscanf(buffer,"%f %f %f", &Vertex_Buffer[i], &Vertex_Buffer[i+1], &Vertex_Buffer[i+2]);
-                i += 3;
+                sscanf(buffer,"%f %f %f %f %f %f", &Vertex_Buffer[i], &Vertex_Buffer[i+1], &Vertex_Buffer[i+2], &Vertex_Buffer[i+3], &Vertex_Buffer[i+4], &Vertex_Buffer[i+5]);
+                i += 6;
             }
             
             // read faces
@@ -187,41 +187,37 @@ int Model_PLY::Load(const char* filename)
                 {
                     
                     int vertex1 = 0, vertex2 = 0, vertex3 = 0;
-                    //sscanf(buffer,"%i%i%in", vertex1,vertex2,vertex3 );
+
                     buffer[0] = ' ';
-                    sscanf(buffer,"%i%i%i", &vertex1,&vertex2,&vertex3 );
-                    /*vertex1 -= 1;
-                     vertex2 -= 1;
-                     vertex3 -= 1;
-                     */
-                    //  vertex == punt van vertex lijst
-                    // vertex_buffer -> xyz xyz xyz xyz
-                    //printf("%f %f %f ", Vertex_Buffer[3*vertex1], Vertex_Buffer[3*vertex1+1], Vertex_Buffer[3*vertex1+2]);
+                    sscanf(buffer,"%i%i%i", &vertex1,&vertex2,&vertex3);
+
                     
-                    Faces_Triangles[triangle_index] = Vertex_Buffer[3*vertex1];
-                    Faces_Triangles[triangle_index+1] = Vertex_Buffer[3*vertex1+1];
-                    Faces_Triangles[triangle_index+2] = Vertex_Buffer[3*vertex1+2];
-                    Faces_Triangles[triangle_index+3] = Vertex_Buffer[3*vertex2];
-                    Faces_Triangles[triangle_index+4] = Vertex_Buffer[3*vertex2+1];
-                    Faces_Triangles[triangle_index+5] = Vertex_Buffer[3*vertex2+2];
-                    Faces_Triangles[triangle_index+6] = Vertex_Buffer[3*vertex3];
-                    Faces_Triangles[triangle_index+7] = Vertex_Buffer[3*vertex3+1];
-                    Faces_Triangles[triangle_index+8] = Vertex_Buffer[3*vertex3+2];
+                    Faces_Triangles[triangle_index] = Vertex_Buffer[6*vertex1];
+                    Faces_Triangles[triangle_index+1] = Vertex_Buffer[6*vertex1+1];
+                    Faces_Triangles[triangle_index+2] = Vertex_Buffer[6*vertex1+2];
+                    
+                    Faces_Triangles[triangle_index+3] = Vertex_Buffer[6*vertex2];
+                    Faces_Triangles[triangle_index+4] = Vertex_Buffer[6*vertex2+1];
+                    Faces_Triangles[triangle_index+5] = Vertex_Buffer[6*vertex2+2];
+                    
+                    Faces_Triangles[triangle_index+6] = Vertex_Buffer[6*vertex3];
+                    Faces_Triangles[triangle_index+7] = Vertex_Buffer[6*vertex3+1];
+                    Faces_Triangles[triangle_index+8] = Vertex_Buffer[6*vertex3+2];
                     
                     float coord1[3] = { Faces_Triangles[triangle_index], Faces_Triangles[triangle_index+1],Faces_Triangles[triangle_index+2]};
                     float coord2[3] = {Faces_Triangles[triangle_index+3],Faces_Triangles[triangle_index+4],Faces_Triangles[triangle_index+5]};
                     float coord3[3] = {Faces_Triangles[triangle_index+6],Faces_Triangles[triangle_index+7],Faces_Triangles[triangle_index+8]};
-                    float *norm = this->calculateNormal( coord1, coord2, coord3 );
+                    //float *norm = this->calculateNormal( coord1, coord2, coord3 );
                     
-                    Normals[normal_index] = norm[0];
-                    Normals[normal_index+1] = norm[1];
-                    Normals[normal_index+2] = norm[2];
-                    Normals[normal_index+3] = norm[0];
-                    Normals[normal_index+4] = norm[1];
-                    Normals[normal_index+5] = norm[2];
-                    Normals[normal_index+6] = norm[0];
-                    Normals[normal_index+7] = norm[1];
-                    Normals[normal_index+8] = norm[2];
+                    Normals[normal_index] = Vertex_Buffer[6*vertex1 + 3];
+                    Normals[normal_index+1] = Vertex_Buffer[6*vertex1 + 4];
+                    Normals[normal_index+2] = Vertex_Buffer[6*vertex1 + 5];
+                    Normals[normal_index+3] = Vertex_Buffer[6*vertex2 + 3];
+                    Normals[normal_index+4] = Vertex_Buffer[6*vertex2 + 4];
+                    Normals[normal_index+5] = Vertex_Buffer[6*vertex2 + 5];
+                    Normals[normal_index+6] = Vertex_Buffer[6*vertex3 + 3];
+                    Normals[normal_index+7] = Vertex_Buffer[6*vertex3 + 4];
+                    Normals[normal_index+8] = Vertex_Buffer[6*vertex3 + 5];
                     
                     normal_index += 9;
                     
@@ -241,7 +237,7 @@ int Model_PLY::Load(const char* filename)
     } else {
         printf("File does not have a .PLY extension. ");    
     }
-    printf("File %s loaded.", filename);
+    printf("File %s loaded.\n", filename);
     return 0;
 }
 

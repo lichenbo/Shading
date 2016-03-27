@@ -10,5 +10,5 @@ out vec4 outputColor;
 void main(void)
 {
 	outputColor.xyz = ambientColor;
-	outputColor.w = 0.5;
+	//outputColor.w = 0.5;
 }

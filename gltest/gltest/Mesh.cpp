@@ -115,6 +115,15 @@ void Mesh::LoadSquare()
     vertex_data[16] = -1.0f;
     vertex_data[17] = 0.0f;
     
+    normal_data = new GLfloat[3 * numberOfVertices];
+    
+    for (int i = 0; i < 3*numberOfVertices; i = i+3)
+    {
+        normal_data[i] = 0.0f;
+        normal_data[i+1] = 0.0f;
+        normal_data[i+2] = 1.0f;
+    }
+    
     texture_data = new GLfloat[2*numberOfVertices];
     
     texture_data[0] = 0.0f;
