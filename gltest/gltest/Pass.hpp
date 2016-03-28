@@ -40,6 +40,7 @@ public:
 	void SetDepthTest(bool status);
 	void SetCullfaceFront(bool status);
 	void SetCullfaceBack(bool status);
+    void SetClear(bool status);
     
     void BindAttribVertex();
     void BindAttribNormal();
@@ -67,6 +68,7 @@ private:
 	bool isDepthTest;
 	bool isCullfaceFront;
 	bool isCullfaceBack;
+    bool isClear;
 	
     
     std::unordered_map<GLint, GLfloat**> UniformMatrix4Mapper;

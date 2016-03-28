@@ -182,6 +182,7 @@ int main(int argc, char * argv[]) {
 	if (!ambientShader->AddFragmentShaderPath(path)) return 0;
 	if (!ambientShader->Link()) return 0;
 	ambientShader->SetAttribVertex("vertex_coord");
+    ambientShader->SetAttribTexture("texure_coordinate");
 
 	ShaderProgram* shadowMapShader = new ShaderProgram();
 	GET_SHADER_PATH(path, 256, "shadow.vert");
@@ -230,8 +231,11 @@ int main(int argc, char * argv[]) {
 	Mesh Light1;
 	Light1.Load(path);
 
-	Mesh FSQ;
-	FSQ.LoadSquare();
+	Mesh AmbientFSQ;
+	AmbientFSQ.LoadSquare();
+    
+    Mesh ShadowRenderFSQ;
+    ShadowRenderFSQ.LoadSquare();
 
 	// ---------------MODEL LOADING--------------------------
 
@@ -248,8 +252,8 @@ int main(int argc, char * argv[]) {
     bunnyScene.addObject(&square6);
 
 
-	Scene fullScreen;
-	fullScreen.addObject(&FSQ);
+    Scene ambientScene;
+	ambientScene.addObject(&AmbientFSQ);
 
 	Scene shadowMapScene;
 	shadowMapScene.addObject(&shadowBunny1);
@@ -262,18 +266,22 @@ int main(int argc, char * argv[]) {
     shadowMapScene.addObject(&shadowSquare5);
     shadowMapScene.addObject(&shadowSquare6);
 
+    Scene shadowRenderScene;
+    shadowRenderScene.addObject(&ShadowRenderFSQ);
+
 
 
 	// --------------SCENE LOADING --------------------------
 
 	Pass gbufferPass(defergbufferShader, &bunnyScene);
-	Pass ambientPass(ambientShader, &fullScreen);
+	Pass ambientPass(ambientShader, &ambientScene);
 	Pass shadowPass(shadowMapShader, &shadowMapScene);
-	Pass shadowRenderPass(shadowRenderShader, &fullScreen);
+	Pass shadowRenderPass(shadowRenderShader, &shadowRenderScene);
 
 	gbufferPass.BindAttribNormal();
 	gbufferPass.BindAttribVertex();
 	ambientPass.BindAttribVertex();
+    ambientPass.BindAttribTexture();
 	shadowPass.BindAttribVertex();
 	shadowRenderPass.BindAttribVertex();
 	shadowRenderPass.BindAttribTexture();
@@ -355,6 +363,7 @@ int main(int argc, char * argv[]) {
 	Texture* specularTex = g_buffer.GetTexture(3);
 	Texture* shadowTex = shadow_buffer.GetTexture(0);
 
+    ambientPass.BindTexture("diffuseTexture", diffuseTex);
 	shadowRenderPass.BindTexture("shadowTexture", shadowTex);
 	shadowRenderPass.BindTexture("positionTexture", positionTex);
 	shadowRenderPass.BindTexture("normalTexture", normalTex);
@@ -363,12 +372,16 @@ int main(int argc, char * argv[]) {
 
 	gbufferPass.SetBlend(false);
 	gbufferPass.SetDepthTest(true);
+    gbufferPass.SetClear(true);
 	ambientPass.SetBlend(false);
 	ambientPass.SetDepthTest(false);
+    ambientPass.SetClear(true);
 	shadowPass.SetBlend(false);
 	shadowPass.SetDepthTest(true);
+    shadowPass.SetClear(true);
 	shadowRenderPass.SetBlend(true);
 	shadowRenderPass.SetDepthTest(false);
+    shadowRenderPass.SetClear(false);
 
 	// ---------------PASS CONFIG --------------------------
 	engine->addPass(&gbufferPass);

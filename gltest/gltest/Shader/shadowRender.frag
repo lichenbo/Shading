@@ -37,23 +37,19 @@ void main()
 	float G;
 
 	vec2 shadowIndex = shadowCoord.xy/shadowCoord.w;
-	outputColor.xyz = 0.5*Kd;
-	outputColor.w = 1.0;
-	if (shadowCoord.w > 0 && shadowIndex.x > 0 && shadowIndex.x < 1 && shadowIndex.y > 0 && shadowIndex.y < 1) {
-		float lightDepth = texture(shadowTexture, shadowIndex).w;
-		float pixelDepth = shadowCoord.w/100;
-		if (pixelDepth - lightDepth < 0.00001) {
-			float g = 0.5;
-			float alpha = pow(8192, g);
-			F = Ks + (1 - Ks) * pow((1 - dot(L, H)), 5);
-			D = ((alpha + 2)/(2*M_PI))*pow(max(0.0,dot(N, H)), alpha);
-			G = 1.0 / (dot(L,H) * dot(L,H));
-			I = I * M_PI;
-			if (dot(L, N) > 0) {
-				outputColor.xyz += (Kd / M_PI + 0.25 * F * D *G) * dot(L, N) * I; 
-
-			}
-		}
-	}
-	
+    outputColor = vec4(0.0, 0.0, 0.0, 0.8);
+    
+    float lightDepth = texture(shadowTexture, shadowIndex).w;
+    float pixelDepth = shadowCoord.w/100;
+    if (pixelDepth - lightDepth < 0.00001) {
+        float g = 0.5;
+        float alpha = pow(8192, g);
+        F = Ks + (1 - Ks) * pow((1 - dot(L, H)), 5);
+        D = ((alpha + 2)/(2*M_PI))*pow(max(0.0,dot(N, H)), alpha);
+        G = 1.0 / (dot(L,H) * dot(L,H));
+        I = I * M_PI;
+        if (dot(L, N) > 0) {
+            outputColor.xyz += (Kd / M_PI + 0.25 * F * D *G) * dot(L, N) * I;
+        }
+    }
 }

@@ -12,7 +12,7 @@
 #include "FBO.hpp"
 #include "Texture.hpp"
 
-Pass::Pass(ShaderProgram* shader, Scene* scene) : shader(shader), scene(scene), targetFBO(NULL), numOfTexture(0), isBlend(false), isCullfaceBack(false), isCullfaceFront(false), isDepthTest(false)
+Pass::Pass(ShaderProgram* shader, Scene* scene) : shader(shader), scene(scene), targetFBO(NULL), numOfTexture(0), isBlend(false), isCullfaceBack(false), isCullfaceFront(false), isDepthTest(false), isClear(true)
 {
     
 }
@@ -75,6 +75,8 @@ void Pass::Draw()
 		glCullFace(GL_BACK);
 		glEnable(GL_CULL_FACE);
 	}
+    if (isClear)
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     RebindUniforms();
 
@@ -138,4 +140,9 @@ void Pass::SetCullfaceFront(bool status)
 void Pass::SetCullfaceBack(bool status)
 {
 	this->isCullfaceBack = status;
+}
+
+void Pass::SetClear(bool status)
+{
+    this->isClear = status;
 }
