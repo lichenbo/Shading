@@ -61,35 +61,35 @@ auto Bunny3Diffuse = glm::vec3(0.5, 0.0, 0.5);
 auto Bunny3Specular = glm::vec3(0.5, 0.5, 0.0);
 
 //Square1
-auto Square1ModelMatrix = glm::translate(glm::scale(glm::mat4(1.0f), glm::vec3(5.0f)),glm::vec3(0.0f,0.0f,-5.0f));
+auto Square1ModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -5.0f)) * glm::scale(glm::mat4(1.0f),glm::vec3(5.0f));
 auto Square1NormalMatrix = glm::transpose(glm::inverse(Square1ModelMatrix));
 auto Square1Diffuse = glm::vec3(1.0, 0.0, 0.0);
-auto Square1Specular = glm::vec3(1.0, 0.0, 0.0);
+auto Square1Specular = glm::vec3(1.0, 1.0, 1.0);
 
-auto Square2ModelMatrix = glm::translate(glm::scale(glm::rotate(glm::mat4(1.0f),-90.0f,glm::vec3(0.0f,1.0f,0.0f)), glm::vec3(5.0f)),glm::vec3(5.0f,0.0f,0.0f));
+auto Square2ModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(-5.0f, 0.0f, 0.0f)) * glm::scale(glm::mat4(1.0f),glm::vec3(5.0f)) * glm::rotate(glm::mat4(1.0f),glm::radians(90.0f),glm::vec3(0.0f,1.0f,0.0f));
 auto Square2NormalMatrix = glm::transpose(glm::inverse(Square2ModelMatrix));
-auto Square2Diffuse = glm::vec3(1.0, 0.0, 0.0);
-auto Square2Specular = glm::vec3(1.0, 0.0, 0.0);
+auto Square2Diffuse = glm::vec3(0.0, 1.0, 0.0);
+auto Square2Specular = glm::vec3(1.0, 1.0, 1.0);
 
-auto Square3ModelMatrix = glm::translate(glm::scale(glm::mat4(1.0f), glm::vec3(5.0f)),glm::vec3(0.0f,0.0f,-5.0f));
+auto Square3ModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 5.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(5.0f)) * glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 auto Square3NormalMatrix = glm::transpose(glm::inverse(Square3ModelMatrix));
-auto Square3Diffuse = glm::vec3(1.0, 0.0, 0.0);
-auto Square3Specular = glm::vec3(1.0, 0.0, 0.0);
+auto Square3Diffuse = glm::vec3(0.0, 0.0, 1.0);
+auto Square3Specular = glm::vec3(1.0, 1.0, 1.0);
 
-auto Square4ModelMatrix = glm::translate(glm::scale(glm::mat4(1.0f), glm::vec3(5.0f)),glm::vec3(0.0f,0.0f,-5.0f));
+auto Square4ModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(5.0f, 0.0f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(5.0f)) * glm::rotate(glm::mat4(1.0f), glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 auto Square4NormalMatrix = glm::transpose(glm::inverse(Square4ModelMatrix));
-auto Square4Diffuse = glm::vec3(1.0, 0.0, 0.0);
-auto Square4Specular = glm::vec3(1.0, 0.0, 0.0);
+auto Square4Diffuse = glm::vec3(1.0, 0.5, 0.5);
+auto Square4Specular = glm::vec3(1.0, 1.0, 1.0);
 
-auto Square5ModelMatrix = glm::translate(glm::scale(glm::mat4(1.0f), glm::vec3(5.0f)),glm::vec3(0.0f,0.0f,-5.0f));
+auto Square5ModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 5.0f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(5.0f)) * glm::rotate(glm::mat4(1.0f), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 auto Square5NormalMatrix = glm::transpose(glm::inverse(Square5ModelMatrix));
-auto Square5Diffuse = glm::vec3(1.0, 0.0, 0.0);
-auto Square5Specular = glm::vec3(1.0, 0.0, 0.0);
+auto Square5Diffuse = glm::vec3(0.5, 1.0, 0.5);
+auto Square5Specular = glm::vec3(1.0, 1.0, 1.0);
 
-auto Square6ModelMatrix = glm::translate(glm::scale(glm::mat4(1.0f), glm::vec3(5.0f)),glm::vec3(0.0f,0.0f,-5.0f));
+auto Square6ModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -5.0f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(5.0f)) * glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 auto Square6NormalMatrix = glm::transpose(glm::inverse(Square6ModelMatrix));
-auto Square6Diffuse = glm::vec3(1.0, 0.0, 0.0);
-auto Square6Specular = glm::vec3(1.0, 0.0, 0.0);
+auto Square6Diffuse = glm::vec3(0.5, 0.5, 1.0);
+auto Square6Specular = glm::vec3(1.0, 1.0, 1.0);
 
 // Light1: Global light
 auto Light1Pos = glm::vec3(4.0f);
