@@ -37,7 +37,7 @@ void main()
 	float G;
 
 	vec2 shadowIndex = shadowCoord.xy/shadowCoord.w;
-    outputColor = vec4(0.0, 0.0, 0.0, 0.8);
+    outputColor = vec4(0.0, 0.0, 0.0, 0.7);
     
     float lightDepth = texture(shadowTexture, shadowIndex).w;
     float pixelDepth = shadowCoord.w/100;

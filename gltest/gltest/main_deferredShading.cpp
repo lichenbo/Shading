@@ -182,7 +182,7 @@ int main(int argc, char * argv[]) {
 	if (!ambientShader->AddFragmentShaderPath(path)) return 0;
 	if (!ambientShader->Link()) return 0;
 	ambientShader->SetAttribVertex("vertex_coord");
-    ambientShader->SetAttribTexture("texure_coordinate");
+    ambientShader->SetAttribTexture("texture_coordinate");
 
 	ShaderProgram* shadowMapShader = new ShaderProgram();
 	GET_SHADER_PATH(path, 256, "shadow.vert");
