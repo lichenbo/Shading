@@ -14,8 +14,7 @@ layout(location = 0) out vec4 gposition;
 layout(location = 1) out vec4 gnormal;
 layout(location = 2) out vec3 gdiffuse;
 layout(location = 3) out vec3 gspecular;
-//layout(location = 4) out vec3 glight;
-//layout(location = 5) out vec3 geye;
+
 
 void main(void)
 {

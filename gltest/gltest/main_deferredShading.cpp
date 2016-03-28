@@ -102,6 +102,17 @@ auto Light1Specular = glm::vec3(1.0, 1.0, 1.0);
 auto Light1ViewMatrix = glm::lookAt(Light1Pos, WatchPos, UpPos);
 auto Light1ShadowMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.5f)) * ProjectionMatrix * Light1ViewMatrix;
 
+// Light2: Local light
+auto Light2Pos = glm::vec3(-2.0f);
+auto Light2ModelMatrix = glm::translate(glm::mat4(1.0f), Light1Pos) * glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+auto Light2NormalMatrix = glm::transpose(glm::inverse(Light2ModelMatrix));
+auto Light2Diffuse = glm::vec3(1.0, 1.0, 1.0);
+auto Light2Specular = glm::vec3(0.0, 0.0, 1.0);
+
+// For Shadow Pass
+auto Light2ViewMatrix = glm::lookAt(Light1Pos, WatchPos, UpPos);
+auto Light2ShadowMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.5f)) * ProjectionMatrix * Light1ViewMatrix;
+
 // -------------------- POINTERS ZONE ------------------------
 auto EyePosPtr = glm::value_ptr(EyePos);
 auto UpPosPtr = glm::value_ptr(UpPos);
@@ -129,6 +140,13 @@ auto Light1DiffusePtr = glm::value_ptr(Light1Diffuse);
 auto Light1SpecularPtr = glm::value_ptr(Light1Specular);
 auto Light1ViewMatrixPtr = glm::value_ptr(Light1ViewMatrix);
 auto Light1ShadowMatrixPtr = glm::value_ptr(Light1ShadowMatrix);
+auto Light2PosPtr = glm::value_ptr(Light2Pos);
+auto Light2ModelMatrixPtr = glm::value_ptr(Light2ModelMatrix);
+auto Light2NormalMatrixPtr = glm::value_ptr(Light2NormalMatrix);
+auto Light2DiffusePtr = glm::value_ptr(Light2Diffuse);
+auto Light2SpecularPtr = glm::value_ptr(Light2Specular);
+auto Light2ViewMatrixPtr = glm::value_ptr(Light2ViewMatrix);
+auto Light2ShadowMatrixPtr = glm::value_ptr(Light2ShadowMatrix);
 auto Square1ModelMatrixPtr = glm::value_ptr(Square1ModelMatrix);
 auto Square1NormalMatrixPtr = glm::value_ptr(Square1NormalMatrix);
 auto Square1DiffusePtr = glm::value_ptr(Square1Diffuse);
@@ -200,6 +218,15 @@ int main(int argc, char * argv[]) {
 	if (!shadowRenderShader->Link()) return 0;
 	shadowRenderShader->SetAttribVertex("vertex");
 	shadowRenderShader->SetAttribTexture("texture_coordinate");
+    
+    ShaderProgram* deferredBRDFShader = new ShaderProgram();
+    GET_SHADER_PATH(path, 256, "deferredBRDF.vert");
+    if (!deferredBRDFShader->AddVertexShaderPath(path)) return 0;
+    GET_SHADER_PATH(path, 256, "deferredBRDF.frag");
+    if (!deferredBRDFShader->AddFragmentShaderPath(path)) return 0;
+    if (!deferredBRDFShader->Link()) return 0;
+    deferredBRDFShader->SetAttribVertex("vertex");
+    deferredBRDFShader->SetAttribTexture("texture_coordinate");
 
 	// --------------SHADER LOADING--------------------------
 
@@ -214,6 +241,8 @@ int main(int argc, char * argv[]) {
 	shadowBunny1.Load(path);
 	shadowBunny2.Load(path);
 	shadowBunny3.Load(path);
+    
+    
     square1.LoadSquare();
     square2.LoadSquare();
     square3.LoadSquare();
@@ -228,14 +257,18 @@ int main(int argc, char * argv[]) {
     shadowSquare6.LoadSquare();
 
 	GET_MODEL_PATH(path, 256, "sphere.ply");
-	Mesh Light1;
+	Mesh Light1, Light2;
 	Light1.Load(path);
+    Light2.Load(path);
 
 	Mesh AmbientFSQ;
 	AmbientFSQ.LoadSquare();
     
     Mesh ShadowRenderFSQ;
     ShadowRenderFSQ.LoadSquare();
+    
+    Mesh DeferredBRDFFSQ;
+    DeferredBRDFFSQ.LoadSquare();
 
 	// ---------------MODEL LOADING--------------------------
 
@@ -244,6 +277,7 @@ int main(int argc, char * argv[]) {
 	bunnyScene.addObject(&bunny2);
 	bunnyScene.addObject(&bunny3);
 	bunnyScene.addObject(&Light1);
+    bunnyScene.addObject(&Light2);
     bunnyScene.addObject(&square1);
     bunnyScene.addObject(&square2);
     bunnyScene.addObject(&square3);
@@ -268,8 +302,9 @@ int main(int argc, char * argv[]) {
 
     Scene shadowRenderScene;
     shadowRenderScene.addObject(&ShadowRenderFSQ);
-
-
+    
+    Scene deferredBRDFScene;
+    deferredBRDFScene.addObject(&DeferredBRDFFSQ);
 
 	// --------------SCENE LOADING --------------------------
 
@@ -277,6 +312,7 @@ int main(int argc, char * argv[]) {
 	Pass ambientPass(ambientShader, &ambientScene);
 	Pass shadowPass(shadowMapShader, &shadowMapScene);
 	Pass shadowRenderPass(shadowRenderShader, &shadowRenderScene);
+    Pass deferredBRDFPass(deferredBRDFShader, &deferredBRDFScene);
 
 	gbufferPass.BindAttribNormal();
 	gbufferPass.BindAttribVertex();
@@ -285,11 +321,12 @@ int main(int argc, char * argv[]) {
 	shadowPass.BindAttribVertex();
 	shadowRenderPass.BindAttribVertex();
 	shadowRenderPass.BindAttribTexture();
+    deferredBRDFPass.BindAttribVertex();
+    deferredBRDFPass.BindAttribTexture();
 
 	// --------------- BIND ATTRIBUTES ---------------------
 
 	gbufferPass.BindUniformMatrix4("ViewMatrix", &ViewMatrixPtr);
-	gbufferPass.BindUniformMatrix4("ViewInverseMatrix", &ViewInverseMatrixPtr);
 	gbufferPass.BindUniformMatrix4("ProjectionMatrix", &ProjectionMatrixPtr);
 	ambientPass.BindUniformVec3("ambientColor", &AmbientLightPtr);
 	shadowPass.BindUniformMatrix4("ViewMatrix", &Light1ViewMatrixPtr);
@@ -298,6 +335,10 @@ int main(int argc, char * argv[]) {
 	shadowRenderPass.BindUniformVec3("lightPos", &Light1PosPtr);
 	shadowRenderPass.BindUniformVec3("eyePos", &EyePosPtr);
 	shadowRenderPass.BindUniformVec3("lightValue", &Light1DiffusePtr);
+    deferredBRDFPass.BindUniformVec3("lightPos", &Light2PosPtr);
+    deferredBRDFPass.BindUniformVec3("eyePos", &EyePosPtr);
+    deferredBRDFPass.BindUniformVec3("lightValue", &Light2DiffusePtr);
+
 	// ------------- BIND PASS-WISE UNIFORMS---------------
 
 	gbufferPass.MeshBindUniformMatrix4(&bunny1, "ModelMatrix", &Bunny1ModelMatrixPtr);
@@ -316,6 +357,10 @@ int main(int argc, char * argv[]) {
 	gbufferPass.MeshBindUniformMatrix4(&Light1, "NormalMatrix", &Light1NormalMatrixPtr);
 	gbufferPass.MeshBindUniformVec3(&Light1, "diffuse", &Light1DiffusePtr);
 	gbufferPass.MeshBindUniformVec3(&Light1, "specular", &Light1SpecularPtr);
+    gbufferPass.MeshBindUniformMatrix4(&Light2, "ModelMatrix", &Light2ModelMatrixPtr);
+    gbufferPass.MeshBindUniformMatrix4(&Light2, "NormalMatrix", &Light2NormalMatrixPtr);
+    gbufferPass.MeshBindUniformVec3(&Light2, "diffuse", &Light2DiffusePtr);
+    gbufferPass.MeshBindUniformVec3(&Light2, "specular", &Light2SpecularPtr);
     gbufferPass.MeshBindUniformMatrix4(&square1, "ModelMatrix", &Square1ModelMatrixPtr);
     gbufferPass.MeshBindUniformMatrix4(&square1, "NormalMatrix", &Square1NormalMatrixPtr);
     gbufferPass.MeshBindUniformVec3(&square1, "diffuse", &Square1DiffusePtr);
@@ -369,6 +414,10 @@ int main(int argc, char * argv[]) {
 	shadowRenderPass.BindTexture("normalTexture", normalTex);
 	shadowRenderPass.BindTexture("diffuseTexture", diffuseTex);
 	shadowRenderPass.BindTexture("specularTexture", specularTex);
+    deferredBRDFPass.BindTexture("positionTexture", positionTex);
+    deferredBRDFPass.BindTexture("normalTexture", normalTex);
+    deferredBRDFPass.BindTexture("diffuseTexture", diffuseTex);
+    deferredBRDFPass.BindTexture("specularTexture", specularTex);
 
 	gbufferPass.SetBlend(false);
 	gbufferPass.SetDepthTest(true);
@@ -382,12 +431,16 @@ int main(int argc, char * argv[]) {
 	shadowRenderPass.SetBlend(true);
 	shadowRenderPass.SetDepthTest(false);
     shadowRenderPass.SetClear(false);
+    deferredBRDFPass.SetBlend(true);
+    deferredBRDFPass.SetDepthTest(false);
+    deferredBRDFPass.SetClear(false);
 
 	// ---------------PASS CONFIG --------------------------
 	engine->addPass(&gbufferPass);
 	engine->addPass(&ambientPass);
 	engine->addPass(&shadowPass);
 	engine->addPass(&shadowRenderPass);
+    engine->addPass(&deferredBRDFPass);
 
 	// ----------------ENGINE------------------------------
 
