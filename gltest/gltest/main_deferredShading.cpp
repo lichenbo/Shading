@@ -110,6 +110,14 @@ auto Light2Diffuse = glm::vec3(1.0, 1.0, 1.0);
 auto Light2Specular = glm::vec3(0.0, 0.0, 1.0);
 auto Light2Range = glm::vec3(1.0);
 
+// Light3: Local light
+auto Light3Pos = glm::vec3(0.25f);
+auto Light3ModelMatrix = glm::translate(glm::mat4(1.0f), Light3Pos) * glm::scale(glm::mat4(1.0f), glm::vec3(0.05f));
+auto Light3NormalMatrix = glm::transpose(glm::inverse(Light3ModelMatrix));
+auto Light3Diffuse = glm::vec3(1.0, 1.0, 1.0);
+auto Light3Specular = glm::vec3(0.0, 0.0, 1.0);
+auto Light3Range = glm::vec3(1.0);
+
 
 // -------------------- POINTERS ZONE ------------------------
 auto EyePosPtr = glm::value_ptr(EyePos);
@@ -144,6 +152,12 @@ auto Light2NormalMatrixPtr = glm::value_ptr(Light2NormalMatrix);
 auto Light2DiffusePtr = glm::value_ptr(Light2Diffuse);
 auto Light2SpecularPtr = glm::value_ptr(Light2Specular);
 auto Light2RangePtr = glm::value_ptr(Light2Range);
+auto Light3PosPtr = glm::value_ptr(Light3Pos);
+auto Light3ModelMatrixPtr = glm::value_ptr(Light3ModelMatrix);
+auto Light3NormalMatrixPtr = glm::value_ptr(Light3NormalMatrix);
+auto Light3DiffusePtr = glm::value_ptr(Light3Diffuse);
+auto Light3SpecularPtr = glm::value_ptr(Light3Specular);
+auto Light3RangePtr = glm::value_ptr(Light3Range);
 auto Square1ModelMatrixPtr = glm::value_ptr(Square1ModelMatrix);
 auto Square1NormalMatrixPtr = glm::value_ptr(Square1NormalMatrix);
 auto Square1DiffusePtr = glm::value_ptr(Square1Diffuse);
@@ -254,9 +268,10 @@ int main(int argc, char * argv[]) {
     shadowSquare6.LoadSquare();
 
 	GET_MODEL_PATH(path, 256, "sphere.ply");
-	Mesh Light1, Light2;
+	Mesh Light1, Light2, Light3;
 	Light1.Load(path);
     Light2.Load(path);
+    Light3.Load(path);
 
 	Mesh AmbientFSQ;
 	AmbientFSQ.LoadSquare();
@@ -275,6 +290,7 @@ int main(int argc, char * argv[]) {
 	bunnyScene.addObject(&bunny3);
 	bunnyScene.addObject(&Light1);
     bunnyScene.addObject(&Light2);
+    bunnyScene.addObject(&Light3);
     bunnyScene.addObject(&square1);
     bunnyScene.addObject(&square2);
     bunnyScene.addObject(&square3);
@@ -309,7 +325,8 @@ int main(int argc, char * argv[]) {
 	Pass ambientPass(ambientShader, &ambientScene);
 	Pass shadowPass(shadowMapShader, &shadowMapScene);
 	Pass shadowRenderPass(shadowRenderShader, &shadowRenderScene);
-    Pass deferredBRDFPass(deferredBRDFShader, &deferredBRDFScene);
+    Pass deferredBRDFPass1(deferredBRDFShader, &deferredBRDFScene);
+    Pass deferredBRDFPass2(deferredBRDFShader, &deferredBRDFScene);
 
 	gbufferPass.BindAttribNormal();
 	gbufferPass.BindAttribVertex();
@@ -318,8 +335,8 @@ int main(int argc, char * argv[]) {
 	shadowPass.BindAttribVertex();
 	shadowRenderPass.BindAttribVertex();
 	shadowRenderPass.BindAttribTexture();
-    deferredBRDFPass.BindAttribVertex();
-    deferredBRDFPass.BindAttribTexture();
+    deferredBRDFPass1.BindAttribVertex();
+    deferredBRDFPass1.BindAttribTexture();
 
 	// --------------- BIND ATTRIBUTES ---------------------
 
@@ -332,10 +349,13 @@ int main(int argc, char * argv[]) {
 	shadowRenderPass.BindUniformVec3("lightPos", &Light1PosPtr);
 	shadowRenderPass.BindUniformVec3("eyePos", &EyePosPtr);
 	shadowRenderPass.BindUniformVec3("lightValue", &Light1DiffusePtr);
-    deferredBRDFPass.BindUniformVec3("lightPos", &Light2PosPtr);
-    deferredBRDFPass.BindUniformVec3("eyePos", &EyePosPtr);
-    deferredBRDFPass.BindUniformVec3("lightValue", &Light2DiffusePtr);
-    deferredBRDFPass.BindUniformVec3("range", &Light2RangePtr);
+    deferredBRDFPass1.BindUniformVec3("lightPos", &Light2PosPtr);
+    deferredBRDFPass1.BindUniformVec3("eyePos", &EyePosPtr);
+    deferredBRDFPass1.BindUniformVec3("lightValue", &Light2DiffusePtr);
+    deferredBRDFPass1.BindUniformVec3("range", &Light2RangePtr);
+    deferredBRDFPass2.BindUniformVec3("lightPos", &Light3PosPtr);
+    deferredBRDFPass2.BindUniformVec3("lightValue", &Light3DiffusePtr);
+    deferredBRDFPass2.BindUniformVec3("range", &Light3RangePtr);
 
 	// ------------- BIND PASS-WISE UNIFORMS---------------
 
@@ -359,6 +379,10 @@ int main(int argc, char * argv[]) {
     gbufferPass.MeshBindUniformMatrix4(&Light2, "NormalMatrix", &Light2NormalMatrixPtr);
     gbufferPass.MeshBindUniformVec3(&Light2, "diffuse", &Light2DiffusePtr);
     gbufferPass.MeshBindUniformVec3(&Light2, "specular", &Light2SpecularPtr);
+    gbufferPass.MeshBindUniformMatrix4(&Light3, "ModelMatrix", &Light3ModelMatrixPtr);
+    gbufferPass.MeshBindUniformMatrix4(&Light3, "NormalMatrix", &Light3NormalMatrixPtr);
+    gbufferPass.MeshBindUniformVec3(&Light3, "diffuse", &Light3DiffusePtr);
+    gbufferPass.MeshBindUniformVec3(&Light3, "specular", &Light3SpecularPtr);
     gbufferPass.MeshBindUniformMatrix4(&square1, "ModelMatrix", &Square1ModelMatrixPtr);
     gbufferPass.MeshBindUniformMatrix4(&square1, "NormalMatrix", &Square1NormalMatrixPtr);
     gbufferPass.MeshBindUniformVec3(&square1, "diffuse", &Square1DiffusePtr);
@@ -412,10 +436,14 @@ int main(int argc, char * argv[]) {
 	shadowRenderPass.BindTexture("normalTexture", normalTex);
 	shadowRenderPass.BindTexture("diffuseTexture", diffuseTex);
 	shadowRenderPass.BindTexture("specularTexture", specularTex);
-    deferredBRDFPass.BindTexture("positionTexture", positionTex);
-    deferredBRDFPass.BindTexture("normalTexture", normalTex);
-    deferredBRDFPass.BindTexture("diffuseTexture", diffuseTex);
-    deferredBRDFPass.BindTexture("specularTexture", specularTex);
+    deferredBRDFPass1.BindTexture("positionTexture", positionTex);
+    deferredBRDFPass1.BindTexture("normalTexture", normalTex);
+    deferredBRDFPass1.BindTexture("diffuseTexture", diffuseTex);
+    deferredBRDFPass1.BindTexture("specularTexture", specularTex);
+    deferredBRDFPass2.BindTexture("positionTexture", positionTex);
+    deferredBRDFPass2.BindTexture("normalTexture", normalTex);
+    deferredBRDFPass2.BindTexture("diffuseTexture", diffuseTex);
+    deferredBRDFPass2.BindTexture("specularTexture", specularTex);
 
 	gbufferPass.SetBlend(false);
 	gbufferPass.SetDepthTest(true);
@@ -429,16 +457,20 @@ int main(int argc, char * argv[]) {
 	shadowRenderPass.SetBlend(true);
 	shadowRenderPass.SetDepthTest(false);
     shadowRenderPass.SetClear(false);
-    deferredBRDFPass.SetBlend(true);
-    deferredBRDFPass.SetDepthTest(false);
-    deferredBRDFPass.SetClear(false);
+    deferredBRDFPass1.SetBlend(true);
+    deferredBRDFPass1.SetDepthTest(false);
+    deferredBRDFPass1.SetClear(false);
+    deferredBRDFPass2.SetBlend(true);
+    deferredBRDFPass2.SetDepthTest(false);
+    deferredBRDFPass2.SetClear(false);
 
 	// ---------------PASS CONFIG --------------------------
 	engine->addPass(&gbufferPass);
 	engine->addPass(&ambientPass);
 	engine->addPass(&shadowPass);
 	engine->addPass(&shadowRenderPass);
-    engine->addPass(&deferredBRDFPass);
+    engine->addPass(&deferredBRDFPass1);
+    engine->addPass(&deferredBRDFPass2);
 
 	// ----------------ENGINE------------------------------
 
