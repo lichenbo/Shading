@@ -54,6 +54,7 @@ void main()
 
 			}
 		}
+        //outputColor.xyz = vec3(1.0f, 1.0f, 1.0f);
 	}
 	
 }

@@ -39,7 +39,7 @@ void keyboardPress(unsigned char c, int x, int y);
 auto EyePos = glm::vec3(0.0f, 0.0f, 3.0f);
 auto UpPos = glm::vec3(0.0f, 1.0f, 0.0f);
 auto WatchPos = glm::vec3(0.0f, 0.0f, 0.0f);
-auto ProjectionMatrix = glm::perspective(45.0f, 1.0f, 0.5f, 40.0f);
+auto ProjectionMatrix = glm::perspective(45.0f, 1.0f, 0.5f, 10.0f);
 auto ViewMatrix = glm::lookAt(EyePos, WatchPos, UpPos);
 auto ViewInverseMatrix = glm::inverse(ViewMatrix);
 auto AmbientLight = glm::vec3(1.0, 1.0, 1.0);
@@ -81,12 +81,12 @@ auto Square4NormalMatrix = glm::transpose(glm::inverse(Square4ModelMatrix));
 auto Square4Diffuse = glm::vec3(1.0, 0.5, 0.5);
 auto Square4Specular = glm::vec3(1.0, 1.0, 1.0);
 
-auto Square5ModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 3.0f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(3.0f)) * glm::rotate(glm::mat4(1.0f), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+auto Square5ModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 3.0f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(3.0f)) * glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 auto Square5NormalMatrix = glm::transpose(glm::inverse(Square5ModelMatrix));
 auto Square5Diffuse = glm::vec3(0.5, 1.0, 0.5);
 auto Square5Specular = glm::vec3(1.0, 1.0, 1.0);
 
-auto Square6ModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -3.0f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(3.0f)) * glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+auto Square6ModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -3.0f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(3.0f)) * glm::rotate(glm::mat4(1.0f), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 auto Square6NormalMatrix = glm::transpose(glm::inverse(Square6ModelMatrix));
 auto Square6Diffuse = glm::vec3(0.5, 0.5, 1.0);
 auto Square6Specular = glm::vec3(1.0, 1.0, 1.0);

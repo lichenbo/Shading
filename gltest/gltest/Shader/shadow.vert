@@ -3,12 +3,12 @@ uniform mat4 ModelMatrix;
 uniform mat4 ViewMatrix;
 uniform mat4 ProjectionMatrix;
 
-in vec4 vertex;
+in vec3 vertex;
 
 out vec4 position;
 
 void main()
 {      
-	gl_Position = ProjectionMatrix *ViewMatrix*ModelMatrix*vertex;
+	gl_Position = ProjectionMatrix *ViewMatrix*ModelMatrix*vec4(vertex,1);
 	position = gl_Position;
 }
