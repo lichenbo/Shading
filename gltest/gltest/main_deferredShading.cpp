@@ -103,15 +103,13 @@ auto Light1ViewMatrix = glm::lookAt(Light1Pos, WatchPos, UpPos);
 auto Light1ShadowMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.5f)) * ProjectionMatrix * Light1ViewMatrix;
 
 // Light2: Local light
-auto Light2Pos = glm::vec3(-2.0f);
-auto Light2ModelMatrix = glm::translate(glm::mat4(1.0f), Light1Pos) * glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+auto Light2Pos = glm::vec3(-0.5f);
+auto Light2ModelMatrix = glm::translate(glm::mat4(1.0f), Light2Pos) * glm::scale(glm::mat4(1.0f), glm::vec3(0.05f));
 auto Light2NormalMatrix = glm::transpose(glm::inverse(Light2ModelMatrix));
 auto Light2Diffuse = glm::vec3(1.0, 1.0, 1.0);
 auto Light2Specular = glm::vec3(0.0, 0.0, 1.0);
+auto Light2Range = glm::vec3(1.0);
 
-// For Shadow Pass
-auto Light2ViewMatrix = glm::lookAt(Light1Pos, WatchPos, UpPos);
-auto Light2ShadowMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.5f)) * ProjectionMatrix * Light1ViewMatrix;
 
 // -------------------- POINTERS ZONE ------------------------
 auto EyePosPtr = glm::value_ptr(EyePos);
@@ -145,8 +143,7 @@ auto Light2ModelMatrixPtr = glm::value_ptr(Light2ModelMatrix);
 auto Light2NormalMatrixPtr = glm::value_ptr(Light2NormalMatrix);
 auto Light2DiffusePtr = glm::value_ptr(Light2Diffuse);
 auto Light2SpecularPtr = glm::value_ptr(Light2Specular);
-auto Light2ViewMatrixPtr = glm::value_ptr(Light2ViewMatrix);
-auto Light2ShadowMatrixPtr = glm::value_ptr(Light2ShadowMatrix);
+auto Light2RangePtr = glm::value_ptr(Light2Range);
 auto Square1ModelMatrixPtr = glm::value_ptr(Square1ModelMatrix);
 auto Square1NormalMatrixPtr = glm::value_ptr(Square1NormalMatrix);
 auto Square1DiffusePtr = glm::value_ptr(Square1Diffuse);
@@ -338,6 +335,7 @@ int main(int argc, char * argv[]) {
     deferredBRDFPass.BindUniformVec3("lightPos", &Light2PosPtr);
     deferredBRDFPass.BindUniformVec3("eyePos", &EyePosPtr);
     deferredBRDFPass.BindUniformVec3("lightValue", &Light2DiffusePtr);
+    deferredBRDFPass.BindUniformVec3("range", &Light2RangePtr);
 
 	// ------------- BIND PASS-WISE UNIFORMS---------------
 

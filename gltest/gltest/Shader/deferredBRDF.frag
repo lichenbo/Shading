@@ -7,6 +7,7 @@ in vec2 texture_coord;
 uniform vec3 lightPos;
 uniform vec3 eyePos;
 uniform vec3 lightValue;
+uniform vec3 range;
 
 uniform sampler2D positionTexture;
 uniform sampler2D normalTexture;
@@ -22,7 +23,6 @@ void main()
     vec3 lightVec = lightPos - positionVec.xyz;
     vec3 eyeVec = eyePos - positionVec.xyz;
 
-    
     vec3 N = normalize(normalVec);
     vec3 L = normalize(lightVec);
     vec3 V = normalize(eyeVec);
@@ -35,8 +35,14 @@ void main()
     float D;
     float G;
     
-    outputColor = vec4(0.0, 0.0, 0.0, 0.2);
-    
+    // local light
+    if (length(lightVec) > range.x)
+    {
+        outputColor = vec4(0.0, 0.0, 0.0, 0.0);
+    }
+    else
+    {
+        outputColor = vec4(0.0, 0.0, 0.0, 0.7);
         float g = 0.5;
         float alpha = pow(8192, g);
         F = Ks + (1 - Ks) * pow((1 - dot(L, H)), 5);
@@ -46,4 +52,6 @@ void main()
         if (dot(L, N) > 0) {
             outputColor.xyz += (Kd / M_PI + 0.25 * F * D *G) * dot(L, N) * I;
         }
+
+    }
 }
