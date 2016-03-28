@@ -37,7 +37,7 @@ void main()
 	float G;
 
 	vec2 shadowIndex = shadowCoord.xy/shadowCoord.w;
-	outputColor.xyz = Kd;
+	outputColor.xyz = 0.5*Kd;
 	outputColor.w = 1.0;
 	if (shadowCoord.w > 0 && shadowIndex.x > 0 && shadowIndex.x < 1 && shadowIndex.y > 0 && shadowIndex.y < 1) {
 		float lightDepth = texture(shadowTexture, shadowIndex).w;
@@ -54,7 +54,6 @@ void main()
 
 			}
 		}
-        //outputColor.xyz = vec3(1.0f, 1.0f, 1.0f);
 	}
 	
 }
