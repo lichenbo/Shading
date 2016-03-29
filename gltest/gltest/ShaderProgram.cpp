@@ -20,7 +20,6 @@ bool ShaderProgram::AddVertexShaderPath(const char* path)
     const char * src = vertexShader;
     vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShaderId, 1, &src, NULL);
-    
     return compileShader(vertexShaderId);
 }
 
