@@ -42,7 +42,7 @@ auto WatchPos = glm::vec3(0.0f, 0.0f, 0.0f);
 auto ProjectionMatrix = glm::perspective(45.0f, 1.0f, 0.5f, 10.0f);
 auto ViewMatrix = glm::lookAt(EyePos, WatchPos, UpPos);
 auto ViewInverseMatrix = glm::inverse(ViewMatrix);
-auto AmbientLight = glm::vec3(1.0, 1.0, 1.0);
+auto AmbientLight = glm::vec3(0.5, 0.5, 0.5);
 
 // Bunny1
 auto Bunny1ModelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(5.0f));
@@ -469,8 +469,12 @@ int main(int argc, char * argv[]) {
 	engine->addPass(&ambientPass);
 	engine->addPass(&shadowPass);
 	engine->addPass(&shadowRenderPass);
-    engine->addPass(&deferredBRDFPass1);
-    engine->addPass(&deferredBRDFPass2);
+    for (int i = 0; i < 20; ++i)
+    {
+        engine->addPass(&deferredBRDFPass1);
+        engine->addPass(&deferredBRDFPass2);
+    }
+
 
 	// ----------------ENGINE------------------------------
 
