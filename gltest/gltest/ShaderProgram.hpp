@@ -21,9 +21,11 @@ public:
     ShaderProgram();
     bool AddVertexShaderPath(const char* path);
     bool AddFragmentShaderPath(const char* path);
+	bool SetupComputeShader(const char* path);
     bool Link();
     void Use();
     void Unuse();
+	void Compute();
 
     GLint GetAttribute(const char* attr_name);
     GLint GetUniform(const char* uniform_name);

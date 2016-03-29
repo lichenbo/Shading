@@ -33,6 +33,32 @@ bool ShaderProgram::AddFragmentShaderPath(const char* path)
     return compileShader(fragmentShaderId);
 }
 
+bool ShaderProgram::SetupComputeShader(const char* path)
+{
+#ifdef _WIN32
+	const char* src = readFile(path);
+	GLuint computeShaderId = glCreateShader(GL_COMPUTE_SHADER);
+	glShaderSource(computeShaderId, 1, &src, NULL);
+	glCompileShader(computeShaderId);
+	GLint info;
+	glGetShaderiv(computeShaderId, GL_COMPILE_STATUS, &info);
+	if (info != 1)
+	{
+		glGetShaderiv(computeShaderId, GL_INFO_LOG_LENGTH, &info);
+		GLchar* logBuffer = new char[info];
+		glGetShaderInfoLog(computeShaderId, info, NULL, logBuffer);
+		std::cout << "compute shader compilation error" << std::endl;
+		std::cout << logBuffer << std::endl;
+		delete logBuffer;
+		return false;
+	}
+	glAttachShader(programId, computeShaderId);
+	glLinkProgram(programId);
+	glDetachShader(programId, computeShaderId);
+#endif
+	return true;
+}
+
 bool ShaderProgram::compileShader(GLuint shaderId)
 {
     glCompileShader(shaderId);
@@ -127,6 +153,13 @@ GLint ShaderProgram::GetUniform(const char* uniform_name)
 void ShaderProgram::Unuse()
 {
     glUseProgram(0);
+}
+
+void ShaderProgram::Compute()
+{
+#ifdef _WIN32
+	glDispatchCompute(0,0,0);
+#endif
 }
 
 void ShaderProgram::SetAttribNormal(const char *attr_normal_name)

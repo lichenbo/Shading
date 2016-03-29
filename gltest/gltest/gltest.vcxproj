@@ -165,6 +165,7 @@
     <ClCompile Include="FBO.cpp" />
     <ClCompile Include="main_basiclighting.cpp" />
     <ClCompile Include="main_deferredShading.cpp" />
+    <ClCompile Include="main_ExpShadowMap.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Pass.cpp" />
     <ClCompile Include="Scene.cpp" />

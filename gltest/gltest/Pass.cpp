@@ -83,7 +83,10 @@ void Pass::Draw()
 	for (auto item: TextureUnitMapper)
 		item.first->BindToUnit(item.second);
         
-    scene->Draw();
+	if (scene)
+		scene->Draw();
+	else
+		shader->Compute(); // Compute shader
     
 	for (auto item: TextureUnitMapper)
 		item.first->Unbind();
