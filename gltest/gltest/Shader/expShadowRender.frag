@@ -11,6 +11,8 @@ uniform vec3 lightPos;
 uniform vec3 eyePos;
 uniform vec3 lightValue;
 
+uniform vec3 blurFactor;
+
 uniform sampler2D shadowTexture;
 uniform sampler2D positionTexture;
 uniform sampler2D normalTexture;
@@ -45,8 +47,7 @@ void main()
     float filteredLightDepth = texture(shadowTexture, shadowIndex).w;
     float pixelDepth = shadowCoord.w;
     
-    float c = 10.0;
-    float shadowFactor = filteredLightDepth * pow(EXP, -c*pixelDepth);
+    float shadowFactor = filteredLightDepth * pow(EXP, -blurFactor.x*pixelDepth);
     if (shadowFactor > 1.0)
         shadowFactor = 1.0;
     

@@ -101,6 +101,7 @@ auto Light1Specular = glm::vec3(1.0, 1.0, 1.0);
 // For Shadow Pass
 auto Light1ViewMatrix = glm::lookAt(Light1Pos, WatchPos, UpPos);
 auto Light1ShadowMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.5f)) * ProjectionMatrix * Light1ViewMatrix;
+auto BlurFactor = glm::vec3(10.0f);
 
 // Light2: Local light
 auto Light2Pos = glm::vec3(-0.5f);
@@ -117,6 +118,7 @@ auto Light3NormalMatrix = glm::transpose(glm::inverse(Light3ModelMatrix));
 auto Light3Diffuse = glm::vec3(1.0, 1.0, 1.0);
 auto Light3Specular = glm::vec3(0.0, 0.0, 1.0);
 auto Light3Range = glm::vec3(1.0);
+
 
 
 // -------------------- POINTERS ZONE ------------------------
@@ -158,6 +160,8 @@ auto Light3NormalMatrixPtr = glm::value_ptr(Light3NormalMatrix);
 auto Light3DiffusePtr = glm::value_ptr(Light3Diffuse);
 auto Light3SpecularPtr = glm::value_ptr(Light3Specular);
 auto Light3RangePtr = glm::value_ptr(Light3Range);
+auto BlurFactorPtr = glm::value_ptr(BlurFactor);
+
 auto Square1ModelMatrixPtr = glm::value_ptr(Square1ModelMatrix);
 auto Square1NormalMatrixPtr = glm::value_ptr(Square1NormalMatrix);
 auto Square1DiffusePtr = glm::value_ptr(Square1Diffuse);
@@ -345,10 +349,13 @@ int main(int argc, char * argv[]) {
     ambientPass.BindUniformVec3("ambientColor", &AmbientLightPtr);
     shadowPass.BindUniformMatrix4("ViewMatrix", &Light1ViewMatrixPtr);
     shadowPass.BindUniformMatrix4("ProjectionMatrix", &ProjectionMatrixPtr);
+    shadowPass.BindUniformVec3("blurFactor", &BlurFactorPtr);
     shadowRenderPass.BindUniformMatrix4("shadowMatrix", &Light1ShadowMatrixPtr);
     shadowRenderPass.BindUniformVec3("lightPos", &Light1PosPtr);
     shadowRenderPass.BindUniformVec3("eyePos", &EyePosPtr);
     shadowRenderPass.BindUniformVec3("lightValue", &Light1DiffusePtr);
+    shadowRenderPass.BindUniformVec3("blurFactor", &BlurFactorPtr);
+
     deferredBRDFPass1.BindUniformVec3("lightPos", &Light2PosPtr);
     deferredBRDFPass1.BindUniformVec3("eyePos", &EyePosPtr);
     deferredBRDFPass1.BindUniformVec3("lightValue", &Light2DiffusePtr);
