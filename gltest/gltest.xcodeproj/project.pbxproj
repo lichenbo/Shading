@@ -99,6 +99,7 @@
 			children = (
 				EBBFA6E11CA52BB7008C5807 /* main_basiclighting.cpp */,
 				EBBFA6E21CA52BB7008C5807 /* main_deferredShading.cpp */,
+				EB94510E1CAA84C90081C137 /* main_ExpShadowMap.cpp */,
 				EB0C4B531C7DBD8300AF0BA6 /* Mesh.cpp */,
 				EB0C4B541C7DBD8300AF0BA6 /* Mesh.hpp */,
 				EB0C4B561C7DBDAC00AF0BA6 /* Engine.cpp */,
@@ -116,7 +117,6 @@
 				EBA25AC11CA022140025CD64 /* Texture.cpp */,
 				EBA25AC21CA022140025CD64 /* Texture.hpp */,
 				EBBFA6E01CA16324008C5807 /* gl.h */,
-				EB94510E1CAA84C90081C137 /* main_ExpShadowMap.cpp */,
 			);
 			path = gltest;
 			sourceTree = "<group>";

@@ -214,17 +214,17 @@ int main(int argc, char * argv[]) {
     ambientShader->SetAttribTexture("texture_coordinate");
     
     ShaderProgram* shadowMapShader = new ShaderProgram();
-    GET_SHADER_PATH(path, 256, "shadow.vert");
+    GET_SHADER_PATH(path, 256, "expShadow.vert");
     if (!shadowMapShader->AddVertexShaderPath(path)) return 0;
-    GET_SHADER_PATH(path, 256, "shadow.frag");
+    GET_SHADER_PATH(path, 256, "expShadow.frag");
     if (!shadowMapShader->AddFragmentShaderPath(path)) return 0;
     if (!shadowMapShader->Link()) return 0;
     shadowMapShader->SetAttribVertex("vertex");
     
     ShaderProgram* shadowRenderShader = new ShaderProgram();
-    GET_SHADER_PATH(path, 256, "shadowRender.vert");
+    GET_SHADER_PATH(path, 256, "expShadowRender.vert");
     if (!shadowRenderShader->AddVertexShaderPath(path)) return 0;
-    GET_SHADER_PATH(path, 256, "shadowRender.frag");
+    GET_SHADER_PATH(path, 256, "expShadowRender.frag");
     if (!shadowRenderShader->AddFragmentShaderPath(path)) return 0;
     if (!shadowRenderShader->Link()) return 0;
     shadowRenderShader->SetAttribVertex("vertex");
