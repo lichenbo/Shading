@@ -34,15 +34,21 @@ bool ShaderProgram::AddFragmentShaderPath(const char* path)
     return compileShader(fragmentShaderId);
 }
 
-bool ShaderProgram::SetupComputeShader(const char* path, int num_groups_x, int num_groups_y, int num_groups_z)
+bool ShaderProgram::SetComputeShaderPath(const char* path)
 {
 #ifdef _WIN32
-	const char* src = readFile(path);
+	const char* computeShader = readFile(path);
 	GLuint computeShaderId = glCreateShader(GL_COMPUTE_SHADER);
-	glShaderSource(computeShaderId, 1, &src, NULL);
+	glShaderSource(computeShaderId, 1, &computeShader, NULL);
 	compileShader(computeShaderId);
-	glLinkProgram(programId);
 	glDetachShader(programId, computeShaderId);
+#endif
+	return true;
+}
+
+bool ShaderProgram::SetupComputeShader(int num_groups_x, int num_groups_y, int num_groups_z)
+{
+#ifdef _WIN32
 	this->num_groups_x = num_groups_x;
 	this->num_groups_y = num_groups_y;
 	this->num_groups_z = num_groups_z;

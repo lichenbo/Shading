@@ -21,7 +21,9 @@ public:
     ShaderProgram();
     bool AddVertexShaderPath(const char* path);
     bool AddFragmentShaderPath(const char* path);
-	bool SetupComputeShader(const char* path, int num_groups_x, int num_groups_y, int num_groups_z);
+	bool SetComputeShaderPath(const char* path);
+	bool AddComputeShaderPath(const char* path);
+	bool SetupComputeShader(int num_groups_x, int num_groups_y, int num_groups_z);
     bool Link();
     void Use();
     void Unuse();

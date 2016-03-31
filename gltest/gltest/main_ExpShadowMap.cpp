@@ -188,6 +188,15 @@ auto Square6DiffusePtr = glm::value_ptr(Square6Diffuse);
 auto Square6SpecularPtr = glm::value_ptr(Square6Specular);
 // --------------------------------------------------------
 
+float* buildGaussianWeight(int w, float s)
+{
+	float* weights = new float[2 * w + 1];
+	for (int i = 0; i < 2 * w + 1; ++i)
+	{
+		weights[i] = exp(-0.5*(i/s)*(i/s)) / (2.50662827463 * s);
+	}
+	return weights;
+}
 
 int main(int argc, char * argv[]) {
     
@@ -245,6 +254,8 @@ int main(int argc, char * argv[]) {
 
 	ShaderProgram* blurShader = new ShaderProgram();
 	GET_SHADER_PATH(path, 256, "gaussianBlur.comp");
+	blurShader->SetComputeShaderPath(path);
+	
     
     // --------------SHADER LOADING--------------------------
     
@@ -428,7 +439,11 @@ int main(int argc, char * argv[]) {
     shadowPass.MeshBindUniformMatrix4(&shadowSquare4, "ModelMatrix", &Square4ModelMatrixPtr);
     shadowPass.MeshBindUniformMatrix4(&shadowSquare5, "ModelMatrix", &Square5ModelMatrixPtr);
     shadowPass.MeshBindUniformMatrix4(&shadowSquare6, "ModelMatrix", &Square6ModelMatrixPtr);
-    
+
+	int blurWidth = 7; // kenel half width
+	float h = 8.0; // What's this?
+	float* blurKernel = buildGaussianWeight(blurWidth, 0.5*h); 
+	blurPass.GlobalBindUniformBlock("blurKernel", (char*)blurKernel, sizeof(float)*(2 * blurWidth + 1));
     
     // ------------BIND MESH-WISE UNIFORMS----------------
     
@@ -442,7 +457,10 @@ int main(int argc, char * argv[]) {
     Texture* shadowTex = shadow_buffer.GetTexture(0);
     
 	Texture* blurredShadow = new Texture(shadowTex->Width(), shadowTex->Height());
-	//blurShader->SetupComputeShader(path, shadowTex->Width() / 128, shadowTex->Height(), 1);
+	blurShader->SetupComputeShader(shadowTex->Width() / 128, shadowTex->Height(), 1);
+
+	blurPass.BindImage("src", shadowTex);
+	blurPass.BindImage("dst", blurredShadow);
 
     ambientPass.BindTexture("diffuseTexture", diffuseTex);
     shadowRenderPass.BindTexture("shadowTexture", shadowTex);
@@ -482,7 +500,7 @@ int main(int argc, char * argv[]) {
     engine->addPass(&gbufferPass);
     engine->addPass(&ambientPass);
     engine->addPass(&shadowPass);
-	//engine->addPass(&blurPass); // Compute shader
+	engine->addPass(&blurPass); // Compute shader
     engine->addPass(&shadowRenderPass);
     engine->addPass(&deferredBRDFPass1);
     engine->addPass(&deferredBRDFPass2);
