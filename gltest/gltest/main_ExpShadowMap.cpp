@@ -440,8 +440,8 @@ int main(int argc, char * argv[]) {
     shadowPass.MeshBindUniformMatrix4(&shadowSquare5, "ModelMatrix", &Square5ModelMatrixPtr);
     shadowPass.MeshBindUniformMatrix4(&shadowSquare6, "ModelMatrix", &Square6ModelMatrixPtr);
 
-	int blurWidth = 7; // kenel half width
-	float h = 8.0; // What's this?
+	int blurWidth = 10; // kenel half width
+	float h = 0.5 * blurWidth; // What's this?
 	float* blurKernel = buildGaussianWeight(blurWidth, 0.5*h); 
 	blurPass.GlobalBindUniformBlock("blurKernel", (char*)blurKernel, sizeof(float)*(2 * blurWidth + 1));
     
@@ -458,6 +458,7 @@ int main(int argc, char * argv[]) {
     
 	Texture* blurredShadow = new Texture(shadowTex->Width(), shadowTex->Height());
 	blurShader->SetupComputeShader(shadowTex->Width() / 128, shadowTex->Height(), 1);
+	blurPass.BindUniformInt1("kernelWidth", blurWidth);
 
 	blurPass.BindImage("src", shadowTex);
 	blurPass.BindImage("dst", blurredShadow);

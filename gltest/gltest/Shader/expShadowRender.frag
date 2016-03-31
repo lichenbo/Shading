@@ -47,7 +47,7 @@ void main()
     float filteredLightDepth = texture(shadowTexture, shadowIndex).w;
     float pixelDepth = shadowCoord.w;
     
-    float shadowFactor = filteredLightDepth * pow(EXP, -blurFactor.x*pixelDepth);
+    float shadowFactor = filteredLightDepth * exp(-blurFactor.x*pixelDepth);
     if (shadowFactor > 1.0)
         shadowFactor = 1.0;
     
