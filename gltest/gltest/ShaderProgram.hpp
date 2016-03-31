@@ -21,7 +21,7 @@ public:
     ShaderProgram();
     bool AddVertexShaderPath(const char* path);
     bool AddFragmentShaderPath(const char* path);
-	bool SetupComputeShader(const char* path);
+	bool SetupComputeShader(const char* path, int num_groups_x, int num_groups_y, int num_groups_z);
     bool Link();
     void Use();
     void Unuse();
@@ -29,7 +29,8 @@ public:
 
     GLint GetAttribute(const char* attr_name);
     GLint GetUniform(const char* uniform_name);
-    void SetAttribVertex(const char* attr_vertex_name);
+	GLint GetUniformBlock(const char* block_name);
+	void SetAttribVertex(const char* attr_vertex_name);
     void SetAttribNormal(const char* attr_normal_name);
     void SetAttribTangent(const char* attr_tangent_name);
     void SetAttribTexture(const char* attr_texture_name);
@@ -37,8 +38,8 @@ public:
     GLint GetAttribNormal();
     GLint GetAttribTangent();
     GLint GetAttribTexture();
+	void BindUniformBlockToPoint(const char* block_name, int uniform_binding_point);
 
-    
 private:
     GLuint vertexShaderId;
     GLuint fragmentShaderId;
@@ -52,6 +53,8 @@ private:
     GLint attribNormalLoc;
     GLint attribTangentLoc;
     GLint attribTextureLoc;
+
+	int num_groups_x, num_groups_y, num_groups_z;
     
 };
 

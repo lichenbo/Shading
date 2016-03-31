@@ -5,8 +5,8 @@
 //  Created by Chenbo Li on 11/2/15.
 //  Copyright � 2015 binarythink. All rights reserved.
 //
-//#define __MAIN_ENTRY
 
+//#define __MAIN_ENTRY
 #ifdef __MAIN_ENTRY
 
 #include "gl.h"
@@ -470,7 +470,7 @@ int main(int argc, char * argv[]) {
 	engine->addPass(&ambientPass);
 	engine->addPass(&shadowPass);
 	engine->addPass(&shadowRenderPass);
-    for (int i = 0; i < 20; ++i)
+    for (int i = 0; i < 1; ++i)
     {
         engine->addPass(&deferredBRDFPass1);
         engine->addPass(&deferredBRDFPass2);

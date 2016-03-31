@@ -24,6 +24,7 @@ class Pass
 public:
     Pass(ShaderProgram* shader, Scene* scene);
     void Draw();
+	void ComputeBlur();
     void addSpin(float);
     void addTilt(float);
     void addZoom(int);
@@ -41,6 +42,8 @@ public:
 	void SetCullfaceFront(bool status);
 	void SetCullfaceBack(bool status);
     void SetClear(bool status);
+	void SetBlur(bool status);
+	void SetBlurTex(Texture* tex);
     
     void BindAttribVertex();
     void BindAttribNormal();
@@ -48,14 +51,15 @@ public:
     void BindAttribTexture();
 
 	void BindTexture(const char* uniform_texture_name, Texture* texture);
-    
-    template<typename ValueType>
+	void BindImage(const char* uniform_image_name, Texture* texture);
+	template<typename ValueType>
     void MeshBindUniformMatrix4(Mesh* mesh, const char* uniform_name, ValueType v);
     template<typename ValueType>
     void MeshBindUniformVec3(Mesh* mesh, const char* uniform_name, ValueType v);
     template<typename ValueType>
     void MeshBindUniformInt1(Mesh* mesh, const char* uniform_name, ValueType v);
 
+	void GlobalBindUniformBlock(const char* block_name, char* buf, int size);
     
 private:
     void RebindUniforms();
@@ -64,17 +68,21 @@ private:
     ShaderProgram* shader;
     FBO* targetFBO;
 	int numOfTexture;
+	int numOfImage;
 	bool isBlend;
 	bool isDepthTest;
 	bool isCullfaceFront;
 	bool isCullfaceBack;
     bool isClear;
-	
+	bool isBlur;  // Compute Gaussian Blur in GPU
     
     std::unordered_map<GLint, GLfloat**> UniformMatrix4Mapper;
     std::unordered_map<GLint, GLfloat**> UniformVec3Mapper;
     std::unordered_map<GLint, GLint> UniformInt1Mapper;
 	std::unordered_map<Texture*, int> TextureUnitMapper;
+	std::unordered_map<Texture*, int> ImageUnitMapper;
+
+	static int uniform_binding_point;
     
 };
 

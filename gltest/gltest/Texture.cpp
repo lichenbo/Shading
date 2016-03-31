@@ -36,6 +36,11 @@ void Texture::BindToUnit(const int unit)
     glBindTexture(GL_TEXTURE_2D, renderedTexture);
 }
 
+void Texture::BindToImageUnit(const int unit)
+{
+	glBindImageTexture(unit, renderedTexture, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
+}
+
 void Texture::Unbind()
 {
     glActiveTexture(GL_TEXTURE0 + unit);
@@ -45,4 +50,14 @@ void Texture::Unbind()
 GLuint Texture::textureId() const
 {
     return renderedTexture;
+}
+
+int Texture::Width()
+{
+	return w;
+}
+
+int Texture::Height()
+{
+	return h;
 }

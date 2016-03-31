@@ -17,8 +17,11 @@ public:
     Texture(const int w, const int h);
     void LoadData(char* data);
     void BindToUnit(const int unit);
-    void Unbind();
+	void BindToImageUnit(const int unit);
+	void Unbind();
     GLuint textureId() const;
+	int Width();
+	int Height();
 private:
     GLuint renderedTexture;
     int w, h;

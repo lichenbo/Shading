@@ -242,6 +242,9 @@ int main(int argc, char * argv[]) {
     if (!deferredBRDFShader->Link()) return 0;
     deferredBRDFShader->SetAttribVertex("vertex");
     deferredBRDFShader->SetAttribTexture("texture_coordinate");
+
+	ShaderProgram* blurShader = new ShaderProgram();
+	GET_SHADER_PATH(path, 256, "gaussianBlur.comp");
     
     // --------------SHADER LOADING--------------------------
     
@@ -328,6 +331,7 @@ int main(int argc, char * argv[]) {
     Pass gbufferPass(defergbufferShader, &bunnyScene);
     Pass ambientPass(ambientShader, &ambientScene);
     Pass shadowPass(shadowMapShader, &shadowMapScene);
+	Pass blurPass(blurShader, NULL);
     Pass shadowRenderPass(shadowRenderShader, &shadowRenderScene);
     Pass deferredBRDFPass1(deferredBRDFShader, &deferredBRDFScene);
     Pass deferredBRDFPass2(deferredBRDFShader, &deferredBRDFScene);
@@ -437,6 +441,9 @@ int main(int argc, char * argv[]) {
     Texture* specularTex = g_buffer.GetTexture(3);
     Texture* shadowTex = shadow_buffer.GetTexture(0);
     
+	Texture* blurredShadow = new Texture(shadowTex->Width(), shadowTex->Height());
+	//blurShader->SetupComputeShader(path, shadowTex->Width() / 128, shadowTex->Height(), 1);
+
     ambientPass.BindTexture("diffuseTexture", diffuseTex);
     shadowRenderPass.BindTexture("shadowTexture", shadowTex);
     shadowRenderPass.BindTexture("positionTexture", positionTex);
@@ -451,7 +458,7 @@ int main(int argc, char * argv[]) {
     deferredBRDFPass2.BindTexture("normalTexture", normalTex);
     deferredBRDFPass2.BindTexture("diffuseTexture", diffuseTex);
     deferredBRDFPass2.BindTexture("specularTexture", specularTex);
-    
+
     gbufferPass.SetBlend(false);
     gbufferPass.SetDepthTest(true);
     gbufferPass.SetClear(true);
@@ -475,12 +482,27 @@ int main(int argc, char * argv[]) {
     engine->addPass(&gbufferPass);
     engine->addPass(&ambientPass);
     engine->addPass(&shadowPass);
+	//engine->addPass(&blurPass); // Compute shader
     engine->addPass(&shadowRenderPass);
     engine->addPass(&deferredBRDFPass1);
     engine->addPass(&deferredBRDFPass2);
     
-    
+
     // ----------------ENGINE------------------------------
+
+	/*GLuint BlockID;
+	glGenBuffers(1, &BlockID);
+	int bindPoint = 0;
+	int loc = glGetUniformBlockIndex(1,"blurKernel");
+	glUniformBlockBinding(1, loc, bindPoint);
+	glBindBufferBase(GL_UNIFORM_BUFFER, bindPoint, BlockID);
+	glBufferData(GL_UNIFORM_BUFFER, );
+
+	glBindImageTexture(0, shadowTex->textureId(), 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA32F);
+	glUniform1i(blurShader->GetUniform("src"), 0);
+	glBindImageTexture(1, blurredShadow->textureId(), 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32F);
+	glUniform1i(blurShader->GetUniform("dst"), 1);*/
+
     
 #ifdef _WIN32
     glutMouseWheelFunc(mouseWheel);
@@ -492,7 +514,7 @@ int main(int argc, char * argv[]) {
     
     glutKeyboardUpFunc(keyboardPress);
     glutMainLoop();
-    
+
     return 0;
 }
 

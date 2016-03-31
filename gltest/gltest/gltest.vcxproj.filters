@@ -31,6 +31,9 @@
     <Filter Include="Shader\ShadowMap">
       <UniqueIdentifier>{80d97728-1eca-49a2-8592-adf619263c35}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader\ExpShadowMap">
+      <UniqueIdentifier>{a12b40c7-c703-4179-af74-023e7fdd0ed2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -150,6 +153,27 @@
     </None>
     <None Include="Shader\shadowRender.vert">
       <Filter>Shader\ShadowMap</Filter>
+    </None>
+    <None Include="Shader\deferredBRDF.frag">
+      <Filter>Shader\Defershading</Filter>
+    </None>
+    <None Include="Shader\deferredBRDF.vert">
+      <Filter>Shader\Defershading</Filter>
+    </None>
+    <None Include="Shader\expShadow.frag">
+      <Filter>Shader\ExpShadowMap</Filter>
+    </None>
+    <None Include="Shader\expShadowRender.vert">
+      <Filter>Shader\ExpShadowMap</Filter>
+    </None>
+    <None Include="Shader\expShadow.vert">
+      <Filter>Shader\ExpShadowMap</Filter>
+    </None>
+    <None Include="Shader\expShadowRender.frag">
+      <Filter>Shader\ExpShadowMap</Filter>
+    </None>
+    <None Include="gaussianBlur.comp">
+      <Filter>Shader\ExpShadowMap</Filter>
     </None>
   </ItemGroup>
 </Project>

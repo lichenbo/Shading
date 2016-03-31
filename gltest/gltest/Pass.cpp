@@ -11,10 +11,22 @@
 #include "ShaderProgram.hpp"
 #include "FBO.hpp"
 #include "Texture.hpp"
+#include <iostream>
 
-Pass::Pass(ShaderProgram* shader, Scene* scene) : shader(shader), scene(scene), targetFBO(NULL), numOfTexture(0), isBlend(false), isCullfaceBack(false), isCullfaceFront(false), isDepthTest(false), isClear(true)
+int Pass::uniform_binding_point = 0;
+
+Pass::Pass(ShaderProgram* shader, Scene* scene) : shader(shader), scene(scene), targetFBO(NULL), isBlend(false), isCullfaceBack(false), isCullfaceFront(false), isDepthTest(false), isClear(true), numOfTexture(0), numOfImage(0)
 {
     
+}
+
+void Pass::GlobalBindUniformBlock(const char* block_name, char* buf, int sizeInBytes)
+{
+	GLuint blockID;
+	glGenBuffers(1, &blockID);
+	shader->BindUniformBlockToPoint(block_name, uniform_binding_point);
+	glBindBufferBase(GL_UNIFORM_BUFFER, uniform_binding_point, blockID);
+	glBufferData(GL_UNIFORM_BUFFER, sizeInBytes, buf, GL_STATIC_DRAW);
 }
 
 // Refresh Pass-Scope Uniforms on Every Pass Draw
@@ -42,9 +54,26 @@ void Pass::BindTexture(const char* uniform_texture_name,Texture* texture)
 {
 	numOfTexture++;
 	if (numOfTexture > GL_MAX_TEXTURE_UNITS)
+	{
+		std::cout << "Max texture units reached" << std::endl;
+		return;
+	}
 	texture->BindToUnit(numOfTexture);
 	BindUniformInt1(uniform_texture_name, numOfTexture);
 	TextureUnitMapper[texture] = numOfTexture;
+}
+
+void Pass::BindImage(const char* uniform_image_name, Texture* texture)
+{
+	numOfImage++;
+	if (numOfImage > GL_MAX_IMAGE_UNITS)
+	{
+		std::cout << "Max image units reached" << std::endl;
+		return;
+	}
+	texture->BindToImageUnit(numOfImage);
+	BindUniformInt1(uniform_image_name, numOfImage);
+	ImageUnitMapper[texture] = numOfImage;
 }
 
 void Pass::Draw()
@@ -94,7 +123,6 @@ void Pass::Draw()
     if (targetFBO)
         targetFBO->Unbind();
 	
-    
     shader->Unuse();
 }
 
@@ -148,4 +176,9 @@ void Pass::SetCullfaceBack(bool status)
 void Pass::SetClear(bool status)
 {
     this->isClear = status;
+}
+
+void Pass::SetBlur(bool status)
+{
+	this->isBlur = status;
 }

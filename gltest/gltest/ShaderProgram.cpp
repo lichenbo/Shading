@@ -8,8 +8,9 @@
 
 #include "ShaderProgram.hpp"
 #include <iostream>
+#include "Texture.hpp"
 
-ShaderProgram::ShaderProgram():attribNormalLoc(-1), attribVertexLoc(-1), attribTangentLoc(-1), attribTextureLoc(-1)
+ShaderProgram::ShaderProgram():attribNormalLoc(-1), attribVertexLoc(-1), attribTangentLoc(-1), attribTextureLoc(-1), num_groups_x(0), num_groups_y(0), num_groups_z(0)
 {
     programId = glCreateProgram();
 }
@@ -33,28 +34,18 @@ bool ShaderProgram::AddFragmentShaderPath(const char* path)
     return compileShader(fragmentShaderId);
 }
 
-bool ShaderProgram::SetupComputeShader(const char* path)
+bool ShaderProgram::SetupComputeShader(const char* path, int num_groups_x, int num_groups_y, int num_groups_z)
 {
 #ifdef _WIN32
 	const char* src = readFile(path);
 	GLuint computeShaderId = glCreateShader(GL_COMPUTE_SHADER);
 	glShaderSource(computeShaderId, 1, &src, NULL);
-	glCompileShader(computeShaderId);
-	GLint info;
-	glGetShaderiv(computeShaderId, GL_COMPILE_STATUS, &info);
-	if (info != 1)
-	{
-		glGetShaderiv(computeShaderId, GL_INFO_LOG_LENGTH, &info);
-		GLchar* logBuffer = new char[info];
-		glGetShaderInfoLog(computeShaderId, info, NULL, logBuffer);
-		std::cout << "compute shader compilation error" << std::endl;
-		std::cout << logBuffer << std::endl;
-		delete logBuffer;
-		return false;
-	}
-	glAttachShader(programId, computeShaderId);
+	compileShader(computeShaderId);
 	glLinkProgram(programId);
 	glDetachShader(programId, computeShaderId);
+	this->num_groups_x = num_groups_x;
+	this->num_groups_y = num_groups_y;
+	this->num_groups_z = num_groups_z;
 #endif
 	return true;
 }
@@ -119,6 +110,7 @@ char* ShaderProgram::readFile(const char * path)
     int fileLength = static_cast<int>(ifs.tellg());
     
     char* content = new char[fileLength+1];
+
     ifs.seekg(0, std::ios_base::beg);
     ifs.read(content, fileLength);
     ifs.close();
@@ -150,6 +142,14 @@ GLint ShaderProgram::GetUniform(const char* uniform_name)
     return uniformLoc;
 }
 
+GLint ShaderProgram::GetUniformBlock(const char* block_name)
+{
+	GLint blockLoc;
+	blockLoc = glGetUniformBlockIndex(programId, block_name);
+	if (blockLoc == -1) std::cout << block_name << " is invalid in shader" << std::endl;
+	return blockLoc;
+}
+
 void ShaderProgram::Unuse()
 {
     glUseProgram(0);
@@ -157,9 +157,7 @@ void ShaderProgram::Unuse()
 
 void ShaderProgram::Compute()
 {
-#ifdef _WIN32
-	glDispatchCompute(0,0,0);
-#endif
+	//glDispatchCompute(num_groups_x, num_groups_y, num_groups_z);
 }
 
 void ShaderProgram::SetAttribNormal(const char *attr_normal_name)
@@ -197,4 +195,10 @@ GLint ShaderProgram::GetAttribTangent()
 GLint ShaderProgram::GetAttribTexture()
 {
     return attribTextureLoc;
+}
+
+void ShaderProgram::BindUniformBlockToPoint(const char* block_name, int uniform_binding_point)
+{
+	int loc = GetUniformBlock(block_name);
+	glUniformBlockBinding(programId, loc, uniform_binding_point);
 }
