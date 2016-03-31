@@ -41,6 +41,7 @@ bool ShaderProgram::SetComputeShaderPath(const char* path)
 	GLuint computeShaderId = glCreateShader(GL_COMPUTE_SHADER);
 	glShaderSource(computeShaderId, 1, &computeShader, NULL);
 	compileShader(computeShaderId);
+	glLinkProgram(programId);
 	glDetachShader(programId, computeShaderId);
 #endif
 	return true;
@@ -163,7 +164,7 @@ void ShaderProgram::Unuse()
 
 void ShaderProgram::Compute()
 {
-	//glDispatchCompute(num_groups_x, num_groups_y, num_groups_z);
+	glDispatchCompute(num_groups_x, num_groups_y, num_groups_z);
 }
 
 void ShaderProgram::SetAttribNormal(const char *attr_normal_name)

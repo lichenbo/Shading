@@ -173,7 +173,6 @@
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="gaussianBlur.comp" />
     <None Include="Model\bunny.ply" />
     <None Include="Model\bunny_export.ply" />
     <None Include="Model\cube1.ply" />
@@ -193,6 +192,7 @@
     <None Include="Shader\expShadow.vert" />
     <None Include="Shader\expShadowRender.frag" />
     <None Include="Shader\expShadowRender.vert" />
+    <None Include="Shader\gaussianBlur.comp" />
     <None Include="Shader\shadow.frag" />
     <None Include="Shader\shadow.vert" />
     <None Include="Shader\shadowRender.frag" />

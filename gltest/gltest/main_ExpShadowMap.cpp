@@ -205,7 +205,7 @@ int main(int argc, char * argv[]) {
     
     ShaderProgram* defergbufferShader = new ShaderProgram();
     FBO g_buffer(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT), 4);
-    FBO shadow_buffer(2000, 2000, 1);
+    FBO shadow_buffer(1024, 1024, 1);
     
     GET_SHADER_PATH(path, 256, "defergbuffer.vert");
     if (!defergbufferShader->AddVertexShaderPath(path)) return 0;
@@ -463,7 +463,8 @@ int main(int argc, char * argv[]) {
 	blurPass.BindImage("dst", blurredShadow);
 
     ambientPass.BindTexture("diffuseTexture", diffuseTex);
-    shadowRenderPass.BindTexture("shadowTexture", shadowTex);
+    shadowRenderPass.BindTexture("shadowTexture", blurredShadow);
+    //shadowRenderPass.BindTexture("shadowTexture", shadowTex);
     shadowRenderPass.BindTexture("positionTexture", positionTex);
     shadowRenderPass.BindTexture("normalTexture", normalTex);
     shadowRenderPass.BindTexture("diffuseTexture", diffuseTex);
@@ -507,20 +508,6 @@ int main(int argc, char * argv[]) {
     
 
     // ----------------ENGINE------------------------------
-
-	/*GLuint BlockID;
-	glGenBuffers(1, &BlockID);
-	int bindPoint = 0;
-	int loc = glGetUniformBlockIndex(1,"blurKernel");
-	glUniformBlockBinding(1, loc, bindPoint);
-	glBindBufferBase(GL_UNIFORM_BUFFER, bindPoint, BlockID);
-	glBufferData(GL_UNIFORM_BUFFER, );
-
-	glBindImageTexture(0, shadowTex->textureId(), 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA32F);
-	glUniform1i(blurShader->GetUniform("src"), 0);
-	glBindImageTexture(1, blurredShadow->textureId(), 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32F);
-	glUniform1i(blurShader->GetUniform("dst"), 1);*/
-
     
 #ifdef _WIN32
     glutMouseWheelFunc(mouseWheel);

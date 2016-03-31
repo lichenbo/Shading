@@ -172,7 +172,7 @@
     <None Include="Shader\expShadowRender.frag">
       <Filter>Shader\ExpShadowMap</Filter>
     </None>
-    <None Include="gaussianBlur.comp">
+    <None Include="Shader\gaussianBlur.comp">
       <Filter>Shader\ExpShadowMap</Filter>
     </None>
   </ItemGroup>
