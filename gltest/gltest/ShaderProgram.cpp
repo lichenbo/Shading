@@ -164,7 +164,9 @@ void ShaderProgram::Unuse()
 
 void ShaderProgram::Compute()
 {
+#ifdef _WIN32
 	glDispatchCompute(num_groups_x, num_groups_y, num_groups_z);
+#endif
 }
 
 void ShaderProgram::SetAttribNormal(const char *attr_normal_name)

@@ -471,8 +471,11 @@ int main(int argc, char * argv[]) {
 	blurPass.BindImage("dst", blurredShadow);
 
     ambientPass.BindTexture("diffuseTexture", diffuseTex);
+#ifdef _WIN32
     shadowRenderPass.BindTexture("shadowTexture", blurredShadow);
-    //shadowRenderPass.BindTexture("shadowTexture", shadowTex);
+#elif defined __APPLE__
+    shadowRenderPass.BindTexture("shadowTexture", shadowTex);
+#endif
     shadowRenderPass.BindTexture("positionTexture", positionTex);
     shadowRenderPass.BindTexture("normalTexture", normalTex);
     shadowRenderPass.BindTexture("diffuseTexture", diffuseTex);
