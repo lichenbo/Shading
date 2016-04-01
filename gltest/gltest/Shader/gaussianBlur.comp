@@ -30,16 +30,43 @@ void main() {
 
 	 barrier(); // Wait for all threads to catchup before reading v[]
 
-	 float sum = 0.0;
+	 float sumHorizontal = 0.0;
 
 	 for (int j = 0; j < 2*kernelWidth+1; ++j)
 	 {
 		if (gpos.x + j > kernelWidth)
-			sum = sum + weights[j] * v[localID+j];
+			sumHorizontal +=  weights[j] * v[localID+j];
 		else
-			sum = sum + weights[j] * v[localID + kernelWidth];
+			sumHorizontal += weights[j] * v[localID + kernelWidth];
 	 }
 
-	 imageStore(dst, gpos, vec4(sum,sum,sum,sum));
+	 barrier();
+
+	 if (gpos.x >= kernelWidth)
+		v[localID] = imageLoad(src, gpos+ivec2(0,-kernelWidth)).x;
+
+	if (localID < 2*kernelWidth)
+	{
+		v[localID+128] = imageLoad(src, gpos + ivec2(0, 128-kernelWidth)).x;
+	}
+
+	barrier();
+
+	float sumVertical = 0.0;
+
+	for (int j = 0; j < 2*kernelWidth+1; ++j)
+	 {
+		if (gpos.x + j > kernelWidth)
+			sumVertical +=  weights[j] * v[localID+j];
+		else
+			sumVertical += weights[j] * v[localID + kernelWidth];
+	 }
+	
+	//float sum = 0.5*(sumHorizontal + sumVertical);
+	float sum = sumHorizontal;
+	//float sum = sumVertical;
+
+	imageStore(dst, gpos, vec4(sum, sum, sum,sum));
+	 
 }
 

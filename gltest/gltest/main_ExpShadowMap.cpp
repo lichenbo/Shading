@@ -191,10 +191,17 @@ auto Square6SpecularPtr = glm::value_ptr(Square6Specular);
 float* buildGaussianWeight(int w, float s)
 {
 	float* weights = new float[2 * w + 1];
-	for (int i = 0; i < 2 * w + 1; ++i)
+
+	for (int i = 0; i < 2*w + 1; ++i)
 	{
-		weights[i] = exp(-0.5*(i/s)*(i/s)) / (2.50662827463 * s);
+		weights[i] = exp(-0.5*((w-i)/s)*((w-i)/s))/ (2.50662827463 * s);
 	}
+	float sum = 0.0f;
+	for (int i = 0; i < w; ++i)
+	{
+		sum += weights[i];
+	}
+	weights[w] = 1.0 - 2 * sum;
 	return weights;
 }
 
@@ -441,8 +448,8 @@ int main(int argc, char * argv[]) {
     shadowPass.MeshBindUniformMatrix4(&shadowSquare6, "ModelMatrix", &Square6ModelMatrixPtr);
 
 	int blurWidth = 10; // kenel half width
-	float h = 0.5 * blurWidth; // What's this?
-	float* blurKernel = buildGaussianWeight(blurWidth, 0.5*h); 
+	float h = 2 * blurWidth + 1; // What's this?
+	float* blurKernel = buildGaussianWeight(blurWidth, h/2.0); 
 	blurPass.GlobalBindUniformBlock("blurKernel", (char*)blurKernel, sizeof(float)*(2 * blurWidth + 1));
     
     // ------------BIND MESH-WISE UNIFORMS----------------
