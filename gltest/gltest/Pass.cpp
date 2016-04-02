@@ -70,6 +70,7 @@ void Pass::BindTexture(const char* uniform_texture_name,Texture* texture)
 
 void Pass::BindImage(const char* uniform_image_name, Texture* texture)
 {
+#ifdef _WIN32
 	numOfImage++;
 	if (numOfImage > GL_MAX_IMAGE_UNITS)
 	{
@@ -79,6 +80,7 @@ void Pass::BindImage(const char* uniform_image_name, Texture* texture)
 	texture->BindToImageUnit(numOfImage);
 	BindUniformInt1(uniform_image_name, numOfImage);
 	ImageUnitMapper[texture] = numOfImage;
+#endif
 }
 
 void Pass::Draw()

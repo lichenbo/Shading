@@ -38,7 +38,9 @@ void Texture::BindToUnit(const int unit)
 
 void Texture::BindToImageUnit(const int unit)
 {
+#ifdef _WIN32
 	glBindImageTexture(unit, renderedTexture, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
+#endif
 }
 
 void Texture::Unbind()
