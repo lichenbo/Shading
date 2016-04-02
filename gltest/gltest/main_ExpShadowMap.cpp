@@ -259,9 +259,13 @@ int main(int argc, char * argv[]) {
     deferredBRDFShader->SetAttribVertex("vertex");
     deferredBRDFShader->SetAttribTexture("texture_coordinate");
 
-	ShaderProgram* blurShader = new ShaderProgram();
-	GET_SHADER_PATH(path, 256, "gaussianBlur.comp");
-	blurShader->SetComputeShaderPath(path);
+	ShaderProgram* blurShaderHorizontal = new ShaderProgram();
+	GET_SHADER_PATH(path, 256, "gaussianBlurHorizontal.comp");
+	blurShaderHorizontal->SetComputeShaderPath(path);
+
+	ShaderProgram* blurShaderVertical = new ShaderProgram();
+	GET_SHADER_PATH(path, 256, "gaussianBlurVertical.comp");
+	blurShaderVertical->SetComputeShaderPath(path);
 	
     
     // --------------SHADER LOADING--------------------------
@@ -349,7 +353,8 @@ int main(int argc, char * argv[]) {
     Pass gbufferPass(defergbufferShader, &bunnyScene);
     Pass ambientPass(ambientShader, &ambientScene);
     Pass shadowPass(shadowMapShader, &shadowMapScene);
-	Pass blurPass(blurShader, NULL);
+	Pass blurHorizontalPass(blurShaderHorizontal, NULL);
+	Pass blurVerticalPass(blurShaderVertical, NULL);
     Pass shadowRenderPass(shadowRenderShader, &shadowRenderScene);
     Pass deferredBRDFPass1(deferredBRDFShader, &deferredBRDFScene);
     Pass deferredBRDFPass2(deferredBRDFShader, &deferredBRDFScene);
@@ -450,7 +455,8 @@ int main(int argc, char * argv[]) {
 	int blurWidth = 10; // kenel half width
 	float h = 2 * blurWidth + 1; // What's this?
 	float* blurKernel = buildGaussianWeight(blurWidth, h/2.0); 
-	blurPass.GlobalBindUniformBlock("blurKernel", (char*)blurKernel, sizeof(float)*(2 * blurWidth + 1));
+	blurHorizontalPass.GlobalBindUniformBlock("blurKernel", (char*)blurKernel, sizeof(float)*(2 * blurWidth + 1));
+	blurVerticalPass.GlobalBindUniformBlock("blurKernel", (char*)blurKernel, sizeof(float)*(2 * blurWidth + 1));
     
     // ------------BIND MESH-WISE UNIFORMS----------------
     
@@ -463,15 +469,20 @@ int main(int argc, char * argv[]) {
     Texture* specularTex = g_buffer.GetTexture(3);
     Texture* shadowTex = shadow_buffer.GetTexture(0);
     
-	Texture* blurredShadow = new Texture(shadowTex->Width(), shadowTex->Height());
-	blurShader->SetupComputeShader(shadowTex->Width() / 128, shadowTex->Height(), 1);
-	blurPass.BindUniformInt1("kernelWidth", blurWidth);
+	Texture* blurredShadowHorizontal = new Texture(shadowTex->Width(), shadowTex->Height());
+	Texture* blurredShadowVertical= new Texture(shadowTex->Width(), shadowTex->Height());
+	blurShaderHorizontal->SetupComputeShader(shadowTex->Width() / 128, shadowTex->Height(), 1);
+	blurShaderVertical->SetupComputeShader(shadowTex->Width(), shadowTex->Height()/128, 1);
+	blurHorizontalPass.BindUniformInt1("kernelWidth", blurWidth);
+	blurVerticalPass.BindUniformInt1("kernelWidth", blurWidth);
 
-	blurPass.BindImage("src", shadowTex);
-	blurPass.BindImage("dst", blurredShadow);
+	blurHorizontalPass.BindImage("src", shadowTex);
+	blurHorizontalPass.BindImage("dst", blurredShadowHorizontal);
+	blurVerticalPass.BindImage("src", blurredShadowHorizontal);
+	blurVerticalPass.BindImage("dst", blurredShadowVertical);
 
     ambientPass.BindTexture("diffuseTexture", diffuseTex);
-    shadowRenderPass.BindTexture("shadowTexture", blurredShadow);
+    shadowRenderPass.BindTexture("shadowTexture", blurredShadowVertical);
     //shadowRenderPass.BindTexture("shadowTexture", shadowTex);
     shadowRenderPass.BindTexture("positionTexture", positionTex);
     shadowRenderPass.BindTexture("normalTexture", normalTex);
@@ -509,7 +520,8 @@ int main(int argc, char * argv[]) {
     engine->addPass(&gbufferPass);
     engine->addPass(&ambientPass);
     engine->addPass(&shadowPass);
-	engine->addPass(&blurPass); // Compute shader
+	engine->addPass(&blurHorizontalPass); // Compute shader
+	engine->addPass(&blurVerticalPass); // Compute shader
     engine->addPass(&shadowRenderPass);
     engine->addPass(&deferredBRDFPass1);
     engine->addPass(&deferredBRDFPass2);

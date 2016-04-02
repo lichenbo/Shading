@@ -48,6 +48,11 @@ void Pass::RebindUniforms()
     {
         item.first->BindToUnit(item.second);
     }
+	for (auto item: ImageUnitMapper)
+	{
+		item.first->BindToImageUnit(item.second);
+	}
+	
 }
 
 void Pass::BindTexture(const char* uniform_texture_name,Texture* texture)

@@ -192,7 +192,8 @@
     <None Include="Shader\expShadow.vert" />
     <None Include="Shader\expShadowRender.frag" />
     <None Include="Shader\expShadowRender.vert" />
-    <None Include="Shader\gaussianBlur.comp" />
+    <None Include="Shader\gaussianBlurHorizontal.comp" />
+    <None Include="Shader\gaussianBlurVertical.comp" />
     <None Include="Shader\shadow.frag" />
     <None Include="Shader\shadow.vert" />
     <None Include="Shader\shadowRender.frag" />
