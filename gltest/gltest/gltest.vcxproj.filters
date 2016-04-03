@@ -69,6 +69,9 @@
     <ClInclude Include="Pass.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="rgbe.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderProgram.cpp">
@@ -99,6 +102,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main_ExpShadowMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main_AdvancedLighting.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rgbe.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

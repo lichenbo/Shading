@@ -156,6 +156,7 @@
     <ClInclude Include="model_ply.h" />
     <ClInclude Include="Pass.hpp" />
     <ClInclude Include="Path.h" />
+    <ClInclude Include="rgbe.h" />
     <ClInclude Include="Scene.hpp" />
     <ClInclude Include="ShaderProgram.hpp" />
     <ClInclude Include="Texture.hpp" />
@@ -163,11 +164,13 @@
   <ItemGroup>
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="FBO.cpp" />
+    <ClCompile Include="main_AdvancedLighting.cpp" />
     <ClCompile Include="main_basiclighting.cpp" />
     <ClCompile Include="main_deferredShading.cpp" />
     <ClCompile Include="main_ExpShadowMap.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Pass.cpp" />
+    <ClCompile Include="rgbe.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Texture.cpp" />

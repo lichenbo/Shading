@@ -18,7 +18,9 @@
  * Just the class for loading PLY files.
  *
  */
+#define M_PI       3.14159265358979323846
 
+#include <cmath>
 #ifdef _WIN32
     #include <windows.h>
     #include <GL/glew.h>
@@ -28,7 +30,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <cmath>
+
 #include <string>
 #include <stdlib.h>
 
@@ -38,13 +40,14 @@ class Model_PLY
 public:
     int Load(const char *filename);
     void Draw();
-    float* calculateNormal( float *coord1, float *coord2, float *coord3 );
+    float* calculateDomeTexture( float *coord1, float *coord2, float *coord3 );
     Model_PLY();
     
     float* Faces_Triangles;
     float* Faces_Quads;
     float* Vertex_Buffer;
     float* Normals;
+	float* Textures;
     
     int TotalConnectedTriangles;
     int TotalConnectedQuads;
@@ -55,44 +58,18 @@ public:
 };
 
 
+inline float* Model_PLY::calculateDomeTexture(float* coord1, float* coord2, float* coord3)
+{
+	float* uv = new float[2];
+	uv[0] = 0.5 - atan2(*coord2, *coord1) / (2* M_PI);
+	uv[1] = acos(*coord3) / M_PI;
+	return uv;
+}
 
 Model_PLY::Model_PLY()
 {
     
 }
-
-
-// Normal of a triangle on the surface, just calculate the cross product of the 2 vector of the triangle
-float* Model_PLY::calculateNormal( float *coord1, float *coord2, float *coord3 )
-{
-    /* calculate Vector1 and Vector2 */
-    float va[3], vb[3], vr[3], val;
-    va[0] = coord1[0] - coord2[0];
-    va[1] = coord1[1] - coord2[1];
-    va[2] = coord1[2] - coord2[2];
-    
-    vb[0] = coord1[0] - coord3[0];
-    vb[1] = coord1[1] - coord3[1];
-    vb[2] = coord1[2] - coord3[2];
-    
-    /* cross product */
-    vr[0] = va[1] * vb[2] - vb[1] * va[2];
-    vr[1] = vb[0] * va[2] - va[0] * vb[2];
-    vr[2] = va[0] * vb[1] - vb[0] * va[1];
-    
-    /* normalization factor */
-    val = sqrt( vr[0]*vr[0] + vr[1]*vr[1] + vr[2]*vr[2] );
-    
-    float norm[3];
-    norm[0] = vr[0]/val;
-    norm[1] = vr[1]/val;
-    norm[2] = vr[2]/val;
-    
-    
-    return norm;
-}
-
-
 
 int Model_PLY::Load(const char* filename)
 {
@@ -122,6 +99,7 @@ int Model_PLY::Load(const char* filename)
         
         Faces_Triangles = (float*) malloc(fileSize*sizeof(float));
         Normals  = (float*) malloc(fileSize*sizeof(float));
+		Textures = (float*)malloc(fileSize*sizeof(float));
         
         if (file)
         {
@@ -131,7 +109,6 @@ int Model_PLY::Load(const char* filename)
             int triangle_index = 0;
             int normal_index = 0;
             char buffer[1000];
-            
             
             fgets(buffer,300,file);			// ply
             
@@ -147,7 +124,6 @@ int Model_PLY::Load(const char* filename)
             strcpy(buffer, buffer+strlen("element vertex"));
             sscanf(buffer,"%i", &this->TotalConnectedPoints);
             
-            
             // Find number of vertexes
             fseek(file,0,SEEK_SET);
             while (  strncmp( "element face", buffer,strlen("element face")) != 0  )
@@ -157,22 +133,17 @@ int Model_PLY::Load(const char* filename)
             strcpy(buffer, buffer+strlen("element face"));
             sscanf(buffer,"%i", &this->TotalFaces);
             
-            
             // go to end_header
             while (  strncmp( "end_header", buffer,strlen("end_header")) != 0  )
             {
                 fgets(buffer,300,file);			// format
             }
             
-            //----------------------
-            
-            
             // read verteces
             i =0;
             for (int iterator = 0; iterator < this->TotalConnectedPoints; iterator++)
             {
                 fgets(buffer,300,file);
-                
                 sscanf(buffer,"%f %f %f %f %f %f", &Vertex_Buffer[i], &Vertex_Buffer[i+1], &Vertex_Buffer[i+2], &Vertex_Buffer[i+3], &Vertex_Buffer[i+4], &Vertex_Buffer[i+5]);
                 i += 6;
             }
@@ -182,15 +153,11 @@ int Model_PLY::Load(const char* filename)
             for (int iterator = 0; iterator < this->TotalFaces; iterator++)
             {
                 fgets(buffer,300,file);
-                
                 if (buffer[0] == '3')
                 {
-                    
                     int vertex1 = 0, vertex2 = 0, vertex3 = 0;
-
                     buffer[0] = ' ';
                     sscanf(buffer,"%i%i%i", &vertex1,&vertex2,&vertex3);
-
                     
                     Faces_Triangles[triangle_index] = Vertex_Buffer[6*vertex1];
                     Faces_Triangles[triangle_index+1] = Vertex_Buffer[6*vertex1+1];
@@ -207,7 +174,6 @@ int Model_PLY::Load(const char* filename)
                     float coord1[3] = { Faces_Triangles[triangle_index], Faces_Triangles[triangle_index+1],Faces_Triangles[triangle_index+2]};
                     float coord2[3] = {Faces_Triangles[triangle_index+3],Faces_Triangles[triangle_index+4],Faces_Triangles[triangle_index+5]};
                     float coord3[3] = {Faces_Triangles[triangle_index+6],Faces_Triangles[triangle_index+7],Faces_Triangles[triangle_index+8]};
-                    //float *norm = this->calculateNormal( coord1, coord2, coord3 );
                     
                     Normals[normal_index] = Vertex_Buffer[6*vertex1 + 3];
                     Normals[normal_index+1] = Vertex_Buffer[6*vertex1 + 4];
@@ -224,12 +190,8 @@ int Model_PLY::Load(const char* filename)
                     triangle_index += 9;
                     TotalConnectedTriangles += 3;
                 }
-                
-                
                 i += 3;
             }
-            
-            
             fclose(file);
         }
         
