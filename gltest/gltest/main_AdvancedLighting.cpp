@@ -33,6 +33,8 @@ void mouseMove(int x, int y);
 void mouseClick(int button, int state, int x, int y);
 void mouseWheel(int, int dir, int, int);
 void keyboardPress(unsigned char c, int x, int y);
+glm::vec3 RGB2Linear(glm::vec3 rgb);
+glm::vec3 Linear2RGB(glm::vec3 linear);
 
 
 // ----------------- VARIABLE ZONE --------------------------
@@ -60,36 +62,7 @@ auto Bunny3NormalMatrix = glm::transpose(glm::inverse(Bunny1ModelMatrix));
 auto Bunny3Diffuse = glm::vec3(0.5, 0.0, 0.5);
 auto Bunny3Specular = glm::vec3(0.5, 0.5, 0.0);
 
-//Square1
-auto Square1ModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(3.0f));
-auto Square1NormalMatrix = glm::transpose(glm::inverse(Square1ModelMatrix));
-auto Square1Diffuse = glm::vec3(1.0, 0.0, 0.0);
-auto Square1Specular = glm::vec3(1.0, 1.0, 1.0);
 
-auto Square2ModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(-3.0f, 0.0f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(3.0f)) * glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-auto Square2NormalMatrix = glm::transpose(glm::inverse(Square2ModelMatrix));
-auto Square2Diffuse = glm::vec3(0.0, 1.0, 0.0);
-auto Square2Specular = glm::vec3(1.0, 1.0, 1.0);
-
-auto Square3ModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 3.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(3.0f)) * glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-auto Square3NormalMatrix = glm::transpose(glm::inverse(Square3ModelMatrix));
-auto Square3Diffuse = glm::vec3(0.0, 0.0, 1.0);
-auto Square3Specular = glm::vec3(1.0, 1.0, 1.0);
-
-auto Square4ModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(3.0f, 0.0f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(3.0f)) * glm::rotate(glm::mat4(1.0f), glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-auto Square4NormalMatrix = glm::transpose(glm::inverse(Square4ModelMatrix));
-auto Square4Diffuse = glm::vec3(1.0, 0.5, 0.5);
-auto Square4Specular = glm::vec3(1.0, 1.0, 1.0);
-
-auto Square5ModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 3.0f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(3.0f)) * glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-auto Square5NormalMatrix = glm::transpose(glm::inverse(Square5ModelMatrix));
-auto Square5Diffuse = glm::vec3(0.5, 1.0, 0.5);
-auto Square5Specular = glm::vec3(1.0, 1.0, 1.0);
-
-auto Square6ModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -3.0f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(3.0f)) * glm::rotate(glm::mat4(1.0f), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-auto Square6NormalMatrix = glm::transpose(glm::inverse(Square6ModelMatrix));
-auto Square6Diffuse = glm::vec3(0.5, 0.5, 1.0);
-auto Square6Specular = glm::vec3(1.0, 1.0, 1.0);
 
 // Light1: Global light
 auto Light1Pos = glm::vec3(2.0f);
@@ -161,31 +134,6 @@ auto Light3DiffusePtr = glm::value_ptr(Light3Diffuse);
 auto Light3SpecularPtr = glm::value_ptr(Light3Specular);
 auto Light3RangePtr = glm::value_ptr(Light3Range);
 auto BlurFactorPtr = glm::value_ptr(BlurFactor);
-
-auto Square1ModelMatrixPtr = glm::value_ptr(Square1ModelMatrix);
-auto Square1NormalMatrixPtr = glm::value_ptr(Square1NormalMatrix);
-auto Square1DiffusePtr = glm::value_ptr(Square1Diffuse);
-auto Square1SpecularPtr = glm::value_ptr(Square1Specular);
-auto Square2ModelMatrixPtr = glm::value_ptr(Square2ModelMatrix);
-auto Square2NormalMatrixPtr = glm::value_ptr(Square2NormalMatrix);
-auto Square2DiffusePtr = glm::value_ptr(Square2Diffuse);
-auto Square2SpecularPtr = glm::value_ptr(Square2Specular);
-auto Square3ModelMatrixPtr = glm::value_ptr(Square3ModelMatrix);
-auto Square3NormalMatrixPtr = glm::value_ptr(Square3NormalMatrix);
-auto Square3DiffusePtr = glm::value_ptr(Square3Diffuse);
-auto Square3SpecularPtr = glm::value_ptr(Square3Specular);
-auto Square4ModelMatrixPtr = glm::value_ptr(Square4ModelMatrix);
-auto Square4NormalMatrixPtr = glm::value_ptr(Square4NormalMatrix);
-auto Square4DiffusePtr = glm::value_ptr(Square4Diffuse);
-auto Square4SpecularPtr = glm::value_ptr(Square4Specular);
-auto Square5ModelMatrixPtr = glm::value_ptr(Square5ModelMatrix);
-auto Square5NormalMatrixPtr = glm::value_ptr(Square5NormalMatrix);
-auto Square5DiffusePtr = glm::value_ptr(Square5Diffuse);
-auto Square5SpecularPtr = glm::value_ptr(Square5Specular);
-auto Square6ModelMatrixPtr = glm::value_ptr(Square6ModelMatrix);
-auto Square6NormalMatrixPtr = glm::value_ptr(Square6NormalMatrix);
-auto Square6DiffusePtr = glm::value_ptr(Square6Diffuse);
-auto Square6SpecularPtr = glm::value_ptr(Square6Specular);
 // --------------------------------------------------------
 
 float* buildGaussianWeight(int w, float s)
@@ -282,19 +230,6 @@ int main(int argc, char * argv[]) {
 	shadowBunny2.Load(path);
 	shadowBunny3.Load(path);
 
-
-	square1.LoadSquare();
-	square2.LoadSquare();
-	square3.LoadSquare();
-	square4.LoadSquare();
-	square5.LoadSquare();
-	square6.LoadSquare();
-	shadowSquare1.LoadSquare();
-	shadowSquare2.LoadSquare();
-	shadowSquare3.LoadSquare();
-	shadowSquare4.LoadSquare();
-	shadowSquare5.LoadSquare();
-	shadowSquare6.LoadSquare();
 
 	GET_MODEL_PATH(path, 256, "sphere.ply");
 	Mesh Light1, Light2, Light3;

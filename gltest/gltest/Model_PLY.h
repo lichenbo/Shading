@@ -40,7 +40,7 @@ class Model_PLY
 public:
     int Load(const char *filename);
     void Draw();
-    float* calculateDomeTexture( float *coord1, float *coord2, float *coord3 );
+    float* calculateDomeTexture( float coord1, float coord2, float coord3 );
     Model_PLY();
     
     float* Faces_Triangles;
@@ -58,11 +58,11 @@ public:
 };
 
 
-inline float* Model_PLY::calculateDomeTexture(float* coord1, float* coord2, float* coord3)
+inline float* Model_PLY::calculateDomeTexture(float coord1, float coord2, float coord3)
 {
 	float* uv = new float[2];
-	uv[0] = 0.5 - atan2(*coord2, *coord1) / (2* M_PI);
-	uv[1] = acos(*coord3) / M_PI;
+	uv[0] = 0.5 - atan2(coord2, coord1) / (2* M_PI);
+	uv[1] = acos(coord3) / M_PI;
 	return uv;
 }
 
@@ -108,6 +108,7 @@ int Model_PLY::Load(const char* filename)
             int quads_index = 0;
             int triangle_index = 0;
             int normal_index = 0;
+            int texture_index = 0;
             char buffer[1000];
             
             fgets(buffer,300,file);			// ply
@@ -185,6 +186,17 @@ int Model_PLY::Load(const char* filename)
                     Normals[normal_index+7] = Vertex_Buffer[6*vertex3 + 4];
                     Normals[normal_index+8] = Vertex_Buffer[6*vertex3 + 5];
                     
+                    float* textureCoord1 = calculateDomeTexture(Normals[normal_index], Normals[normal_index+1], Normals[normal_index+2]);
+                    float* textureCoord2 = calculateDomeTexture(Normals[normal_index+3], Normals[normal_index+4], Normals[normal_index+5]);
+                    float* textureCoord3 = calculateDomeTexture(Normals[normal_index+6], Normals[normal_index+7], Normals[normal_index+8]);
+                    Texture[texture_index] = textureCoord1[0];
+                    Texture[texture_index+1] = textureCoord1[1];
+                    Texture[texture_index+2] = textureCoord2[0];
+                    Texture[texture_index+3] = textureCoord2[1];
+                    Texture[texture_index+4] = textureCoord3[0];
+                    Texture[texture_index+5] = textureCoord3[1];
+
+                    texture_index+= 6;
                     normal_index += 9;
                     
                     triangle_index += 9;
