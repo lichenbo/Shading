@@ -215,7 +215,7 @@ int main(int argc, char * argv[]) {
 
 	defergbufferShader->SetAttribVertex("vertex_coord");
 	defergbufferShader->SetAttribNormal("normal_coord");
-    defergbufferShader->SetAttribTangent("texture_coord");
+    defergbufferShader->SetAttribTexture("texture_coord");
 
 	ShaderProgram* ambientShader = new ShaderProgram();
 	GET_SHADER_PATH(path, 256, "deferAmbientLight.vert");

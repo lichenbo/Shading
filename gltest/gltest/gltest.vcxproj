@@ -187,6 +187,8 @@
     <None Include="Shader\deferAmbientLight.vert" />
     <None Include="Shader\defergbuffer.frag" />
     <None Include="Shader\defergbuffer.vert" />
+    <None Include="Shader\defergbufferDome.frag" />
+    <None Include="Shader\defergbufferDome.vert" />
     <None Include="Shader\deferredBRDF.frag" />
     <None Include="Shader\deferredBRDF.vert" />
     <None Include="Shader\displayTexture.frag" />

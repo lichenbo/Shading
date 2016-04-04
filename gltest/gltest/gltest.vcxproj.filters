@@ -34,6 +34,9 @@
     <Filter Include="Shader\ExpShadowMap">
       <UniqueIdentifier>{a12b40c7-c703-4179-af74-023e7fdd0ed2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader\PhysicsLighting">
+      <UniqueIdentifier>{ca2caf75-abef-41b6-977f-e9d6bfb8ceb2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -60,9 +63,6 @@
     <ClInclude Include="Texture.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="gl.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="FBO.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -70,6 +70,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="rgbe.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -186,6 +189,12 @@
     </None>
     <None Include="Shader\gaussianBlurVertical.comp">
       <Filter>Shader\ExpShadowMap</Filter>
+    </None>
+    <None Include="Shader\defergbufferDome.vert">
+      <Filter>Shader\PhysicsLighting</Filter>
+    </None>
+    <None Include="Shader\defergbufferDome.frag">
+      <Filter>Shader\PhysicsLighting</Filter>
     </None>
   </ItemGroup>
 </Project>

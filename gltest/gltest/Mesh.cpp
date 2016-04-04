@@ -84,6 +84,7 @@ void Mesh::Load(const char* filename)
     numberOfVertices = model->TotalConnectedTriangles;
     vertex_data = model->Faces_Triangles;
     normal_data = model->Normals;
+	texture_data = model->Textures;
 }
 
 void Mesh::LoadSquare()
