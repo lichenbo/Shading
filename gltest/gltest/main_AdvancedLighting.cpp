@@ -43,7 +43,7 @@ glm::vec3 Linear2RGB(glm::vec3 linear);
 auto EyePos = glm::vec3(0.0f, 0.0f, 3.0f);
 auto UpPos = glm::vec3(0.0f, 1.0f, 0.0f);
 auto WatchPos = glm::vec3(0.0f, 0.0f, 0.0f);
-auto ProjectionMatrix = glm::perspective(45.0f, 1.0f, 0.1f, 100.0f);
+auto ProjectionMatrix = glm::perspective(45.0f, 1.0f, 0.1f, 20.0f);
 auto ViewMatrix = glm::lookAt(EyePos, WatchPos, UpPos);
 auto ViewInverseMatrix = glm::inverse(ViewMatrix);
 auto AmbientLight = glm::vec3(0.5, 0.5, 0.5);
