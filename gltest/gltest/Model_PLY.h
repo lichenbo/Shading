@@ -189,12 +189,12 @@ int Model_PLY::Load(const char* filename)
                     float* textureCoord1 = calculateDomeTexture(Normals[normal_index], Normals[normal_index+1], Normals[normal_index+2]);
                     float* textureCoord2 = calculateDomeTexture(Normals[normal_index+3], Normals[normal_index+4], Normals[normal_index+5]);
                     float* textureCoord3 = calculateDomeTexture(Normals[normal_index+6], Normals[normal_index+7], Normals[normal_index+8]);
-                    Texture[texture_index] = textureCoord1[0];
-                    Texture[texture_index+1] = textureCoord1[1];
-                    Texture[texture_index+2] = textureCoord2[0];
-                    Texture[texture_index+3] = textureCoord2[1];
-                    Texture[texture_index+4] = textureCoord3[0];
-                    Texture[texture_index+5] = textureCoord3[1];
+                    Textures[texture_index] = textureCoord1[0];
+                    Textures[texture_index+1] = textureCoord1[1];
+                    Textures[texture_index+2] = textureCoord2[0];
+                    Textures[texture_index+3] = textureCoord2[1];
+                    Textures[texture_index+4] = textureCoord3[0];
+                    Textures[texture_index+5] = textureCoord3[1];
 
                     texture_index+= 6;
                     normal_index += 9;

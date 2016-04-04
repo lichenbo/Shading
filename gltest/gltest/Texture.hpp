@@ -15,7 +15,7 @@ class Texture
 {
 public:
     Texture(const int w, const int h);
-    void LoadData(char* data);
+    void LoadData(float* data);
     void BindToUnit(const int unit);
 	void BindToImageUnit(const int unit);
 	void Unbind();

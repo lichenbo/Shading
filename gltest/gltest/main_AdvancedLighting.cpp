@@ -18,6 +18,7 @@
 #include "FBO.hpp"
 #include "Texture.hpp"
 #include <iostream>
+#include "rgbe.h"
 
 
 #ifdef _WIN32
@@ -33,6 +34,7 @@ void mouseMove(int x, int y);
 void mouseClick(int button, int state, int x, int y);
 void mouseWheel(int, int dir, int, int);
 void keyboardPress(unsigned char c, int x, int y);
+void readHDR(const char* path, float* data, int& width, int& height);
 glm::vec3 RGB2Linear(glm::vec3 rgb);
 glm::vec3 Linear2RGB(glm::vec3 linear);
 
@@ -62,7 +64,9 @@ auto Bunny3NormalMatrix = glm::transpose(glm::inverse(Bunny1ModelMatrix));
 auto Bunny3Diffuse = glm::vec3(0.5, 0.0, 0.5);
 auto Bunny3Specular = glm::vec3(0.5, 0.5, 0.0);
 
-
+// Dome
+auto DomeModelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(40.0f));
+auto DomeNormalMatrix = glm::transpose(glm::inverse(DomeModelMatrix));
 
 // Light1: Global light
 auto Light1Pos = glm::vec3(2.0f);
@@ -114,6 +118,8 @@ auto Bunny3ModelMatrixPtr = glm::value_ptr(Bunny3ModelMatrix);
 auto Bunny3NormalMatrixPtr = glm::value_ptr(Bunny3NormalMatrix);
 auto Bunny3DiffusePtr = glm::value_ptr(Bunny3Diffuse);
 auto Bunny3SpecularPtr = glm::value_ptr(Bunny3Specular);
+auto DomeModelMatrixPtr = glm::value_ptr(DomeModelMatrix);
+auto DomeNormalMatrixPtr = glm::value_ptr(DomeNormalMatrix);
 auto Light1PosPtr = glm::value_ptr(Light1Pos);
 auto Light1ModelMatrixPtr = glm::value_ptr(Light1ModelMatrix);
 auto Light1NormalMatrixPtr = glm::value_ptr(Light1NormalMatrix);
@@ -153,6 +159,45 @@ float* buildGaussianWeight(int w, float s)
 	return weights;
 }
 
+// readHDR as RGBA format 
+void readHDR(const char* path, std::vector<float>& data, int& width, int& height)
+{
+    rgbe_header_info info;
+    char errbuff[100] = {0};
+    
+    FILE* fp = fopen(path, "rb");
+    if (!fp)
+    {
+        std::cout << "Can't open hdr file " << path << std::endl;
+        exit(-1);
+    }
+    int rc = RGBE_ReadHeader(fp, &width, &height, &info, errbuff);
+    if (rc!= RGBE_RETURN_SUCCESS)
+    {
+        std::cout << "RGBE Read error " << errbuff << std::endl;
+    }
+    float* rgb_data = new float[3*width*height];
+    
+    rc = RGBE_ReadPixels_RLE(fp, rgb_data, width, height);
+    if (rc != RGBE_RETURN_SUCCESS)
+    {
+        std::cout << "RGBE read error " << errbuff << std::endl;
+    }
+    fclose(fp);
+    
+    data.resize(4*width*height);
+    for (int i = 0; i < width*height; ++i)
+    {
+        data[4*i] = rgb_data[3*i];
+        data[4*i+1] = rgb_data[3*i+1];
+        data[4*i+2] = rgb_data[3*i+2];
+        data[4*i+3] = 1.0f;
+    }
+    
+    return;
+    
+}
+
 int main(int argc, char * argv[]) {
 
 	char path[256];
@@ -162,16 +207,16 @@ int main(int argc, char * argv[]) {
 	FBO g_buffer(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT), 4);
 	FBO shadow_buffer(1024, 1024, 1);
 
-	GET_SHADER_PATH(path, 256, "defergbuffer.vert");
+	GET_SHADER_PATH(path, 256, "defergbufferDome.vert");
 	if (!defergbufferShader->AddVertexShaderPath(path)) return 0;
-	GET_SHADER_PATH(path, 256, "defergbuffer.frag");
+	GET_SHADER_PATH(path, 256, "defergbufferDome.frag");
 	if (!defergbufferShader->AddFragmentShaderPath(path)) return 0;
 	if (!defergbufferShader->Link()) return 0;
 
 	defergbufferShader->SetAttribVertex("vertex_coord");
 	defergbufferShader->SetAttribNormal("normal_coord");
+    defergbufferShader->SetAttribTangent("texture_coord");
 
-	//
 	ShaderProgram* ambientShader = new ShaderProgram();
 	GET_SHADER_PATH(path, 256, "deferAmbientLight.vert");
 	if (!ambientShader->AddVertexShaderPath(path)) return 0;
@@ -197,7 +242,7 @@ int main(int argc, char * argv[]) {
 	if (!shadowRenderShader->Link()) return 0;
 	shadowRenderShader->SetAttribVertex("vertex");
 	shadowRenderShader->SetAttribTexture("texture_coordinate");
-
+    
 	ShaderProgram* deferredBRDFShader = new ShaderProgram();
 	GET_SHADER_PATH(path, 256, "deferredBRDF.vert");
 	if (!deferredBRDFShader->AddVertexShaderPath(path)) return 0;
@@ -221,8 +266,9 @@ int main(int argc, char * argv[]) {
 	GET_MODEL_PATH(path, 256, "bunny_smooth.ply");
 	Mesh bunny1, bunny2, bunny3;
 	Mesh shadowBunny1, shadowBunny2, shadowBunny3;
-	Mesh square1, square2, square3, square4, square5, square6;
-	Mesh shadowSquare1, shadowSquare2, shadowSquare3, shadowSquare4, shadowSquare5, shadowSquare6;
+	Mesh dome;
+    Mesh shadowDome;
+    
 	bunny1.Load(path);
 	bunny2.Load(path);
 	bunny3.Load(path);
@@ -236,6 +282,8 @@ int main(int argc, char * argv[]) {
 	Light1.Load(path);
 	Light2.Load(path);
 	Light3.Load(path);
+    dome.Load(path);
+    shadowDome.Load(path);
 
 	Mesh AmbientFSQ;
 	AmbientFSQ.LoadSquare();
@@ -255,12 +303,7 @@ int main(int argc, char * argv[]) {
 	bunnyScene.addObject(&Light1);
 	bunnyScene.addObject(&Light2);
 	bunnyScene.addObject(&Light3);
-	bunnyScene.addObject(&square1);
-	bunnyScene.addObject(&square2);
-	bunnyScene.addObject(&square3);
-	bunnyScene.addObject(&square4);
-	bunnyScene.addObject(&square5);
-	bunnyScene.addObject(&square6);
+    bunnyScene.addObject(&dome);
 
 
 	Scene ambientScene;
@@ -270,12 +313,7 @@ int main(int argc, char * argv[]) {
 	shadowMapScene.addObject(&shadowBunny1);
 	shadowMapScene.addObject(&shadowBunny2);
 	shadowMapScene.addObject(&shadowBunny3);
-	shadowMapScene.addObject(&shadowSquare1);
-	shadowMapScene.addObject(&shadowSquare2);
-	shadowMapScene.addObject(&shadowSquare3);
-	shadowMapScene.addObject(&shadowSquare4);
-	shadowMapScene.addObject(&shadowSquare5);
-	shadowMapScene.addObject(&shadowSquare6);
+    shadowMapScene.addObject(&shadowDome);
 
 	Scene shadowRenderScene;
 	shadowRenderScene.addObject(&ShadowRenderFSQ);
@@ -296,6 +334,7 @@ int main(int argc, char * argv[]) {
 
 	gbufferPass.BindAttribNormal();
 	gbufferPass.BindAttribVertex();
+    gbufferPass.BindAttribTexture();
 	ambientPass.BindAttribVertex();
 	ambientPass.BindAttribTexture();
 	shadowPass.BindAttribVertex();
@@ -332,14 +371,19 @@ int main(int argc, char * argv[]) {
 	gbufferPass.MeshBindUniformMatrix4(&bunny1, "NormalMatrix", &Bunny1NormalMatrixPtr);
 	gbufferPass.MeshBindUniformVec3(&bunny1, "diffuse", &Bunny1DiffusePtr);
 	gbufferPass.MeshBindUniformVec3(&bunny1, "specular", &Bunny1SpecularPtr);
+    gbufferPass.MeshBindUniformInt1(&bunny1, "isDome", 0);
 	gbufferPass.MeshBindUniformMatrix4(&bunny2, "ModelMatrix", &Bunny2ModelMatrixPtr);
 	gbufferPass.MeshBindUniformMatrix4(&bunny2, "NormalMatrix", &Bunny2NormalMatrixPtr);
 	gbufferPass.MeshBindUniformVec3(&bunny2, "diffuse", &Bunny2DiffusePtr);
 	gbufferPass.MeshBindUniformVec3(&bunny2, "specular", &Bunny2SpecularPtr);
+    gbufferPass.MeshBindUniformInt1(&bunny2, "isDome", 0);
+
 	gbufferPass.MeshBindUniformMatrix4(&bunny3, "ModelMatrix", &Bunny3ModelMatrixPtr);
 	gbufferPass.MeshBindUniformMatrix4(&bunny3, "NormalMatrix", &Bunny3NormalMatrixPtr);
 	gbufferPass.MeshBindUniformVec3(&bunny3, "diffuse", &Bunny3DiffusePtr);
 	gbufferPass.MeshBindUniformVec3(&bunny3, "specular", &Bunny3SpecularPtr);
+    gbufferPass.MeshBindUniformInt1(&bunny3, "isDome", 0);
+
 	gbufferPass.MeshBindUniformMatrix4(&Light1, "ModelMatrix", &Light1ModelMatrixPtr);
 	gbufferPass.MeshBindUniformMatrix4(&Light1, "NormalMatrix", &Light1NormalMatrixPtr);
 	gbufferPass.MeshBindUniformVec3(&Light1, "diffuse", &Light1DiffusePtr);
@@ -352,52 +396,33 @@ int main(int argc, char * argv[]) {
 	gbufferPass.MeshBindUniformMatrix4(&Light3, "NormalMatrix", &Light3NormalMatrixPtr);
 	gbufferPass.MeshBindUniformVec3(&Light3, "diffuse", &Light3DiffusePtr);
 	gbufferPass.MeshBindUniformVec3(&Light3, "specular", &Light3SpecularPtr);
-	gbufferPass.MeshBindUniformMatrix4(&square1, "ModelMatrix", &Square1ModelMatrixPtr);
-	gbufferPass.MeshBindUniformMatrix4(&square1, "NormalMatrix", &Square1NormalMatrixPtr);
-	gbufferPass.MeshBindUniformVec3(&square1, "diffuse", &Square1DiffusePtr);
-	gbufferPass.MeshBindUniformVec3(&square1, "specular", &Square1SpecularPtr);
-	gbufferPass.MeshBindUniformMatrix4(&square2, "ModelMatrix", &Square2ModelMatrixPtr);
-	gbufferPass.MeshBindUniformMatrix4(&square2, "NormalMatrix", &Square2NormalMatrixPtr);
-	gbufferPass.MeshBindUniformVec3(&square2, "diffuse", &Square2DiffusePtr);
-	gbufferPass.MeshBindUniformVec3(&square2, "specular", &Square2SpecularPtr);
-	gbufferPass.MeshBindUniformMatrix4(&square3, "ModelMatrix", &Square3ModelMatrixPtr);
-	gbufferPass.MeshBindUniformMatrix4(&square3, "NormalMatrix", &Square3NormalMatrixPtr);
-	gbufferPass.MeshBindUniformVec3(&square3, "diffuse", &Square3DiffusePtr);
-	gbufferPass.MeshBindUniformVec3(&square3, "specular", &Square3SpecularPtr);
-	gbufferPass.MeshBindUniformMatrix4(&square4, "ModelMatrix", &Square4ModelMatrixPtr);
-	gbufferPass.MeshBindUniformMatrix4(&square4, "NormalMatrix", &Square4NormalMatrixPtr);
-	gbufferPass.MeshBindUniformVec3(&square4, "diffuse", &Square4DiffusePtr);
-	gbufferPass.MeshBindUniformVec3(&square4, "specular", &Square4SpecularPtr);
-	gbufferPass.MeshBindUniformMatrix4(&square5, "ModelMatrix", &Square5ModelMatrixPtr);
-	gbufferPass.MeshBindUniformMatrix4(&square5, "NormalMatrix", &Square5NormalMatrixPtr);
-	gbufferPass.MeshBindUniformVec3(&square5, "diffuse", &Square5DiffusePtr);
-	gbufferPass.MeshBindUniformVec3(&square5, "specular", &Square5SpecularPtr);
-	gbufferPass.MeshBindUniformMatrix4(&square6, "ModelMatrix", &Square6ModelMatrixPtr);
-	gbufferPass.MeshBindUniformMatrix4(&square6, "NormalMatrix", &Square6NormalMatrixPtr);
-	gbufferPass.MeshBindUniformVec3(&square6, "diffuse", &Square6DiffusePtr);
-	gbufferPass.MeshBindUniformVec3(&square6, "specular", &Square6SpecularPtr);
-
+	gbufferPass.MeshBindUniformMatrix4(&dome, "ModelMatrix", &DomeModelMatrixPtr);
+	gbufferPass.MeshBindUniformMatrix4(&dome, "NormalMatrix", &DomeNormalMatrixPtr);
+    gbufferPass.MeshBindUniformInt1(&dome, "isDome", 1);
+	
 	shadowPass.MeshBindUniformMatrix4(&shadowBunny1, "ModelMatrix", &Bunny1ModelMatrixPtr);
 	shadowPass.MeshBindUniformMatrix4(&shadowBunny2, "ModelMatrix", &Bunny2ModelMatrixPtr);
 	shadowPass.MeshBindUniformMatrix4(&shadowBunny3, "ModelMatrix", &Bunny3ModelMatrixPtr);
-	shadowPass.MeshBindUniformMatrix4(&shadowSquare1, "ModelMatrix", &Square1ModelMatrixPtr);
-	shadowPass.MeshBindUniformMatrix4(&shadowSquare2, "ModelMatrix", &Square2ModelMatrixPtr);
-	shadowPass.MeshBindUniformMatrix4(&shadowSquare3, "ModelMatrix", &Square3ModelMatrixPtr);
-	shadowPass.MeshBindUniformMatrix4(&shadowSquare4, "ModelMatrix", &Square4ModelMatrixPtr);
-	shadowPass.MeshBindUniformMatrix4(&shadowSquare5, "ModelMatrix", &Square5ModelMatrixPtr);
-	shadowPass.MeshBindUniformMatrix4(&shadowSquare6, "ModelMatrix", &Square6ModelMatrixPtr);
-
-	int blurWidth = 10; // kenel half width
-	float h = 2 * blurWidth + 1; // What's this?
-	float* blurKernel = buildGaussianWeight(blurWidth, h / 2.0);
-	blurHorizontalPass.GlobalBindUniformBlock("blurKernel", (char*)blurKernel, sizeof(float)*(2 * blurWidth + 1));
-	blurVerticalPass.GlobalBindUniformBlock("blurKernel", (char*)blurKernel, sizeof(float)*(2 * blurWidth + 1));
+	shadowPass.MeshBindUniformMatrix4(&shadowDome, "ModelMatrix", &DomeModelMatrixPtr);
 
 	// ------------BIND MESH-WISE UNIFORMS----------------
-
+    int blurWidth = 10; // kenel half width
+    float h = 2 * blurWidth + 1; // What's this?
+    float* blurKernel = buildGaussianWeight(blurWidth, h / 2.0);
+    blurHorizontalPass.GlobalBindUniformBlock("blurKernel", (char*)blurKernel, sizeof(float)*(2 * blurWidth + 1));
+    blurVerticalPass.GlobalBindUniformBlock("blurKernel", (char*)blurKernel, sizeof(float)*(2 * blurWidth + 1));
 	gbufferPass.SetTarget(&g_buffer);
 	shadowPass.SetTarget(&shadow_buffer);
+    
+    // ------------BIND GLOBAL UNIFROMS -------------------
 
+    GET_HDR_PATH(path, 256, "Alexs_Apt_2k.hdr");
+    std::vector<float> hdrImage;
+    int width, height;
+    readHDR(path, hdrImage, width, height);
+    Texture* domeTex = new Texture(width,height);
+    domeTex->LoadData(&hdrImage[0]);
+    
 	Texture* positionTex = g_buffer.GetTexture(0);
 	Texture* normalTex = g_buffer.GetTexture(1);
 	Texture* diffuseTex = g_buffer.GetTexture(2);
@@ -417,6 +442,7 @@ int main(int argc, char * argv[]) {
 	blurVerticalPass.BindImage("dst", blurredShadowVertical);
 
 	ambientPass.BindTexture("diffuseTexture", diffuseTex);
+    gbufferPass.BindTexture("domeTexture", domeTex);
 
 #ifdef _WIN32
 	shadowRenderPass.BindTexture("shadowTexture", blurredShadowVertical);

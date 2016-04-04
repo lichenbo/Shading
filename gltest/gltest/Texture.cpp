@@ -22,7 +22,7 @@ Texture::Texture(const int w, const int h): w(w), h(h), unit(0)
 
 }
 
-void Texture::LoadData(char* data)
+void Texture::LoadData(float* data)
 {
     glBindTexture(GL_TEXTURE_2D, renderedTexture);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, w, h, 0, GL_RGBA, GL_FLOAT, data);

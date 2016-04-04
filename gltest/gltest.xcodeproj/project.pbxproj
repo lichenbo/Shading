@@ -49,6 +49,7 @@
 		EB9451101CB0DFCD0081C137 /* main_AdvancedLighting.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main_AdvancedLighting.cpp; sourceTree = "<group>"; };
 		EB9451111CB0DFCD0081C137 /* rgbe.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rgbe.cpp; sourceTree = "<group>"; };
 		EB9451121CB0DFCD0081C137 /* rgbe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rgbe.h; sourceTree = "<group>"; };
+		EB9451151CB201010081C137 /* IBL */ = {isa = PBXFileReference; lastKnownFileType = folder; name = IBL; path = gltest/IBL; sourceTree = "<group>"; };
 		EBA252BD1C8AF74E0025CD64 /* Model_PLY.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Model_PLY.h; sourceTree = "<group>"; };
 		EBA252BE1C8BAC440025CD64 /* Path.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Path.h; sourceTree = "<group>"; };
 		EBA252BF1C8C69280025CD64 /* Scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Scene.cpp; sourceTree = "<group>"; };
@@ -82,6 +83,7 @@
 		EB166A111BE788B700ED754D = {
 			isa = PBXGroup;
 			children = (
+				EB9451151CB201010081C137 /* IBL */,
 				EBA252C51C8C71240025CD64 /* Shader */,
 				EBA252C41C8C71030025CD64 /* Model */,
 				EB0C4B511C79DB6B00AF0BA6 /* GLUT.framework */,

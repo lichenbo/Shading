@@ -14,12 +14,14 @@
 
 const char* SHADER_PATH = "Shader/";
 const char* MODEL_PATH = "Model/";
+const char* HDR_PATH = "IBL/";
 
 
 #elif defined __APPLE__
 
 const char* SHADER_PATH = "../../gltest/Shader/"; // Shader path in OSX debug mode
 const char* MODEL_PATH = "../../gltest/Model/";
+const char* HDR_PATH = "../../gltest/IBL/";
 
 #endif
 
@@ -32,5 +34,10 @@ const char* MODEL_PATH = "../../gltest/Model/";
     memset(path, 0, n); \
     strcat(path, MODEL_PATH); \
     strcat(path, str);
+
+#define GET_HDR_PATH(path, n, str) \
+memset(path, 0, n); \
+strcat(path, HDR_PATH); \
+strcat(path, str);
 
 #endif /* Path_h */
