@@ -28,7 +28,7 @@ void main(void)
 	gspecular = specular;
     if (isDome == 1)
     {
-        gdiffuse = texture(domeTexture, tex_coord).xyz;
+        gdiffuse = texture(domeTexture, tex_coord.st).xyz;
     }
     else
     {
