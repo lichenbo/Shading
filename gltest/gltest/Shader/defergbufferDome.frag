@@ -34,7 +34,5 @@ void main(void)
     {
         gdiffuse = diffuse;
     }
-    gdiffuse = vec3(1.0, 0.0, 0.0);
-
 
 }
