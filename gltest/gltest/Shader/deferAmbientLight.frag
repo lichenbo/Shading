@@ -11,5 +11,5 @@ out vec4 outputColor;
 
 void main(void)
 {
-    outputColor.xyz = ambientColor * texture(diffuseTexture, texture_coord.st).xyz + vec3(1.0, 1.0, 1.0);
+    outputColor.xyz = ambientColor * texture(diffuseTexture, texture_coord.st).xyz;
 }

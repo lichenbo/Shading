@@ -347,6 +347,8 @@ int main(int argc, char * argv[]) {
 
 	gbufferPass.BindUniformMatrix4("ViewMatrix", &ViewMatrixPtr);
 	gbufferPass.BindUniformMatrix4("ProjectionMatrix", &ProjectionMatrixPtr);
+    gbufferPass.BindUniformVec3("eyePos", &EyePosPtr);
+
 	ambientPass.BindUniformVec3("ambientColor", &AmbientLightPtr);
 	shadowPass.BindUniformMatrix4("ViewMatrix", &Light1ViewMatrixPtr);
 	shadowPass.BindUniformMatrix4("ProjectionMatrix", &ProjectionMatrixPtr);
@@ -486,11 +488,14 @@ int main(int argc, char * argv[]) {
 	engine->addPass(&gbufferPass);
 	engine->addPass(&ambientPass);
 	engine->addPass(&shadowPass);
+#ifdef __WIN32
 	engine->addPass(&blurHorizontalPass); // Compute shader
 	engine->addPass(&blurVerticalPass); // Compute shader
+#endif
 	engine->addPass(&shadowRenderPass);
 	engine->addPass(&deferredBRDFPass1);
 	engine->addPass(&deferredBRDFPass2);
+
 
 
 	// ----------------ENGINE------------------------------

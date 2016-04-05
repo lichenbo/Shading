@@ -6,6 +6,7 @@ uniform vec3 diffuse;
 uniform vec3 specular;
 uniform sampler2D domeTexture;
 uniform int isDome;
+uniform vec3 eyePos;
 
 in vec3 worldSpacePosition;
 in vec3 worldSpaceNormal;
@@ -26,9 +27,12 @@ void main(void)
 	gnormal.xyz = worldSpaceNormal;
 	gnormal.w = 0.0;
 	gspecular = specular;
+    
+    vec3 D = worldSpacePosition - eyePos;
     if (isDome == 1)
     {
-        gdiffuse = texture(domeTexture, tex_coord.st).xyz;
+        //gdiffuse = texture(domeTexture, vec2(0.5-atan(D.z, D.x)/(2*M_PI), acos(D.y)/M_PI)).xyz;
+        gdiffuse = texture(domeTexture, tex_coord).xyz;
     }
     else
     {

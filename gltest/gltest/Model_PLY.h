@@ -61,8 +61,8 @@ public:
 inline float* Model_PLY::calculateDomeTexture(float coord1, float coord2, float coord3)
 {
 	float* uv = new float[2];
-	uv[0] = 0.5 - atan2(coord2, coord1) / (2* M_PI);
-	uv[1] = acos(coord3) / M_PI;
+	uv[0] = 0.5 - atan2(coord3, coord1) / (2* M_PI);
+	uv[1] = acos(coord2) / M_PI;
 	return uv;
 }
 
