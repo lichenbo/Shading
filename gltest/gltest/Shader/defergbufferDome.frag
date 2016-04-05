@@ -19,6 +19,8 @@ layout(location = 1) out vec4 gnormal;
 layout(location = 2) out vec3 gdiffuse;
 layout(location = 3) out vec3 gspecular;
 
+vec3 sRGB2Linear(vec3 pixel);
+vec3 Linear2sRGB(vec3 pixel);
 
 void main(void)
 {
@@ -29,14 +31,32 @@ void main(void)
 	gspecular = specular;
     
     vec3 D = worldSpacePosition - eyePos;
+    D = worldSpaceNormal;
     if (isDome == 1)
     {
         //gdiffuse = texture(domeTexture, vec2(0.5-atan(D.z, D.x)/(2*M_PI), acos(D.y)/M_PI)).xyz;
         gdiffuse = texture(domeTexture, tex_coord).xyz;
+        gdiffuse = sRGB2Linear(gdiffuse);
+        gdiffuse = Linear2sRGB(gdiffuse);
+        
     }
     else
     {
         gdiffuse = diffuse;
     }
 
+}
+
+vec3 sRGB2Linear(vec3 pixel)
+{
+    float e = 10;
+    vec3 converted = e*pixel/(e*pixel+vec3(1,1,1));
+    return vec3(pow(converted.x, 2.2),pow(converted.y, 2.2),pow(converted.z, 2.2));
+}
+
+vec3 Linear2sRGB(vec3 pixel)
+{
+    float e = 10;
+    vec3 converted = e*pixel/(e*pixel+vec3(1,1,1));
+    return vec3(pow(converted.x, 1/2.2),pow(converted.y, 1/2.2),pow(converted.z, 1/2.2));
 }
