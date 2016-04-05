@@ -44,6 +44,9 @@ void main(void)
     else
     {
         gdiffuse = diffuse/M_PI * texture(domeIrrTexture, gnormal.xz).xyz;
+        gdiffuse = sRGB2Linear(gdiffuse);
+        gdiffuse = Linear2sRGB(gdiffuse);
+
     }
 
 }
