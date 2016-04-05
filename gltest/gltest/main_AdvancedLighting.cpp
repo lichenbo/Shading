@@ -425,6 +425,11 @@ int main(int argc, char * argv[]) {
     Texture* domeTex = new Texture(width,height);
     domeTex->LoadData(&hdrImage[0]);
     
+    GET_HDR_PATH(path, 256, "Alexs_Apt_2k.irr.hdr");
+    readHDR(path, hdrImage, width, height);
+    Texture* domeIrrTex = new Texture(width,height);
+    domeIrrTex->LoadData(&hdrImage[0]);
+    
 	Texture* positionTex = g_buffer.GetTexture(0);
 	Texture* normalTex = g_buffer.GetTexture(1);
 	Texture* diffuseTex = g_buffer.GetTexture(2);
@@ -445,6 +450,7 @@ int main(int argc, char * argv[]) {
 
 	ambientPass.BindTexture("diffuseTexture", diffuseTex);
     gbufferPass.BindTexture("domeTexture", domeTex);
+    gbufferPass.BindTexture("domeIrrTexture", domeIrrTex);
 
 #ifdef _WIN32
 	shadowRenderPass.BindTexture("shadowTexture", blurredShadowVertical);

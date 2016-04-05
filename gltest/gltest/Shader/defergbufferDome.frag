@@ -5,6 +5,7 @@
 uniform vec3 diffuse;
 uniform vec3 specular;
 uniform sampler2D domeTexture;
+uniform sampler2D domeIrrTexture;
 uniform int isDome;
 uniform vec3 eyePos;
 
@@ -42,7 +43,7 @@ void main(void)
     }
     else
     {
-        gdiffuse = diffuse;
+        gdiffuse = diffuse/M_PI * texture(domeIrrTexture, gnormal.xz).xyz;
     }
 
 }
