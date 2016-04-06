@@ -37,14 +37,14 @@ void main(void)
     {
         //gdiffuse = texture(domeTexture, vec2(0.5-atan(D.z, D.x)/(2*M_PI), acos(D.y)/M_PI)).xyz;
         gdiffuse = texture(domeTexture, tex_coord).xyz;
-        gdiffuse = sRGB2Linear(gdiffuse);
+        //gdiffuse = sRGB2Linear(gdiffuse);
         gdiffuse = Linear2sRGB(gdiffuse);
         
     }
     else
     {
         gdiffuse = diffuse/M_PI * texture(domeIrrTexture, gnormal.xz).xyz;
-        gdiffuse = sRGB2Linear(gdiffuse);
+        //gdiffuse = sRGB2Linear(gdiffuse);
         gdiffuse = Linear2sRGB(gdiffuse);
 
     }
