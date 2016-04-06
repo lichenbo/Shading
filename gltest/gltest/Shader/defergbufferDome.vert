@@ -19,7 +19,6 @@ void main(void)
 	homo_vertex.xyz = vertex_coord;
 	homo_vertex.w = 1.0;
 
-	vec3 LightPos = vec3(10.0, 10.0, -10.0);
 	worldSpacePosition = vec3(ModelMatrix * homo_vertex);
 
 	worldSpaceNormal = normalize(mat3(NormalMatrix)*normal_coord);    

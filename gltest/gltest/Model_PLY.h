@@ -57,7 +57,6 @@ public:
     
 };
 
-
 inline float* Model_PLY::calculateDomeTexture(float coord1, float coord2, float coord3)
 {
 	float* uv = new float[2];
