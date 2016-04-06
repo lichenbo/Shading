@@ -32,19 +32,16 @@ void main(void)
 	gspecular = specular;
     
     vec3 D = worldSpacePosition - eyePos;
-    D = worldSpaceNormal;
+    D = normalize(D);
     if (isDome == 1)
     {
-        //gdiffuse = texture(domeTexture, vec2(0.5-atan(D.z, D.x)/(2*M_PI), acos(D.y)/M_PI)).xyz;
-        gdiffuse = texture(domeTexture, tex_coord).xyz;
-        //gdiffuse = sRGB2Linear(gdiffuse);
+        gdiffuse = texture(domeTexture, vec2(0.5-atan(D.z, D.x)/(-2*M_PI), acos(D.y)/M_PI)).xyz;
         gdiffuse = Linear2sRGB(gdiffuse);
         
     }
     else
     {
-        gdiffuse = diffuse/M_PI * texture(domeIrrTexture, gnormal.xz).xyz;
-        //gdiffuse = sRGB2Linear(gdiffuse);
+        gdiffuse = diffuse/M_PI * texture(domeIrrTexture, vec2(0.5-atan(gnormal.z, gnormal.x)/(-2*M_PI), acos(gnormal.y)/M_PI)).xyz;
         gdiffuse = Linear2sRGB(gdiffuse);
 
     }

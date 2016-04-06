@@ -51,18 +51,18 @@ auto AmbientLight = glm::vec3(0.5, 0.5, 0.5);
 // Bunny1
 auto Bunny1ModelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(5.0f));
 auto Bunny1NormalMatrix = glm::transpose(glm::inverse(Bunny1ModelMatrix));
-auto Bunny1Diffuse = glm::vec3(0.0, 0.5, 0.5);
-auto Bunny1Specular = glm::vec3(0.5, 0.5, 0.0);
+auto Bunny1Diffuse = glm::vec3(1.0);
+auto Bunny1Specular = glm::vec3(1.0);
 // Bunny2
 auto Bunny2ModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(-0.5f)) * glm::scale(glm::mat4(1.0f), glm::vec3(5.0f));
 auto Bunny2NormalMatrix = glm::transpose(glm::inverse(Bunny1ModelMatrix));
-auto Bunny2Diffuse = glm::vec3(0.5, 0.5, 0.0);
-auto Bunny2Specular = glm::vec3(0.5, 0.5, 0.0);
+auto Bunny2Diffuse = glm::vec3(1.0);
+auto Bunny2Specular = glm::vec3(1.0);
 // Bunny3
 auto Bunny3ModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f)) * glm::scale(glm::mat4(1.0f), glm::vec3(5.0f));
 auto Bunny3NormalMatrix = glm::transpose(glm::inverse(Bunny1ModelMatrix));
-auto Bunny3Diffuse = glm::vec3(0.5, 0.0, 0.5);
-auto Bunny3Specular = glm::vec3(0.5, 0.5, 0.0);
+auto Bunny3Diffuse = glm::vec3(1.0);
+auto Bunny3Specular = glm::vec3(1.0);
 
 // Dome
 auto DomeModelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(10.0f));
@@ -85,7 +85,7 @@ auto Light2Pos = glm::vec3(-0.5f);
 auto Light2ModelMatrix = glm::translate(glm::mat4(1.0f), Light2Pos) * glm::scale(glm::mat4(1.0f), glm::vec3(0.05f));
 auto Light2NormalMatrix = glm::transpose(glm::inverse(Light2ModelMatrix));
 auto Light2Diffuse = glm::vec3(1.0, 1.0, 1.0);
-auto Light2Specular = glm::vec3(0.0, 0.0, 1.0);
+auto Light2Specular = glm::vec3(1.0, 1.0, 1.0);
 auto Light2Range = glm::vec3(1.0);
 
 // Light3: Local light
@@ -93,7 +93,7 @@ auto Light3Pos = glm::vec3(0.25f);
 auto Light3ModelMatrix = glm::translate(glm::mat4(1.0f), Light3Pos) * glm::scale(glm::mat4(1.0f), glm::vec3(0.05f));
 auto Light3NormalMatrix = glm::transpose(glm::inverse(Light3ModelMatrix));
 auto Light3Diffuse = glm::vec3(1.0, 1.0, 1.0);
-auto Light3Specular = glm::vec3(0.0, 0.0, 1.0);
+auto Light3Specular = glm::vec3(1.0, 1.0, 1.0);
 auto Light3Range = glm::vec3(1.0);
 
 
