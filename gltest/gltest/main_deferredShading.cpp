@@ -6,7 +6,7 @@
 //  Copyright � 2015 binarythink. All rights reserved.
 //
 
-//#define __MAIN_ENTRY
+#define __MAIN_ENTRY
 #ifdef __MAIN_ENTRY
 
 #include "gl.h"
@@ -195,9 +195,9 @@ int main(int argc, char * argv[]) {
 	FBO g_buffer(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT), 4);
 	FBO shadow_buffer(2000, 2000, 1);
 
-	GET_SHADER_PATH(path, 256, "defergbuffer.vert");
+	GET_SHADER_DEFER_PATH(path, 256, "defergbuffer.vert");
 	if (!defergbufferShader->AddVertexShaderPath(path)) return 0;
-	GET_SHADER_PATH(path, 256, "defergbuffer.frag");
+	GET_SHADER_DEFER_PATH(path, 256, "defergbuffer.frag");
 	if (!defergbufferShader->AddFragmentShaderPath(path)) return 0;
 	if (!defergbufferShader->Link()) return 0;
 
@@ -206,35 +206,35 @@ int main(int argc, char * argv[]) {
 
 	//
 	ShaderProgram* ambientShader = new ShaderProgram();
-	GET_SHADER_PATH(path, 256, "deferAmbientLight.vert");
+	GET_SHADER_DEFER_PATH(path, 256, "deferAmbientLight.vert");
 	if (!ambientShader->AddVertexShaderPath(path)) return 0;
-	GET_SHADER_PATH(path, 256, "deferAmbientLight.frag");
+	GET_SHADER_DEFER_PATH(path, 256, "deferAmbientLight.frag");
 	if (!ambientShader->AddFragmentShaderPath(path)) return 0;
 	if (!ambientShader->Link()) return 0;
 	ambientShader->SetAttribVertex("vertex_coord");
     ambientShader->SetAttribTexture("texture_coordinate");
 
 	ShaderProgram* shadowMapShader = new ShaderProgram();
-	GET_SHADER_PATH(path, 256, "shadow.vert");
+	GET_SHADER_DEFER_PATH(path, 256, "shadow.vert");
 	if (!shadowMapShader->AddVertexShaderPath(path)) return 0;
-	GET_SHADER_PATH(path, 256, "shadow.frag");
+	GET_SHADER_DEFER_PATH(path, 256, "shadow.frag");
 	if (!shadowMapShader->AddFragmentShaderPath(path)) return 0;
 	if (!shadowMapShader->Link()) return 0;
 	shadowMapShader->SetAttribVertex("vertex");
 
 	ShaderProgram* shadowRenderShader = new ShaderProgram();
-	GET_SHADER_PATH(path, 256, "shadowRender.vert");
+	GET_SHADER_DEFER_PATH(path, 256, "shadowRender.vert");
 	if (!shadowRenderShader->AddVertexShaderPath(path)) return 0;
-	GET_SHADER_PATH(path, 256, "shadowRender.frag");
+	GET_SHADER_DEFER_PATH(path, 256, "shadowRender.frag");
 	if (!shadowRenderShader->AddFragmentShaderPath(path)) return 0;
 	if (!shadowRenderShader->Link()) return 0;
 	shadowRenderShader->SetAttribVertex("vertex");
 	shadowRenderShader->SetAttribTexture("texture_coordinate");
     
     ShaderProgram* deferredBRDFShader = new ShaderProgram();
-    GET_SHADER_PATH(path, 256, "deferredBRDF.vert");
+    GET_SHADER_DEFER_PATH(path, 256, "deferredBRDF.vert");
     if (!deferredBRDFShader->AddVertexShaderPath(path)) return 0;
-    GET_SHADER_PATH(path, 256, "deferredBRDF.frag");
+    GET_SHADER_DEFER_PATH(path, 256, "deferredBRDF.frag");
     if (!deferredBRDFShader->AddFragmentShaderPath(path)) return 0;
     if (!deferredBRDFShader->Link()) return 0;
     deferredBRDFShader->SetAttribVertex("vertex");

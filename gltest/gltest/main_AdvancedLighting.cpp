@@ -5,7 +5,7 @@
 //  Created by Chenbo Li on 11/2/15.
 //  Copyright ? 2015 binarythink. All rights reserved.
 //
-#define __MAIN_ENTRY
+//#define __MAIN_ENTRY
 #ifdef __MAIN_ENTRY
 
 #include "gl.h"
@@ -191,11 +191,34 @@ void readHDR(const char* path, std::vector<float>& data, int& width, int& height
         data[4*i] = rgb_data[3*i];
         data[4*i+1] = rgb_data[3*i+1];
         data[4*i+2] = rgb_data[3*i+2];
-        data[4*i+3] = 1.0f;
+        data[4*i+3] = info.exposure;
     }
     
     return;
-    
+}
+
+struct
+{
+	float N;
+	float* hammersley;
+} hammersley_block;
+
+void buildHammersleyRandom(float N)
+{
+	hammersley_block.N = N;
+	hammersley_block.hammersley = new float[2*(int)N];
+	int kk, p, u; 
+	int pos = 0;
+
+	for (int k = 0; k < N; ++k)
+	{
+		for (p = 0.5f, kk = k, u = 0.0f; kk; p *= 0.5f, kk >>= 1)
+			if (kk && 1)
+				u += p;
+		float v = (k + 0.5) / N;
+		hammersley_block.hammersley[pos++] = u;
+		hammersley_block.hammersley[pos++] = v;
+	}
 }
 
 int main(int argc, char * argv[]) {
@@ -207,9 +230,9 @@ int main(int argc, char * argv[]) {
 	FBO g_buffer(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT), 4);
 	FBO shadow_buffer(1024, 1024, 1);
 
-	GET_SHADER_PATH(path, 256, "defergbufferDome.vert");
+	GET_SHADER_IMAGELIGHT_PATH(path, 256, "defergbufferDome.vert");
 	if (!defergbufferShader->AddVertexShaderPath(path)) return 0;
-	GET_SHADER_PATH(path, 256, "defergbufferDome.frag");
+	GET_SHADER_IMAGELIGHT_PATH(path, 256, "defergbufferDome.frag");
 	if (!defergbufferShader->AddFragmentShaderPath(path)) return 0;
 	if (!defergbufferShader->Link()) return 0;
 
@@ -218,46 +241,46 @@ int main(int argc, char * argv[]) {
     defergbufferShader->SetAttribTexture("texture_coord");
 
 	ShaderProgram* ambientShader = new ShaderProgram();
-	GET_SHADER_PATH(path, 256, "deferAmbientLight.vert");
+	GET_SHADER_IMAGELIGHT_PATH(path, 256, "deferAmbientLight.vert");
 	if (!ambientShader->AddVertexShaderPath(path)) return 0;
-	GET_SHADER_PATH(path, 256, "deferAmbientLight.frag");
+	GET_SHADER_IMAGELIGHT_PATH(path, 256, "deferAmbientLight.frag");
 	if (!ambientShader->AddFragmentShaderPath(path)) return 0;
 	if (!ambientShader->Link()) return 0;
 	ambientShader->SetAttribVertex("vertex_coord");
 	ambientShader->SetAttribTexture("texture_coordinate");
 
 	ShaderProgram* shadowMapShader = new ShaderProgram();
-	GET_SHADER_PATH(path, 256, "expShadow.vert");
+	GET_SHADER_IMAGELIGHT_PATH(path, 256, "expShadow.vert");
 	if (!shadowMapShader->AddVertexShaderPath(path)) return 0;
-	GET_SHADER_PATH(path, 256, "expShadow.frag");
+	GET_SHADER_IMAGELIGHT_PATH(path, 256, "expShadow.frag");
 	if (!shadowMapShader->AddFragmentShaderPath(path)) return 0;
 	if (!shadowMapShader->Link()) return 0;
 	shadowMapShader->SetAttribVertex("vertex");
 
 	ShaderProgram* shadowRenderShader = new ShaderProgram();
-	GET_SHADER_PATH(path, 256, "expShadowRender.vert");
+	GET_SHADER_IMAGELIGHT_PATH(path, 256, "expShadowRender.vert");
 	if (!shadowRenderShader->AddVertexShaderPath(path)) return 0;
-	GET_SHADER_PATH(path, 256, "expShadowRender.frag");
+	GET_SHADER_IMAGELIGHT_PATH(path, 256, "expShadowRender.frag");
 	if (!shadowRenderShader->AddFragmentShaderPath(path)) return 0;
 	if (!shadowRenderShader->Link()) return 0;
 	shadowRenderShader->SetAttribVertex("vertex");
 	shadowRenderShader->SetAttribTexture("texture_coordinate");
     
 	ShaderProgram* deferredBRDFShader = new ShaderProgram();
-	GET_SHADER_PATH(path, 256, "deferredBRDF.vert");
+	GET_SHADER_IMAGELIGHT_PATH(path, 256, "deferIBL.vert");
 	if (!deferredBRDFShader->AddVertexShaderPath(path)) return 0;
-	GET_SHADER_PATH(path, 256, "deferredBRDF.frag");
+	GET_SHADER_IMAGELIGHT_PATH(path, 256, "deferIBL.frag");
 	if (!deferredBRDFShader->AddFragmentShaderPath(path)) return 0;
 	if (!deferredBRDFShader->Link()) return 0;
 	deferredBRDFShader->SetAttribVertex("vertex");
 	deferredBRDFShader->SetAttribTexture("texture_coordinate");
 
 	ShaderProgram* blurShaderHorizontal = new ShaderProgram();
-	GET_SHADER_PATH(path, 256, "gaussianBlurHorizontal.comp");
+	GET_SHADER_IMAGELIGHT_PATH(path, 256, "gaussianBlurHorizontal.comp");
 	blurShaderHorizontal->SetComputeShaderPath(path);
 
 	ShaderProgram* blurShaderVertical = new ShaderProgram();
-	GET_SHADER_PATH(path, 256, "gaussianBlurVertical.comp");
+	GET_SHADER_IMAGELIGHT_PATH(path, 256, "gaussianBlurVertical.comp");
 	blurShaderVertical->SetComputeShaderPath(path);
 
 
@@ -415,6 +438,9 @@ int main(int argc, char * argv[]) {
     blurVerticalPass.GlobalBindUniformBlock("blurKernel", (char*)blurKernel, sizeof(float)*(2 * blurWidth + 1));
 	gbufferPass.SetTarget(&g_buffer);
 	shadowPass.SetTarget(&shadow_buffer);
+
+	buildHammersleyRandom(20);
+	
     
     // ------------BIND GLOBAL UNIFROMS -------------------
 

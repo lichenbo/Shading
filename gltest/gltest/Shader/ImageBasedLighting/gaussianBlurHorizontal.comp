@@ -1,0 +1,46 @@
+#version 430 core
+
+layout (local_size_x = 128, local_size_y = 1, local_size_z = 1) in; 
+
+uniform blurKernel
+{
+	float weights[101];
+}; 
+
+uniform int kernelWidth;
+
+layout (rgba32f) uniform readonly image2D src;
+layout (rgba32f) uniform writeonly image2D dst;
+
+shared float v[128+101]; // Variable shared with other threads in the 128x1 thread group
+
+void main() {
+
+	 ivec2 gpos = ivec2(gl_GlobalInvocationID.xy); // Combo of groupID, groupSize and localID
+
+	 uint localID = gl_LocalInvocationID.x; // Local thread id in the 128x1 thread groups128x1
+
+	 if (gpos.x >= kernelWidth)
+		 v[localID] = imageLoad(src, gpos + ivec2(-kernelWidth,0)).x;
+
+	 if (localID < 2 * kernelWidth)
+	 {
+		v[localID+128] = imageLoad(src, gpos + ivec2(128-kernelWidth,0)).x;
+	 }
+
+	 barrier(); // Wait for all threads to catchup before reading v[]
+
+	 float sumHorizontal = 0.0;
+
+	 for (int j = 0; j < 2*kernelWidth+1; ++j)
+	 {
+		if (gpos.x + j > kernelWidth && gpos.x + j < imageSize(src).x-kernelWidth)
+			sumHorizontal +=  weights[j] * v[localID+j];
+		else
+			sumHorizontal += weights[j] * v[localID + kernelWidth];
+	 }
+
+	float sum = sumHorizontal;
+	
+	imageStore(dst, gpos, vec4(sum, sum, sum,sum));
+}
