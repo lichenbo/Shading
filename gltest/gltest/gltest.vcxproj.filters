@@ -13,29 +13,23 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Shader">
-      <UniqueIdentifier>{82a5aa02-21c9-4902-9df6-bdbc1866c5a6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shader\BRDF">
-      <UniqueIdentifier>{937f392c-c72f-41ad-85fc-7d8c5c690291}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shader\RenderTexture">
-      <UniqueIdentifier>{1d4e8028-ce87-4455-927e-dca7b003f195}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resource Files\Objs">
       <UniqueIdentifier>{e56ac1a5-735d-4085-bf64-aa6267387804}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shader\Defershading">
-      <UniqueIdentifier>{b562325d-cb14-4ed3-a544-685df8d0a2b8}</UniqueIdentifier>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{22eb94ab-b2fd-4d3c-8599-76662f3b9833}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shader\ShadowMap">
-      <UniqueIdentifier>{80d97728-1eca-49a2-8592-adf619263c35}</UniqueIdentifier>
+    <Filter Include="Shader\Defer">
+      <UniqueIdentifier>{5880f149-f67d-4e06-9ce6-2400180f136a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shader\ExpShadowMap">
-      <UniqueIdentifier>{a12b40c7-c703-4179-af74-023e7fdd0ed2}</UniqueIdentifier>
+    <Filter Include="Shader\Shadow">
+      <UniqueIdentifier>{796876b1-dbef-4b5a-8a9a-4842fa2b80ae}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shader\PhysicsLighting">
-      <UniqueIdentifier>{ca2caf75-abef-41b6-977f-e9d6bfb8ceb2}</UniqueIdentifier>
+    <Filter Include="Shader\IBL">
+      <UniqueIdentifier>{f0695557-d7c1-434d-a83c-3aa0ae6c8c0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\VisBuffer">
+      <UniqueIdentifier>{68a8aae7-fb9a-4ba5-a1a0-744fcb10601c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -113,20 +107,11 @@
     <ClCompile Include="rgbe.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="main_visBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shader\basic.frag">
-      <Filter>Shader\BRDF</Filter>
-    </None>
-    <None Include="Shader\basic.vert">
-      <Filter>Shader\BRDF</Filter>
-    </None>
-    <None Include="Shader\displayTexture.frag">
-      <Filter>Shader\RenderTexture</Filter>
-    </None>
-    <None Include="Shader\displayTexture.vert">
-      <Filter>Shader\RenderTexture</Filter>
-    </None>
     <None Include="Model\bunny.ply">
       <Filter>Resource Files\Objs</Filter>
     </None>
@@ -142,59 +127,137 @@
     <None Include="Model\cube2.ply">
       <Filter>Resource Files\Objs</Filter>
     </None>
-    <None Include="Shader\defergbuffer.frag">
-      <Filter>Shader\Defershading</Filter>
+    <None Include="Shader\DeferredShading\shadowRender.vert">
+      <Filter>Shader\Defer</Filter>
     </None>
-    <None Include="Shader\defergbuffer.vert">
-      <Filter>Shader\Defershading</Filter>
+    <None Include="Shader\DeferredShading\shadowRender.frag">
+      <Filter>Shader\Defer</Filter>
     </None>
-    <None Include="Shader\deferAmbientLight.frag">
-      <Filter>Shader\Defershading</Filter>
+    <None Include="Shader\DeferredShading\shadow.vert">
+      <Filter>Shader\Defer</Filter>
     </None>
-    <None Include="Shader\deferAmbientLight.vert">
-      <Filter>Shader\Defershading</Filter>
+    <None Include="Shader\DeferredShading\shadow.frag">
+      <Filter>Shader\Defer</Filter>
     </None>
-    <None Include="Shader\shadow.frag">
-      <Filter>Shader\ShadowMap</Filter>
+    <None Include="Shader\DeferredShading\deferredBRDF.vert">
+      <Filter>Shader\Defer</Filter>
     </None>
-    <None Include="Shader\shadow.vert">
-      <Filter>Shader\ShadowMap</Filter>
+    <None Include="Shader\DeferredShading\deferredBRDF.frag">
+      <Filter>Shader\Defer</Filter>
     </None>
-    <None Include="Shader\shadowRender.frag">
-      <Filter>Shader\ShadowMap</Filter>
+    <None Include="Shader\DeferredShading\defergbuffer.vert">
+      <Filter>Shader\Defer</Filter>
     </None>
-    <None Include="Shader\shadowRender.vert">
-      <Filter>Shader\ShadowMap</Filter>
+    <None Include="Shader\DeferredShading\defergbuffer.frag">
+      <Filter>Shader\Defer</Filter>
     </None>
-    <None Include="Shader\deferredBRDF.frag">
-      <Filter>Shader\Defershading</Filter>
+    <None Include="Shader\DeferredShading\deferAmbientLight.vert">
+      <Filter>Shader\Defer</Filter>
     </None>
-    <None Include="Shader\deferredBRDF.vert">
-      <Filter>Shader\Defershading</Filter>
+    <None Include="Shader\DeferredShading\deferAmbientLight.frag">
+      <Filter>Shader\Defer</Filter>
     </None>
-    <None Include="Shader\expShadow.frag">
-      <Filter>Shader\ExpShadowMap</Filter>
+    <None Include="Shader\ImageBasedLighting\gaussianBlurVertical.comp">
+      <Filter>Shader\IBL</Filter>
     </None>
-    <None Include="Shader\expShadowRender.vert">
-      <Filter>Shader\ExpShadowMap</Filter>
+    <None Include="Shader\ImageBasedLighting\gaussianBlurHorizontal.comp">
+      <Filter>Shader\IBL</Filter>
     </None>
-    <None Include="Shader\expShadow.vert">
-      <Filter>Shader\ExpShadowMap</Filter>
+    <None Include="Shader\ImageBasedLighting\expShadowRender.vert">
+      <Filter>Shader\IBL</Filter>
     </None>
-    <None Include="Shader\expShadowRender.frag">
-      <Filter>Shader\ExpShadowMap</Filter>
+    <None Include="Shader\ImageBasedLighting\expShadowRender.frag">
+      <Filter>Shader\IBL</Filter>
     </None>
-    <None Include="Shader\gaussianBlurHorizontal.comp">
-      <Filter>Shader\ExpShadowMap</Filter>
+    <None Include="Shader\ImageBasedLighting\expShadow.vert">
+      <Filter>Shader\IBL</Filter>
     </None>
-    <None Include="Shader\gaussianBlurVertical.comp">
-      <Filter>Shader\ExpShadowMap</Filter>
+    <None Include="Shader\ImageBasedLighting\expShadow.frag">
+      <Filter>Shader\IBL</Filter>
     </None>
-    <None Include="Shader\defergbufferDome.vert">
-      <Filter>Shader\PhysicsLighting</Filter>
+    <None Include="Shader\ImageBasedLighting\deferIBL.vert">
+      <Filter>Shader\IBL</Filter>
     </None>
-    <None Include="Shader\defergbufferDome.frag">
-      <Filter>Shader\PhysicsLighting</Filter>
+    <None Include="Shader\ImageBasedLighting\deferIBL.frag">
+      <Filter>Shader\IBL</Filter>
+    </None>
+    <None Include="Shader\ImageBasedLighting\defergbufferDome.vert">
+      <Filter>Shader\IBL</Filter>
+    </None>
+    <None Include="Shader\ImageBasedLighting\defergbufferDome.frag">
+      <Filter>Shader\IBL</Filter>
+    </None>
+    <None Include="Shader\ImageBasedLighting\deferAmbientLight.vert">
+      <Filter>Shader\IBL</Filter>
+    </None>
+    <None Include="Shader\ImageBasedLighting\deferAmbientLight.frag">
+      <Filter>Shader\IBL</Filter>
+    </None>
+    <None Include="Shader\ExponentialShadowMap\gaussianBlurVertical.comp">
+      <Filter>Shader\Shadow</Filter>
+    </None>
+    <None Include="Shader\ExponentialShadowMap\gaussianBlurHorizontal.comp">
+      <Filter>Shader\Shadow</Filter>
+    </None>
+    <None Include="Shader\ExponentialShadowMap\expShadowRender.vert">
+      <Filter>Shader\Shadow</Filter>
+    </None>
+    <None Include="Shader\ExponentialShadowMap\expShadowRender.frag">
+      <Filter>Shader\Shadow</Filter>
+    </None>
+    <None Include="Shader\ExponentialShadowMap\expShadow.vert">
+      <Filter>Shader\Shadow</Filter>
+    </None>
+    <None Include="Shader\ExponentialShadowMap\expShadow.frag">
+      <Filter>Shader\Shadow</Filter>
+    </None>
+    <None Include="Shader\ExponentialShadowMap\deferredBRDF.vert">
+      <Filter>Shader\Shadow</Filter>
+    </None>
+    <None Include="Shader\ExponentialShadowMap\deferredBRDF.frag">
+      <Filter>Shader\Shadow</Filter>
+    </None>
+    <None Include="Shader\ExponentialShadowMap\defergbuffer.vert">
+      <Filter>Shader\Shadow</Filter>
+    </None>
+    <None Include="Shader\ExponentialShadowMap\defergbuffer.frag">
+      <Filter>Shader\Shadow</Filter>
+    </None>
+    <None Include="Shader\ExponentialShadowMap\deferAmbientLight.vert">
+      <Filter>Shader\Shadow</Filter>
+    </None>
+    <None Include="Shader\ExponentialShadowMap\deferAmbientLight.frag">
+      <Filter>Shader\Shadow</Filter>
+    </None>
+    <None Include="Shader\VisibilityBuffer\shadowRender.vert">
+      <Filter>Shader\VisBuffer</Filter>
+    </None>
+    <None Include="Shader\VisibilityBuffer\shadowRender.frag">
+      <Filter>Shader\VisBuffer</Filter>
+    </None>
+    <None Include="Shader\VisibilityBuffer\shadow.vert">
+      <Filter>Shader\VisBuffer</Filter>
+    </None>
+    <None Include="Shader\VisibilityBuffer\shadow.frag">
+      <Filter>Shader\VisBuffer</Filter>
+    </None>
+    <None Include="Shader\VisibilityBuffer\deferredBRDF.vert">
+      <Filter>Shader\VisBuffer</Filter>
+    </None>
+    <None Include="Shader\VisibilityBuffer\deferredBRDF.frag">
+      <Filter>Shader\VisBuffer</Filter>
+    </None>
+    <None Include="Shader\VisibilityBuffer\defergbuffer.vert">
+      <Filter>Shader\VisBuffer</Filter>
+    </None>
+    <None Include="Shader\VisibilityBuffer\defergbuffer.frag">
+      <Filter>Shader\VisBuffer</Filter>
+    </None>
+    <None Include="Shader\VisibilityBuffer\deferAmbientLight.vert">
+      <Filter>Shader\VisBuffer</Filter>
+    </None>
+    <None Include="Shader\VisibilityBuffer\deferAmbientLight.frag">
+      <Filter>Shader\VisBuffer</Filter>
     </None>
   </ItemGroup>
 </Project>

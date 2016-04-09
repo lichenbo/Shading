@@ -5,7 +5,7 @@
 //  Created by Chenbo Li on 11/2/15.
 //  Copyright ? 2015 binarythink. All rights reserved.
 //
-//#define __MAIN_ENTRY
+#define __MAIN_ENTRY
 #ifdef __MAIN_ENTRY
 
 #include "gl.h"
@@ -193,20 +193,19 @@ void readHDR(const char* path, std::vector<float>& data, int& width, int& height
         data[4*i+2] = rgb_data[3*i+2];
         data[4*i+3] = info.exposure;
     }
-    
     return;
 }
 
-struct
+typedef struct Hammersley_block
 {
 	float N;
-	float* hammersley;
-} hammersley_block;
+	float hammersley[100*2];
+} Hammersley_block;
 
-void buildHammersleyRandom(float N)
+char* buildHammersleyRandom(float N)
 {
-	hammersley_block.N = N;
-	hammersley_block.hammersley = new float[2*(int)N];
+	struct Hammersley_block* block = (struct Hammersley_block*)malloc(sizeof(Hammersley_block));
+	block->N = N;
 	int kk, p, u; 
 	int pos = 0;
 
@@ -216,9 +215,10 @@ void buildHammersleyRandom(float N)
 			if (kk && 1)
 				u += p;
 		float v = (k + 0.5) / N;
-		hammersley_block.hammersley[pos++] = u;
-		hammersley_block.hammersley[pos++] = v;
+		block->hammersley[pos++] = u;
+		block->hammersley[pos++] = v;
 	}
+	return (char*)block;
 }
 
 int main(int argc, char * argv[]) {
@@ -439,7 +439,8 @@ int main(int argc, char * argv[]) {
 	gbufferPass.SetTarget(&g_buffer);
 	shadowPass.SetTarget(&shadow_buffer);
 
-	buildHammersleyRandom(20);
+	char* block = buildHammersleyRandom(20);
+	shadowRenderPass.GlobalBindUniformBlock("HammersleyBlock", block, sizeof(Hammersley_block));
 	
     
     // ------------BIND GLOBAL UNIFROMS -------------------

@@ -192,54 +192,35 @@ int main(int argc, char * argv[]) {
 	engine = new Engine(argc, argv);
 
 	ShaderProgram* defergbufferShader = new ShaderProgram();
-	FBO g_buffer(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT), 4);
+	FBO g_buffer(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT), 1);
 	FBO shadow_buffer(2000, 2000, 1);
 
-	GET_SHADER_DEFER_PATH(path, 256, "defergbuffer.vert");
+	GET_SHADER_VISBUFFER_PATH(path, 256, "defergbuffer.vert");
 	if (!defergbufferShader->AddVertexShaderPath(path)) return 0;
-	GET_SHADER_DEFER_PATH(path, 256, "defergbuffer.frag");
+	GET_SHADER_VISBUFFER_PATH(path, 256, "defergbuffer.frag");
 	if (!defergbufferShader->AddFragmentShaderPath(path)) return 0;
 	if (!defergbufferShader->Link()) return 0;
 
 	defergbufferShader->SetAttribVertex("vertex_coord");
 	defergbufferShader->SetAttribNormal("normal_coord");
 
-	//
-	ShaderProgram* ambientShader = new ShaderProgram();
-	GET_SHADER_DEFER_PATH(path, 256, "deferAmbientLight.vert");
-	if (!ambientShader->AddVertexShaderPath(path)) return 0;
-	GET_SHADER_DEFER_PATH(path, 256, "deferAmbientLight.frag");
-	if (!ambientShader->AddFragmentShaderPath(path)) return 0;
-	if (!ambientShader->Link()) return 0;
-	ambientShader->SetAttribVertex("vertex_coord");
-    ambientShader->SetAttribTexture("texture_coordinate");
-
 	ShaderProgram* shadowMapShader = new ShaderProgram();
-	GET_SHADER_DEFER_PATH(path, 256, "shadow.vert");
+	GET_SHADER_VISBUFFER_PATH(path, 256, "shadow.vert");
 	if (!shadowMapShader->AddVertexShaderPath(path)) return 0;
-	GET_SHADER_DEFER_PATH(path, 256, "shadow.frag");
+	GET_SHADER_VISBUFFER_PATH(path, 256, "shadow.frag");
 	if (!shadowMapShader->AddFragmentShaderPath(path)) return 0;
 	if (!shadowMapShader->Link()) return 0;
 	shadowMapShader->SetAttribVertex("vertex");
 
 	ShaderProgram* shadowRenderShader = new ShaderProgram();
-	GET_SHADER_DEFER_PATH(path, 256, "shadowRender.vert");
+	GET_SHADER_VISBUFFER_PATH(path, 256, "shadowRender.vert");
 	if (!shadowRenderShader->AddVertexShaderPath(path)) return 0;
-	GET_SHADER_DEFER_PATH(path, 256, "shadowRender.frag");
+	GET_SHADER_VISBUFFER_PATH(path, 256, "shadowRender.frag");
 	if (!shadowRenderShader->AddFragmentShaderPath(path)) return 0;
 	if (!shadowRenderShader->Link()) return 0;
 	shadowRenderShader->SetAttribVertex("vertex");
 	shadowRenderShader->SetAttribTexture("texture_coordinate");
     
-    ShaderProgram* deferredBRDFShader = new ShaderProgram();
-    GET_SHADER_DEFER_PATH(path, 256, "deferredBRDF.vert");
-    if (!deferredBRDFShader->AddVertexShaderPath(path)) return 0;
-    GET_SHADER_DEFER_PATH(path, 256, "deferredBRDF.frag");
-    if (!deferredBRDFShader->AddFragmentShaderPath(path)) return 0;
-    if (!deferredBRDFShader->Link()) return 0;
-    deferredBRDFShader->SetAttribVertex("vertex");
-    deferredBRDFShader->SetAttribTexture("texture_coordinate");
-
 	// --------------SHADER LOADING--------------------------
 
 	GET_MODEL_PATH(path, 256, "bunny_smooth.ply");
@@ -323,47 +304,32 @@ int main(int argc, char * argv[]) {
 	// --------------SCENE LOADING --------------------------
 
 	Pass gbufferPass(defergbufferShader, &bunnyScene);
-	Pass ambientPass(ambientShader, &ambientScene);
 	Pass shadowPass(shadowMapShader, &shadowMapScene);
 	Pass shadowRenderPass(shadowRenderShader, &shadowRenderScene);
-    Pass deferredBRDFPass1(deferredBRDFShader, &deferredBRDFScene);
-    Pass deferredBRDFPass2(deferredBRDFShader, &deferredBRDFScene);
 
 	gbufferPass.BindAttribNormal();
 	gbufferPass.BindAttribVertex();
-	ambientPass.BindAttribVertex();
-    ambientPass.BindAttribTexture();
 	shadowPass.BindAttribVertex();
 	shadowRenderPass.BindAttribVertex();
 	shadowRenderPass.BindAttribTexture();
-    deferredBRDFPass1.BindAttribVertex();
-    deferredBRDFPass1.BindAttribTexture();
 
 	// --------------- BIND ATTRIBUTES ---------------------
 
 	gbufferPass.BindUniformMatrix4("ViewMatrix", &ViewMatrixPtr);
 	gbufferPass.BindUniformMatrix4("ProjectionMatrix", &ProjectionMatrixPtr);
-	ambientPass.BindUniformVec3("ambientColor", &AmbientLightPtr);
 	shadowPass.BindUniformMatrix4("ViewMatrix", &Light1ViewMatrixPtr);
 	shadowPass.BindUniformMatrix4("ProjectionMatrix", &ProjectionMatrixPtr);
 	shadowRenderPass.BindUniformMatrix4("shadowMatrix", &Light1ShadowMatrixPtr);
 	shadowRenderPass.BindUniformVec3("lightPos", &Light1PosPtr);
 	shadowRenderPass.BindUniformVec3("eyePos", &EyePosPtr);
 	shadowRenderPass.BindUniformVec3("lightValue", &Light1DiffusePtr);
-    deferredBRDFPass1.BindUniformVec3("lightPos", &Light2PosPtr);
-    deferredBRDFPass1.BindUniformVec3("eyePos", &EyePosPtr);
-    deferredBRDFPass1.BindUniformVec3("lightValue", &Light2DiffusePtr);
-    deferredBRDFPass1.BindUniformVec3("range", &Light2RangePtr);
-    deferredBRDFPass2.BindUniformVec3("lightPos", &Light3PosPtr);
-    deferredBRDFPass2.BindUniformVec3("lightValue", &Light3DiffusePtr);
-    deferredBRDFPass2.BindUniformVec3("range", &Light3RangePtr);
 
 	// ------------- BIND PASS-WISE UNIFORMS---------------
 
 	gbufferPass.MeshBindUniformMatrix4(&bunny1, "ModelMatrix", &Bunny1ModelMatrixPtr);
 	gbufferPass.MeshBindUniformMatrix4(&bunny1, "NormalMatrix", &Bunny1NormalMatrixPtr);
-	gbufferPass.MeshBindUniformVec3(&bunny1, "diffuse", &Bunny1DiffusePtr);
-	gbufferPass.MeshBindUniformVec3(&bunny1, "specular", &Bunny1SpecularPtr);
+	shadowRenderPass.MeshBindUniformVec3(&bunny1, "diffuse", &Bunny1DiffusePtr);
+	shadowRenderPass.MeshBindUniformVec3(&bunny1, "specular", &Bunny1SpecularPtr);
 	gbufferPass.MeshBindUniformMatrix4(&bunny2, "ModelMatrix", &Bunny2ModelMatrixPtr);
 	gbufferPass.MeshBindUniformMatrix4(&bunny2, "NormalMatrix", &Bunny2NormalMatrixPtr);
 	gbufferPass.MeshBindUniformVec3(&bunny2, "diffuse", &Bunny2DiffusePtr);
@@ -425,56 +391,28 @@ int main(int argc, char * argv[]) {
 	gbufferPass.SetTarget(&g_buffer);
 	shadowPass.SetTarget(&shadow_buffer);
 
-	Texture* positionTex = g_buffer.GetTexture(0);
-	Texture* normalTex = g_buffer.GetTexture(1);
-	Texture* diffuseTex = g_buffer.GetTexture(2);
-	Texture* specularTex = g_buffer.GetTexture(3);
+	Texture* visibilityTex = g_buffer.GetTexture(0);
 	Texture* shadowTex = shadow_buffer.GetTexture(0);
 
-    ambientPass.BindTexture("diffuseTexture", diffuseTex);
+	shadowRenderPass.BindTexture("visibilityTexture", visibilityTex);
 	shadowRenderPass.BindTexture("shadowTexture", shadowTex);
-	shadowRenderPass.BindTexture("positionTexture", positionTex);
-	shadowRenderPass.BindTexture("normalTexture", normalTex);
-	shadowRenderPass.BindTexture("diffuseTexture", diffuseTex);
-	shadowRenderPass.BindTexture("specularTexture", specularTex);
-    deferredBRDFPass1.BindTexture("positionTexture", positionTex);
-    deferredBRDFPass1.BindTexture("normalTexture", normalTex);
-    deferredBRDFPass1.BindTexture("diffuseTexture", diffuseTex);
-    deferredBRDFPass1.BindTexture("specularTexture", specularTex);
-    deferredBRDFPass2.BindTexture("positionTexture", positionTex);
-    deferredBRDFPass2.BindTexture("normalTexture", normalTex);
-    deferredBRDFPass2.BindTexture("diffuseTexture", diffuseTex);
-    deferredBRDFPass2.BindTexture("specularTexture", specularTex);
+
 
 	gbufferPass.SetBlend(false);
 	gbufferPass.SetDepthTest(true);
     gbufferPass.SetClear(true);
-	ambientPass.SetBlend(false);
-	ambientPass.SetDepthTest(false);
-    ambientPass.SetClear(true);
 	shadowPass.SetBlend(false);
 	shadowPass.SetDepthTest(true);
     shadowPass.SetClear(true);
 	shadowRenderPass.SetBlend(true);
 	shadowRenderPass.SetDepthTest(false);
     shadowRenderPass.SetClear(false);
-    deferredBRDFPass1.SetBlend(true);
-    deferredBRDFPass1.SetDepthTest(false);
-    deferredBRDFPass1.SetClear(false);
-    deferredBRDFPass2.SetBlend(true);
-    deferredBRDFPass2.SetDepthTest(false);
-    deferredBRDFPass2.SetClear(false);
 
 	// ---------------PASS CONFIG --------------------------
 	engine->addPass(&gbufferPass);
-	engine->addPass(&ambientPass);
 	engine->addPass(&shadowPass);
 	engine->addPass(&shadowRenderPass);
-    for (int i = 0; i < 1; ++i)
-    {
-        engine->addPass(&deferredBRDFPass1);
-        engine->addPass(&deferredBRDFPass2);
-    }
+
 
 
 	// ----------------ENGINE------------------------------

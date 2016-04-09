@@ -1,7 +1,6 @@
 #version 330 core
 
 #define M_PI 3.1415926535897932384626433832795
-#define EXP 2.7182818284590452353602874713527
 
 #define DEPTH 0.6
 
@@ -23,7 +22,7 @@ uniform HammersleyBlock
 {
 	float N;
 	float hammersley[2*100];
-}
+};
 
 out vec4 outputColor;
 void main()
