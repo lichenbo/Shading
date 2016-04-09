@@ -241,22 +241,10 @@
     <None Include="Shader\VisibilityBuffer\shadow.frag">
       <Filter>Shader\VisBuffer</Filter>
     </None>
-    <None Include="Shader\VisibilityBuffer\deferredBRDF.vert">
-      <Filter>Shader\VisBuffer</Filter>
-    </None>
-    <None Include="Shader\VisibilityBuffer\deferredBRDF.frag">
-      <Filter>Shader\VisBuffer</Filter>
-    </None>
     <None Include="Shader\VisibilityBuffer\defergbuffer.vert">
       <Filter>Shader\VisBuffer</Filter>
     </None>
     <None Include="Shader\VisibilityBuffer\defergbuffer.frag">
-      <Filter>Shader\VisBuffer</Filter>
-    </None>
-    <None Include="Shader\VisibilityBuffer\deferAmbientLight.vert">
-      <Filter>Shader\VisBuffer</Filter>
-    </None>
-    <None Include="Shader\VisibilityBuffer\deferAmbientLight.frag">
       <Filter>Shader\VisBuffer</Filter>
     </None>
   </ItemGroup>

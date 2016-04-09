@@ -11,7 +11,6 @@ uniform vec3 eyePos;
 
 in vec3 worldSpacePosition;
 in vec3 worldSpaceNormal;
-in vec2 tex_coord;
 
 out vec4 outputColor;
 

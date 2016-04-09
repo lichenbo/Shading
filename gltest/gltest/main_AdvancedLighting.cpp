@@ -238,7 +238,6 @@ int main(int argc, char * argv[]) {
 
 	defergbufferShader->SetAttribVertex("vertex_coord");
 	defergbufferShader->SetAttribNormal("normal_coord");
-    defergbufferShader->SetAttribTexture("texture_coord");
 
 	ShaderProgram* ambientShader = new ShaderProgram();
 	GET_SHADER_IMAGELIGHT_PATH(path, 256, "deferAmbientLight.vert");

@@ -216,12 +216,8 @@
     <None Include="Shader\ImageBasedLighting\expShadowRender.vert" />
     <None Include="Shader\ImageBasedLighting\gaussianBlurHorizontal.comp" />
     <None Include="Shader\ImageBasedLighting\gaussianBlurVertical.comp" />
-    <None Include="Shader\VisibilityBuffer\deferAmbientLight.frag" />
-    <None Include="Shader\VisibilityBuffer\deferAmbientLight.vert" />
     <None Include="Shader\VisibilityBuffer\defergbuffer.frag" />
     <None Include="Shader\VisibilityBuffer\defergbuffer.vert" />
-    <None Include="Shader\VisibilityBuffer\deferredBRDF.frag" />
-    <None Include="Shader\VisibilityBuffer\deferredBRDF.vert" />
     <None Include="Shader\VisibilityBuffer\shadow.frag" />
     <None Include="Shader\VisibilityBuffer\shadow.vert" />
     <None Include="Shader\VisibilityBuffer\shadowRender.frag" />

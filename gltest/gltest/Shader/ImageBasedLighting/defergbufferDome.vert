@@ -2,7 +2,6 @@
 
 in vec3 vertex_coord;
 in vec3 normal_coord;
-in vec2 texture_coord;
 
 uniform mat4 ModelMatrix;
 uniform mat4 ViewMatrix;
@@ -11,7 +10,6 @@ uniform mat4 NormalMatrix;
 
 out vec3 worldSpacePosition;
 out vec3 worldSpaceNormal;
-out vec2 tex_coord;
 
 void main(void)
 {
@@ -23,7 +21,6 @@ void main(void)
 
 	worldSpaceNormal = normalize(mat3(NormalMatrix)*normal_coord);    
 
-    tex_coord = texture_coord;
     
     gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * homo_vertex;
 }
