@@ -26,6 +26,21 @@ uniform HammersleyBlock
 };
 
 out vec4 outputColor;
+
+float g = 0.5;
+float alpha = pow(8192, g);
+
+vec3 BRDF(vec3 L, vec3 V, vec3 N)
+{
+    vec3 H = normalize(L+V);
+    vec3 F = Ks + (1 - Ks) * pow((1 - dot(L, H)), 5);
+    float D = ((alpha + 2)/(2*M_PI))*pow(max(0.0,dot(N, H)), alpha);
+    float G = 1.0 / (dot(L,H) * dot(L,H));
+    
+    return 0.25*F*D*G;
+}
+
+
 void main()
 {
     vec4 positionVec = texture(positionTexture, texture_coord.st);
@@ -38,14 +53,11 @@ void main()
     vec3 N = normalize(normalVec);
     vec3 L = normalize(lightVec);
     vec3 V = normalize(eyeVec);
-    vec3 H = normalize(L+V);
     
     vec3 Kd = texture(diffuseTexture, texture_coord.st).xyz;
     vec3 Ks = texture(specularTexture, texture_coord.st).xyz;
     vec3 I = lightValue;
-    vec3 F;
-    float D;
-    float G;
+
     
     vec2 shadowIndex = shadowCoord.xy/shadowCoord.w;
     outputColor = vec4(0.0, 0.0, 0.0, 0.7);
@@ -57,40 +69,38 @@ void main()
     if (shadowFactor > 1.0)
         shadowFactor = 1.0;
     
-	float g = 0.5;
-	float alpha = pow(8192, g);
+
 
 	vec3 R = 2*dot(N,V)*N - V;
-	vec3 A = normalize(cross(vec3(0,0,1),R));
+	vec3 A = normalize(cross(vec3(0,0,1),R));   //z-axis as spec dir
 	vec3 B = normalize(cross(R,A));
 
 	for (int i = 0; i < Number; ++i)
 	{
-		vec3 Ltemp = buildLtemp(hammersley[2*i],hammersley[2*i+1], alpha);
-		vec3 OmegaK = normalize(Ltemp.x*A+Ltemp.y*B+Ltemp.z*R);
+		vec3 spheCoord = buildSpheCoord(hammersley[2*i],hammersley[2*i+1], alpha);
+		vec3 OmegaK = normalize(spheCoord.x*A+spheCoord.y*B+spheCoord.z*R);
 		L = OmegaK;
 		
-		F = Ks + (1 - Ks) * pow((1 - dot(L, H)), 5);
-		D = ((alpha + 2)/(2*M_PI))*pow(max(0.0,dot(N, H)), alpha);
-		G = 1.0 / (dot(L,H) * dot(L,H));
+		
 		I = I * M_PI;
 
 		// Confused.
-		float level = 0.5*log2(WIDTH*HEIGHT/N)-0.5*log2(D/4));
+		//float level = 0.5*log2(WIDTH*HEIGHT/N)-0.5*log2(D/4);
+        float level = 1;
 		LightIn = textureLod(domeTexture, OmegaK ,level);
 		if (dot(L, N) > 0) {
 			//outputColor.xyz += 0.25 * F * D *G * dot(L, N) *cos(theta)* I * shadowFactor / Number;
-			outputColor.xyz += 0.25 * F * D *G * Lk *cos(theta)* I * shadowFactor / Number;
+			outputColor.xyz += BRDF(L,V,N) * LightIn *cos(theta)* I * shadowFactor / Number;
 		}
 	}
 	
 
 }
 
-vec3 buildLtemp(float xi1, float xi2, float alpha)
+vec3 buildSpheCoord(float xi1, float xi2, float alpha)
 {
 	float u = xi1;
-	float v = acos(pow(xi2, 1/(alpha+1))/M_PI;
+	float v = acos(pow(xi2, 1/(alpha+1)))/M_PI;
 	int x = cos(2*M_PI*(0.5-u))*sin(M_PI*v);
 	int y = sin(2*M_PI*(0.5-u))*sin(M_PI*v);
 	int z = cos(M_PI*v);
