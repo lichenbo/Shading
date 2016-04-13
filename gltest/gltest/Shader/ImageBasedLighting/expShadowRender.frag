@@ -30,7 +30,7 @@ out vec4 outputColor;
 float g = 0.5;
 float alpha = pow(8192, g);
 
-vec3 BRDF(vec3 L, vec3 V, vec3 N)
+vec3 BRDF(vec3 Ks, vec3 L, vec3 V, vec3 N)
 {
     vec3 H = normalize(L+V);
     vec3 F = Ks + (1 - Ks) * pow((1 - dot(L, H)), 5);
@@ -38,6 +38,23 @@ vec3 BRDF(vec3 L, vec3 V, vec3 N)
     float G = 1.0 / (dot(L,H) * dot(L,H));
     
     return 0.25*F*D*G;
+}
+
+vec2 getSphereMapCoord(vec3 N)
+{
+	float u = 0.5 - atan(N.z/N.x)/(2*M_PI);
+	float v = acos(N.y)/M_PI;
+	return vec2(u,v);
+}
+
+vec3 buildSpheCoord(float xi1, float xi2, float alpha)
+{
+	float u = xi1;
+	float v = acos(pow(xi2, 1/(alpha+1)))/M_PI;
+	float x = cos(2*M_PI*(0.5-u))*sin(M_PI*v);
+	float y = sin(2*M_PI*(0.5-u))*sin(M_PI*v);
+	float z = cos(M_PI*v);
+	return vec3(x,z,y); // fix for Herron's code
 }
 
 
@@ -79,30 +96,17 @@ void main()
 	{
 		vec3 spheCoord = buildSpheCoord(hammersley[2*i],hammersley[2*i+1], alpha);
 		vec3 OmegaK = normalize(spheCoord.x*A+spheCoord.y*B+spheCoord.z*R);
-		L = OmegaK;
-		
-		
+		L = OmegaK;	// L is light direction
 		I = I * M_PI;
-
 		// Confused.
 		//float level = 0.5*log2(WIDTH*HEIGHT/N)-0.5*log2(D/4);
-        float level = 1;
-		LightIn = textureLod(domeTexture, OmegaK ,level);
+        float level = 1.0;
+		vec3 LightIn = textureLod(domeTexture, getSphereMapCoord(L) ,level).xyz;
 		if (dot(L, N) > 0) {
-			//outputColor.xyz += 0.25 * F * D *G * dot(L, N) *cos(theta)* I * shadowFactor / Number;
-			outputColor.xyz += BRDF(L,V,N) * LightIn *cos(theta)* I * shadowFactor / Number;
+			outputColor.xyz += BRDF(Ks,L,V,N) * LightIn *dot(L,N)* I * shadowFactor / Number;
 		}
 	}
 	
 
 }
 
-vec3 buildSpheCoord(float xi1, float xi2, float alpha)
-{
-	float u = xi1;
-	float v = acos(pow(xi2, 1/(alpha+1)))/M_PI;
-	int x = cos(2*M_PI*(0.5-u))*sin(M_PI*v);
-	int y = sin(2*M_PI*(0.5-u))*sin(M_PI*v);
-	int z = cos(M_PI*v);
-	return vec3(x,z,y); // fix for Herron's code
-}
