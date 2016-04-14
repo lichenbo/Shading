@@ -46,7 +46,7 @@ auto WatchPos = glm::vec3(0.0f, 0.0f, 0.0f);
 auto ProjectionMatrix = glm::perspective(45.0f, 1.0f, 0.1f, 20.0f);
 auto ViewMatrix = glm::lookAt(EyePos, WatchPos, UpPos);
 auto ViewInverseMatrix = glm::inverse(ViewMatrix);
-auto AmbientLight = glm::vec3(0.5, 0.5, 0.5);
+auto AmbientLight = glm::vec3(0.5, 0.5, 0.5) * glm::float32(4.0);
 
 // Bunny1
 auto Bunny1ModelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(5.0f));
@@ -206,13 +206,14 @@ char* buildHammersleyRandom(float N)
 {
 	struct Hammersley_block* block = (struct Hammersley_block*)malloc(sizeof(Hammersley_block));
 	block->N = N;
-	int kk, p, u; 
+    int kk;
+    float p, u;
 	int pos = 0;
 
 	for (int k = 0; k < N; ++k)
 	{
 		for (p = 0.5f, kk = k, u = 0.0f; kk; p *= 0.5f, kk >>= 1)
-			if (kk && 1)
+			if (kk & 1)
 				u += p;
 		float v = (k + 0.5) / N;
 		block->hammersley[pos++] = u;
