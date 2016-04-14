@@ -489,6 +489,7 @@ int main(int argc, char * argv[]) {
 	shadowRenderPass.BindTexture("normalTexture", normalTex);
 	shadowRenderPass.BindTexture("diffuseTexture", diffuseTex);
 	shadowRenderPass.BindTexture("specularTexture", specularTex);
+    shadowRenderPass.BindTexture("domeTexture", domeTex);
 	deferredBRDFPass1.BindTexture("positionTexture", positionTex);
 	deferredBRDFPass1.BindTexture("normalTexture", normalTex);
 	deferredBRDFPass1.BindTexture("diffuseTexture", diffuseTex);

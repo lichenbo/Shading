@@ -30,14 +30,17 @@ out vec4 outputColor;
 float g = 0.5;
 float alpha = pow(8192, g);
 
-vec3 BRDF(vec3 Ks, vec3 L, vec3 V, vec3 N)
+vec3 MonteBRDF(vec3 Ks, vec3 L, vec3 V, vec3 N)
 {
+    L = normalize(L);
+    V = normalize(V);
     vec3 H = normalize(L+V);
+    // Schlick's approximation of the Fresnel equation
     vec3 F = Ks + (1 - Ks) * pow((1 - dot(L, H)), 5);
-    float D = ((alpha + 2)/(2*M_PI))*pow(max(0.0,dot(N, H)), alpha);
+    // Phong D is combined with probability
+    //float D = ((alpha + 2)/(2*M_PI))*pow(max(0.0,dot(N, H)), alpha);
     float G = 1.0 / (dot(L,H) * dot(L,H));
-    
-    return 0.25*F*D*G;
+    return 0.25*F*G;
 }
 
 vec2 getSphereMapCoord(vec3 N)
@@ -86,8 +89,6 @@ void main()
     float shadowFactor = filteredLightDepth * exp(-blurFactor.x*pixelDepth);
     if (shadowFactor > 1.0)
         shadowFactor = 1.0;
-    
-
 
 	vec3 R = 2*dot(N,V)*N - V; // reflection vector
 	vec3 A = normalize(cross(vec3(0,1,0),R));   //y-axis as spec dir
@@ -96,15 +97,15 @@ void main()
 	for (int i = 0; i < Number; ++i)
 	{
 		vec3 spheCoord = buildSpheCoord(hammersley[2*i],hammersley[2*i+1], alpha);
-		vec3 OmegaK = normalize(spheCoord.x*A+spheCoord.y*B+spheCoord.z*R);
+		vec3 OmegaK = normalize(spheCoord.x*A+spheCoord.y*R+spheCoord.z*B);
 		L = OmegaK;	// L is light direction
-		I = I * M_PI;
+        //I = I * M_PI;
 		// Confused.
 		//float level = 0.5*log2(WIDTH*HEIGHT/N)-0.5*log2(D/4);
         float level = 1.0;
 		vec3 LightIn = textureLod(domeTexture, getSphereMapCoord(L) ,level).xyz;
-		if (dot(L, N) > 0) {
-			outputColor.xyz += BRDF(Ks,L,V,N) * LightIn *dot(L,N)* I * shadowFactor / Number;
+        if (dot(L, N) > 0) {
+            outputColor.xyz += MonteBRDF(Ks,L,V,N) * LightIn *dot(L,N)* I * 2.0 * shadowFactor / Number;
 		}
 	}
 	
