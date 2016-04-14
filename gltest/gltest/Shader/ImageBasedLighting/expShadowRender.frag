@@ -42,8 +42,8 @@ vec3 BRDF(vec3 Ks, vec3 L, vec3 V, vec3 N)
 
 vec2 getSphereMapCoord(vec3 N)
 {
-	float u = 0.5 - atan(N.z/N.x)/(2*M_PI);
-	float v = acos(N.y)/M_PI;
+	float u = 0.5 + atan(N.z/N.x)/(2*M_PI);
+	float v = 0.5 - asin(N.y)/M_PI;
 	return vec2(u,v);
 }
 
@@ -52,9 +52,10 @@ vec3 buildSpheCoord(float xi1, float xi2, float alpha)
 	float u = xi1;
 	float v = acos(pow(xi2, 1/(alpha+1)))/M_PI;
 	float x = cos(2*M_PI*(0.5-u))*sin(M_PI*v);
-	float y = sin(2*M_PI*(0.5-u))*sin(M_PI*v);
-	float z = cos(M_PI*v);
-	return vec3(x,z,y); // fix for Herron's code
+	float y = sin((0.5-v)*M_PI);
+	float z = sin(2*M_PI*(0.5-u))*sin(M_PI*v);
+
+	return vec3(x,y,z); // fix for Herron's code
 }
 
 
@@ -88,8 +89,8 @@ void main()
     
 
 
-	vec3 R = 2*dot(N,V)*N - V;
-	vec3 A = normalize(cross(vec3(0,0,1),R));   //z-axis as spec dir
+	vec3 R = 2*dot(N,V)*N - V; // reflection vector
+	vec3 A = normalize(cross(vec3(0,1,0),R));   //y-axis as spec dir
 	vec3 B = normalize(cross(R,A));
 
 	for (int i = 0; i < Number; ++i)

@@ -34,13 +34,13 @@ void main(void)
     D = normalize(D);
     if (isDome == 1)
     {
-		vec4 pixel = texture(domeTexture, vec2(0.5-atan(D.z, D.x)/(-2*M_PI), acos(D.y)/M_PI));
+		vec4 pixel = texture(domeTexture, vec2(0.5+atan(D.z,D.x)/(2*M_PI),0.5- asin(D.y)/M_PI));
         gdiffuse = Linear2sRGB(pixel);
         
     }
     else
     {
-        vec4 pixel= vec4(diffuse/M_PI,1.0) * texture(domeIrrTexture, vec2(0.5-atan(gnormal.z, gnormal.x)/(-2*M_PI), acos(gnormal.y)/M_PI));
+        vec4 pixel= vec4(diffuse/M_PI,1.0) * texture(domeIrrTexture, vec2(0.5+atan(gnormal.z, gnormal.x)/(2*M_PI), 0.5-asin(gnormal.y)/M_PI));
         gdiffuse = Linear2sRGB(pixel);
 
     }
