@@ -1,12 +1,8 @@
 #version 330 core
-
 #define M_PI 3.1415926535897932384626433832795
-
-#define DEPTH 0.6
 
 in vec2 texture_coord;
 uniform mat4 shadowMatrix;
-uniform vec3 lightPos;
 uniform vec3 eyePos;
 uniform vec3 lightValue;
 
@@ -15,7 +11,6 @@ uniform vec3 blurFactor;
 uniform sampler2D shadowTexture;
 uniform sampler2D positionTexture;
 uniform sampler2D normalTexture;
-uniform sampler2D diffuseTexture;
 uniform sampler2D specularTexture;
 uniform sampler2D domeTexture;
 
@@ -75,7 +70,6 @@ void main()
     vec3 L = normalize(lightVec);
     vec3 V = normalize(eyeVec);
     
-    vec3 Kd = texture(diffuseTexture, texture_coord.st).xyz;
     vec3 Ks = texture(specularTexture, texture_coord.st).xyz;
     vec3 I = lightValue;
 
@@ -107,10 +101,7 @@ void main()
 		LightColor.xyz = Linear2sRGB(LightColor);
         if (dot(L, N) > 0) {
             outputColor.xyz += MonteBRDF(Ks,L,V,N) * LightColor.xyz *dot(L,N)* I / Number * shadowFactor;
-		}
-		
+		}	
 	}
-	
-
 }
 
