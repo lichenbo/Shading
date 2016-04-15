@@ -23,7 +23,7 @@ uniform HammersleyBlock
 
 out vec4 outputColor;
 
-float g = 0.5;
+float g = 10;
 float alpha = pow(8192, g);
 
 vec3 MonteBRDF(vec3 Ks, vec3 L, vec3 V, vec3 N)
@@ -39,7 +39,7 @@ vec3 MonteBRDF(vec3 Ks, vec3 L, vec3 V, vec3 N)
 
 vec2 getSphereMapCoord(vec3 N)
 {
-	float u = 0.5 + atan(N.z/N.x)/(2*M_PI);
+	float u = 0.5 + atan(N.z,N.x)/(2*M_PI);
 	float v = 0.5 - asin(N.y)/M_PI;
 	return vec2(u,v);
 }
@@ -61,7 +61,10 @@ vec3 Linear2sRGB(vec4 pixel)
     return vec3(pow(converted.x, 1/2.2),pow(converted.y, 1/2.2),pow(converted.z, 1/2.2));
 }
 
-float scaleToInterval(float value, float minDepth, float maxDepth){	return (value - minDepth) / (maxDepth - minDepth);}
+float scaleToInterval(float value, float minDepth, float maxDepth)
+{
+	return (value - minDepth) / (maxDepth - minDepth);
+}
 
 void main()
 {
@@ -99,15 +102,16 @@ void main()
 		// spheCoord is local coord light direction
 		vec3 OmegaK = normalize(spheCoord.x*A+spheCoord.y*R+spheCoord.z*B);
 		vec3 L = OmegaK;	// L is world coord light direction
-        I = I * M_PI;
-		// Confused.
-		//float level = 0.5*log2(WIDTH*HEIGHT/N)-0.5*log2(D/4);
-        float level = 1.0;
+		int WIDTH = 2400;
+		int HEIGHT = 1200;
+		vec3 H = normalize(L+V);
+		float D = (alpha+2)/(2*M_PI)*pow(max(0.0,dot(N,H)),alpha);
+		float level = 0.5*log2(WIDTH*HEIGHT/Number)-0.5*log2(D/4);
 		vec4 LightColor = textureLod(domeTexture, getSphereMapCoord(L) ,level);
 		LightColor.xyz = Linear2sRGB(LightColor);
         if (dot(L, N) > 0) {
-            //outputColor.xyz += MonteBRDF(Ks,L,V,N) * LightColor.xyz *dot(L,N)* I / Number ;
-            outputColor.xyz += MonteBRDF(Ks,L,V,N) * LightColor.xyz *dot(L,N) * I * shadowFactor / Number;
+            outputColor.xyz += MonteBRDF(Ks,L,V,N) * LightColor.xyz *dot(L,N)* I / Number ;
+            //outputColor.xyz += MonteBRDF(Ks,L,V,N) * LightColor.xyz *dot(L,N) * I * shadowFactor / Number;
 		}
 		
 	}
