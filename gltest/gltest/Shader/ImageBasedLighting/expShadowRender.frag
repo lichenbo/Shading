@@ -1,5 +1,8 @@
 #version 330 core
+
 #define M_PI 3.1415926535897932384626433832795
+
+#define DEPTH 0.6
 
 in vec2 texture_coord;
 uniform mat4 shadowMatrix;
@@ -55,21 +58,24 @@ vec3 buildSpheCoord(float xi1, float xi2, float alpha)
 
 	return vec3(x,y,z); // fix for Herron's code
 }
-vec3 Linear2sRGB(vec4 pixel){	float exposure = pixel.w;    vec3 converted = exposure*pixel.xyz/(exposure*pixel.xyz+vec3(1,1,1));    return vec3(pow(converted.x, 1/2.2),pow(converted.y, 1/2.2),pow(converted.z, 1/2.2));}
+vec3 Linear2sRGB(vec4 pixel)
+{
+	float exposure = pixel.w;
+    vec3 converted = exposure*pixel.xyz/(exposure*pixel.xyz+vec3(1,1,1));
+    return vec3(pow(converted.x, 1/2.2),pow(converted.y, 1/2.2),pow(converted.z, 1/2.2));
+}
 
 void main()
 {
     vec4 positionVec = texture(positionTexture, texture_coord.st);
     positionVec.w = 1.0;
     vec3 normalVec = texture(normalTexture, texture_coord.st).xyz;
-    vec3 lightVec = lightPos - positionVec.xyz;
     vec3 eyeVec = eyePos - positionVec.xyz;
     vec4 shadowCoord = shadowMatrix * positionVec;
     
     vec3 N = normalize(normalVec);
-    vec3 L = normalize(lightVec);
     vec3 V = normalize(eyeVec);
-    
+
     vec3 Ks = texture(specularTexture, texture_coord.st).xyz;
     vec3 I = lightValue;
 
@@ -92,7 +98,7 @@ void main()
 	{
 		vec3 spheCoord = buildSpheCoord(hammersley[2*i],hammersley[2*i+1], alpha);
 		vec3 OmegaK = normalize(spheCoord.x*A+spheCoord.y*R+spheCoord.z*B);
-		L = OmegaK;	// L is light direction
+		vec3 L = OmegaK;	// L is light direction
         I = I * M_PI;
 		// Confused.
 		//float level = 0.5*log2(WIDTH*HEIGHT/N)-0.5*log2(D/4);
@@ -101,7 +107,10 @@ void main()
 		LightColor.xyz = Linear2sRGB(LightColor);
         if (dot(L, N) > 0) {
             outputColor.xyz += MonteBRDF(Ks,L,V,N) * LightColor.xyz *dot(L,N)* I / Number * shadowFactor;
-		}	
+		}
+		
 	}
+	
+
 }
 
