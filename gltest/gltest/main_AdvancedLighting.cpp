@@ -78,7 +78,7 @@ auto Light1Specular = glm::vec3(1.0, 1.0, 1.0);
 // For Shadow Pass
 auto Light1ViewMatrix = glm::lookAt(Light1Pos, WatchPos, UpPos);
 auto Light1ShadowMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.5f)) * ProjectionMatrix * Light1ViewMatrix;
-auto BlurFactor = glm::vec3(10.0f);
+auto BlurFactor = glm::vec3(1.0f);
 
 // Light2: Local light
 auto Light2Pos = glm::vec3(-0.5f);

@@ -20,6 +20,9 @@ uniform sampler2D diffuseTexture;
 uniform sampler2D specularTexture;
 
 out vec4 outputColor;
+
+
+float scaleToInterval(float value, float minDepth, float maxDepth){	return (value - minDepth) / (maxDepth - minDepth);}
 void main()
 {
     vec4 positionVec = texture(positionTexture, texture_coord.st);
@@ -45,7 +48,7 @@ void main()
     outputColor = vec4(0.0, 0.0, 0.0, 0.7);
     
     float filteredLightDepth = texture(shadowTexture, shadowIndex).w;
-    float pixelDepth = shadowCoord.w;
+    float pixelDepth = scaleToInterval(shadowCoord.w, 0.1, 20);
     
     float shadowFactor = filteredLightDepth * exp(-blurFactor.x*pixelDepth);
     if (shadowFactor > 1.0)

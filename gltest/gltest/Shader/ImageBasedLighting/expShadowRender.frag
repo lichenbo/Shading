@@ -2,8 +2,6 @@
 
 #define M_PI 3.1415926535897932384626433832795
 
-#define DEPTH 0.6
-
 in vec2 texture_coord;
 uniform mat4 shadowMatrix;
 uniform vec3 eyePos;
@@ -35,10 +33,8 @@ vec3 MonteBRDF(vec3 Ks, vec3 L, vec3 V, vec3 N)
     vec3 H = normalize(L+V);
     // Schlick's approximation of the Fresnel equation
     vec3 F = Ks + (1 - Ks) * pow((1 - dot(L, H)), 5);
-    // Phong D is combined with probability
-    //float D = ((alpha + 2)/(2*M_PI))*pow(max(0.0,dot(N, H)), alpha);
     float G = 1.0 / (dot(L,H) * dot(L,H));
-    return 0.25*F*G ;
+    return 0.25*F*G;
 }
 
 vec2 getSphereMapCoord(vec3 N)
@@ -65,6 +61,8 @@ vec3 Linear2sRGB(vec4 pixel)
     return vec3(pow(converted.x, 1/2.2),pow(converted.y, 1/2.2),pow(converted.z, 1/2.2));
 }
 
+float scaleToInterval(float value, float minDepth, float maxDepth){	return (value - minDepth) / (maxDepth - minDepth);}
+
 void main()
 {
     vec4 positionVec = texture(positionTexture, texture_coord.st);
@@ -84,21 +82,23 @@ void main()
     outputColor = vec4(0.0, 0.0, 0.0, 0.7);
     
     float filteredLightDepth = texture(shadowTexture, shadowIndex).w;
-    float pixelDepth = shadowCoord.w;
-    
+    float pixelDepth = scaleToInterval(shadowCoord.w, 0.1, 20);
+
     float shadowFactor = filteredLightDepth * exp(-blurFactor.x*pixelDepth);
     if (shadowFactor > 1.0)
         shadowFactor = 1.0;
 
 	vec3 R = 2*dot(N,V)*N - V; // reflection vector
-	vec3 A = normalize(cross(vec3(0,1,0),R));   //y-axis as spec dir
-	vec3 B = normalize(cross(R,A));
+	vec3 A = normalize(cross(vec3(0,1,0),R));   //R as up dir, A is bi-up
+	vec3 B = normalize(cross(R,A)); // third axis
+	// [A R B] is the new transformation matrix, world coord -> refl coord
 
 	for (int i = 0; i < Number; ++i)
 	{
 		vec3 spheCoord = buildSpheCoord(hammersley[2*i],hammersley[2*i+1], alpha);
+		// spheCoord is local coord light direction
 		vec3 OmegaK = normalize(spheCoord.x*A+spheCoord.y*R+spheCoord.z*B);
-		vec3 L = OmegaK;	// L is light direction
+		vec3 L = OmegaK;	// L is world coord light direction
         I = I * M_PI;
 		// Confused.
 		//float level = 0.5*log2(WIDTH*HEIGHT/N)-0.5*log2(D/4);
@@ -106,7 +106,8 @@ void main()
 		vec4 LightColor = textureLod(domeTexture, getSphereMapCoord(L) ,level);
 		LightColor.xyz = Linear2sRGB(LightColor);
         if (dot(L, N) > 0) {
-            outputColor.xyz += MonteBRDF(Ks,L,V,N) * LightColor.xyz *dot(L,N)* I / Number * shadowFactor;
+            //outputColor.xyz += MonteBRDF(Ks,L,V,N) * LightColor.xyz *dot(L,N)* I / Number ;
+            outputColor.xyz += MonteBRDF(Ks,L,V,N) * LightColor.xyz *dot(L,N) * I * shadowFactor / Number;
 		}
 		
 	}
