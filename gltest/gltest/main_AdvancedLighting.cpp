@@ -376,8 +376,8 @@ int main(int argc, char * argv[]) {
 	shadowPass.BindUniformMatrix4("ViewMatrix", &Light1ViewMatrixPtr);
 	shadowPass.BindUniformMatrix4("ProjectionMatrix", &ProjectionMatrixPtr);
 	shadowPass.BindUniformVec3("blurFactor", &BlurFactorPtr);
-	shadowRenderPass.BindUniformMatrix4("shadowMatrix", &Light1ShadowMatrixPtr);
-	shadowRenderPass.BindUniformVec3("lightPos", &Light1PosPtr);
+    shadowRenderPass.BindUniformMatrix4("shadowMatrix", &Light1ShadowMatrixPtr);
+
 	shadowRenderPass.BindUniformVec3("eyePos", &EyePosPtr);
 	shadowRenderPass.BindUniformVec3("lightValue", &Light1DiffusePtr);
 	shadowRenderPass.BindUniformVec3("blurFactor", &BlurFactorPtr);
@@ -487,7 +487,6 @@ int main(int argc, char * argv[]) {
 
 	shadowRenderPass.BindTexture("positionTexture", positionTex);
 	shadowRenderPass.BindTexture("normalTexture", normalTex);
-	shadowRenderPass.BindTexture("diffuseTexture", diffuseTex);
 	shadowRenderPass.BindTexture("specularTexture", specularTex);
     shadowRenderPass.BindTexture("domeTexture", domeTex);
 	deferredBRDFPass1.BindTexture("positionTexture", positionTex);
