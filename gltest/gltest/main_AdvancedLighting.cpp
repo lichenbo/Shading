@@ -252,14 +252,14 @@ int main(int argc, char * argv[]) {
 	gbufferPass.MeshBindUniformVec3(&sphere1, "diffuse", &Sphere1DiffusePtr);
 	gbufferPass.MeshBindUniformVec3(&sphere1, "specular", &Sphere1SpecularPtr);
     gbufferPass.MeshBindUniformInt1(&sphere1, "isDome", 0);
-    shadowRenderPass.MeshBindUniformInt1(&sphere1, "roughness", 10);
+    shadowRenderPass.MeshBindUniformInt1(&sphere1, "gloss", 0.1);
     
 	gbufferPass.MeshBindUniformMatrix4(&sphere2, "ModelMatrix", &Sphere2ModelMatrixPtr);
 	gbufferPass.MeshBindUniformMatrix4(&sphere2, "NormalMatrix", &Sphere2NormalMatrixPtr);
 	gbufferPass.MeshBindUniformVec3(&sphere2, "diffuse", &Sphere2DiffusePtr);
 	gbufferPass.MeshBindUniformVec3(&sphere2, "specular", &Sphere2SpecularPtr);
     gbufferPass.MeshBindUniformInt1(&sphere2, "isDome", 0);
-    shadowRenderPass.MeshBindUniformInt1(&sphere2, "roughness", 100);
+    shadowRenderPass.MeshBindUniformInt1(&sphere2, "gloss", 0.5);
 
 
 	gbufferPass.MeshBindUniformMatrix4(&sphere3, "ModelMatrix", &Sphere3ModelMatrixPtr);
@@ -267,7 +267,7 @@ int main(int argc, char * argv[]) {
 	gbufferPass.MeshBindUniformVec3(&sphere3, "diffuse", &Sphere3DiffusePtr);
 	gbufferPass.MeshBindUniformVec3(&sphere3, "specular", &Sphere3SpecularPtr);
     gbufferPass.MeshBindUniformInt1(&sphere3, "isDome", 0);
-    shadowRenderPass.MeshBindUniformInt1(&sphere3, "roughness", 1000);
+    shadowRenderPass.MeshBindUniformInt1(&sphere3, "gloss", 1);
 
 
 	gbufferPass.MeshBindUniformMatrix4(&dome, "ModelMatrix", &DomeModelMatrixPtr);

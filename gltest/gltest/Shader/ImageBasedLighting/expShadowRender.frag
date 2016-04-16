@@ -12,7 +12,7 @@ uniform sampler2D normalTexture;
 uniform sampler2D specularTexture;
 uniform sampler2D domeTexture;
 
-uniform int roughness;
+uniform vec3 gloss;
 
 uniform HammersleyBlock
 {
@@ -68,7 +68,7 @@ float scaleToInterval(float value, float minDepth, float maxDepth)
 
 void main()
 {
-    float g = 0.5;
+    float g = gloss.x;
     float alpha = pow(8192, g);
     
     vec4 positionVec = texture(positionTexture, texture_coord.st);
