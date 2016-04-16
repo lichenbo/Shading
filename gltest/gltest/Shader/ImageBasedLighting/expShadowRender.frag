@@ -3,13 +3,10 @@
 #define M_PI 3.1415926535897932384626433832795
 
 in vec2 texture_coord;
-uniform mat4 shadowMatrix;
 uniform vec3 eyePos;
-uniform vec3 lightValue;
 
 uniform vec3 blurFactor;
 
-uniform sampler2D shadowTexture;
 uniform sampler2D positionTexture;
 uniform sampler2D normalTexture;
 uniform sampler2D specularTexture;
@@ -25,6 +22,7 @@ out vec4 outputColor;
 
 float g = 10;
 float alpha = pow(8192, g);
+vec3 lightValue = vec3(1.0);
 
 vec3 MonteBRDF(vec3 Ks, vec3 L, vec3 V, vec3 N)
 {
@@ -72,7 +70,6 @@ void main()
     positionVec.w = 1.0;
     vec3 normalVec = texture(normalTexture, texture_coord.st).xyz;
     vec3 eyeVec = eyePos - positionVec.xyz;
-    vec4 shadowCoord = shadowMatrix * positionVec;
     
     vec3 N = normalize(normalVec);
     vec3 V = normalize(eyeVec);
@@ -81,16 +78,8 @@ void main()
     vec3 I = lightValue;
 
     
-    vec2 shadowIndex = shadowCoord.xy/shadowCoord.w;
     outputColor = vec4(0.0, 0.0, 0.0, 0.7);
     
-    float filteredLightDepth = texture(shadowTexture, shadowIndex).w;
-    float pixelDepth = scaleToInterval(shadowCoord.w, 0.1, 20);
-
-    float shadowFactor = filteredLightDepth * exp(-blurFactor.x*pixelDepth);
-    if (shadowFactor > 1.0)
-        shadowFactor = 1.0;
-
 	vec3 R = 2*dot(N,V)*N - V; // reflection vector
 	vec3 A = normalize(cross(vec3(0,1,0),R));   //R as up dir, A is bi-up
 	vec3 B = normalize(cross(R,A)); // third axis
@@ -111,7 +100,6 @@ void main()
 		LightColor.xyz = Linear2sRGB(LightColor);
         if (dot(L, N) > 0) {
             outputColor.xyz += MonteBRDF(Ks,L,V,N) * LightColor.xyz *dot(L,N)* I / Number ;
-            //outputColor.xyz += MonteBRDF(Ks,L,V,N) * LightColor.xyz *dot(L,N) * I * shadowFactor / Number;
 		}
 		
 	}

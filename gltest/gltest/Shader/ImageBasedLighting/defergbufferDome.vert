@@ -21,6 +21,5 @@ void main(void)
 
 	worldSpaceNormal = normalize(mat3(NormalMatrix)*normal_coord);    
 
-    
     gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * homo_vertex;
 }

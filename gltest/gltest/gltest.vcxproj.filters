@@ -160,28 +160,10 @@
     <None Include="Shader\DeferredShading\deferAmbientLight.frag">
       <Filter>Shader\Defer</Filter>
     </None>
-    <None Include="Shader\ImageBasedLighting\gaussianBlurVertical.comp">
-      <Filter>Shader\IBL</Filter>
-    </None>
-    <None Include="Shader\ImageBasedLighting\gaussianBlurHorizontal.comp">
-      <Filter>Shader\IBL</Filter>
-    </None>
     <None Include="Shader\ImageBasedLighting\expShadowRender.vert">
       <Filter>Shader\IBL</Filter>
     </None>
     <None Include="Shader\ImageBasedLighting\expShadowRender.frag">
-      <Filter>Shader\IBL</Filter>
-    </None>
-    <None Include="Shader\ImageBasedLighting\expShadow.vert">
-      <Filter>Shader\IBL</Filter>
-    </None>
-    <None Include="Shader\ImageBasedLighting\expShadow.frag">
-      <Filter>Shader\IBL</Filter>
-    </None>
-    <None Include="Shader\ImageBasedLighting\deferIBL.vert">
-      <Filter>Shader\IBL</Filter>
-    </None>
-    <None Include="Shader\ImageBasedLighting\deferIBL.frag">
       <Filter>Shader\IBL</Filter>
     </None>
     <None Include="Shader\ImageBasedLighting\defergbufferDome.vert">
