@@ -22,8 +22,6 @@ uniform HammersleyBlock
 
 out vec4 outputColor;
 
-
-//float alpha = roughness;
 vec3 lightValue = vec3(1.0);
 
 vec3 MonteBRDF(vec3 Ks, vec3 L, vec3 V, vec3 N)

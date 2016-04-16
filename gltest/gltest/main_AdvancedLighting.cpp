@@ -52,16 +52,21 @@ auto Sphere1ModelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(0.25f));
 auto Sphere1NormalMatrix = glm::transpose(glm::inverse(Sphere1ModelMatrix));
 auto Sphere1Diffuse = glm::vec3(1.0);
 auto Sphere1Specular = glm::vec3(1.0);
+auto Sphere1Gloss = glm::vec3(0.1);
 // Sphere2
 auto Sphere2ModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(-0.5f)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.25f));
 auto Sphere2NormalMatrix = glm::transpose(glm::inverse(Sphere1ModelMatrix));
 auto Sphere2Diffuse = glm::vec3(1.0);
 auto Sphere2Specular = glm::vec3(1.0);
+auto Sphere2Gloss = glm::vec3(0.5);
+
 // Sphere3
 auto Sphere3ModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.25f));
 auto Sphere3NormalMatrix = glm::transpose(glm::inverse(Sphere1ModelMatrix));
 auto Sphere3Diffuse = glm::vec3(1.0);
 auto Sphere3Specular = glm::vec3(1.0);
+auto Sphere3Gloss = glm::vec3(1.0);
+
 
 // Dome
 auto DomeModelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(10.0f));
@@ -78,14 +83,17 @@ auto Sphere1ModelMatrixPtr = glm::value_ptr(Sphere1ModelMatrix);
 auto Sphere1NormalMatrixPtr = glm::value_ptr(Sphere1NormalMatrix);
 auto Sphere1DiffusePtr = glm::value_ptr(Sphere1Diffuse);
 auto Sphere1SpecularPtr = glm::value_ptr(Sphere1Specular);
+auto Sphere1GlossPtr = glm::value_ptr(Sphere1Gloss);
 auto Sphere2ModelMatrixPtr = glm::value_ptr(Sphere2ModelMatrix);
 auto Sphere2NormalMatrixPtr = glm::value_ptr(Sphere2NormalMatrix);
 auto Sphere2DiffusePtr = glm::value_ptr(Sphere2Diffuse);
 auto Sphere2SpecularPtr = glm::value_ptr(Sphere2Specular);
+auto Sphere2GlossPtr = glm::value_ptr(Sphere2Gloss);
 auto Sphere3ModelMatrixPtr = glm::value_ptr(Sphere3ModelMatrix);
 auto Sphere3NormalMatrixPtr = glm::value_ptr(Sphere3NormalMatrix);
 auto Sphere3DiffusePtr = glm::value_ptr(Sphere3Diffuse);
 auto Sphere3SpecularPtr = glm::value_ptr(Sphere3Specular);
+auto Sphere3GlossPtr = glm::value_ptr(Sphere3Gloss);
 auto DomeModelMatrixPtr = glm::value_ptr(DomeModelMatrix);
 auto DomeNormalMatrixPtr = glm::value_ptr(DomeNormalMatrix);
 
@@ -252,14 +260,14 @@ int main(int argc, char * argv[]) {
 	gbufferPass.MeshBindUniformVec3(&sphere1, "diffuse", &Sphere1DiffusePtr);
 	gbufferPass.MeshBindUniformVec3(&sphere1, "specular", &Sphere1SpecularPtr);
     gbufferPass.MeshBindUniformInt1(&sphere1, "isDome", 0);
-    shadowRenderPass.MeshBindUniformInt1(&sphere1, "gloss", 0.1);
+    shadowRenderPass.MeshBindUniformVec3(&sphere1, "gloss", &Sphere1GlossPtr);
     
 	gbufferPass.MeshBindUniformMatrix4(&sphere2, "ModelMatrix", &Sphere2ModelMatrixPtr);
 	gbufferPass.MeshBindUniformMatrix4(&sphere2, "NormalMatrix", &Sphere2NormalMatrixPtr);
 	gbufferPass.MeshBindUniformVec3(&sphere2, "diffuse", &Sphere2DiffusePtr);
 	gbufferPass.MeshBindUniformVec3(&sphere2, "specular", &Sphere2SpecularPtr);
     gbufferPass.MeshBindUniformInt1(&sphere2, "isDome", 0);
-    shadowRenderPass.MeshBindUniformInt1(&sphere2, "gloss", 0.5);
+    shadowRenderPass.MeshBindUniformVec3(&sphere2, "gloss", &Sphere2GlossPtr);
 
 
 	gbufferPass.MeshBindUniformMatrix4(&sphere3, "ModelMatrix", &Sphere3ModelMatrixPtr);
@@ -267,7 +275,7 @@ int main(int argc, char * argv[]) {
 	gbufferPass.MeshBindUniformVec3(&sphere3, "diffuse", &Sphere3DiffusePtr);
 	gbufferPass.MeshBindUniformVec3(&sphere3, "specular", &Sphere3SpecularPtr);
     gbufferPass.MeshBindUniformInt1(&sphere3, "isDome", 0);
-    shadowRenderPass.MeshBindUniformInt1(&sphere3, "gloss", 1);
+    shadowRenderPass.MeshBindUniformVec3(&sphere3, "gloss", &Sphere3GlossPtr);
 
 
 	gbufferPass.MeshBindUniformMatrix4(&dome, "ModelMatrix", &DomeModelMatrixPtr);
