@@ -47,21 +47,21 @@ auto ProjectionMatrix = glm::perspective(45.0f, 1.0f, 0.1f, 20.0f);
 auto ViewMatrix = glm::lookAt(EyePos, WatchPos, UpPos);
 auto ViewInverseMatrix = glm::inverse(ViewMatrix);
 
-// Bunny1
-auto Bunny1ModelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(5.0f));
-auto Bunny1NormalMatrix = glm::transpose(glm::inverse(Bunny1ModelMatrix));
-auto Bunny1Diffuse = glm::vec3(1.0);
-auto Bunny1Specular = glm::vec3(1.0);
-// Bunny2
-auto Bunny2ModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(-0.5f)) * glm::scale(glm::mat4(1.0f), glm::vec3(5.0f));
-auto Bunny2NormalMatrix = glm::transpose(glm::inverse(Bunny1ModelMatrix));
-auto Bunny2Diffuse = glm::vec3(1.0);
-auto Bunny2Specular = glm::vec3(1.0);
-// Bunny3
-auto Bunny3ModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f)) * glm::scale(glm::mat4(1.0f), glm::vec3(5.0f));
-auto Bunny3NormalMatrix = glm::transpose(glm::inverse(Bunny1ModelMatrix));
-auto Bunny3Diffuse = glm::vec3(1.0);
-auto Bunny3Specular = glm::vec3(1.0);
+// Sphere1
+auto Sphere1ModelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(0.25f));
+auto Sphere1NormalMatrix = glm::transpose(glm::inverse(Sphere1ModelMatrix));
+auto Sphere1Diffuse = glm::vec3(1.0);
+auto Sphere1Specular = glm::vec3(1.0);
+// Sphere2
+auto Sphere2ModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(-0.5f)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.25f));
+auto Sphere2NormalMatrix = glm::transpose(glm::inverse(Sphere1ModelMatrix));
+auto Sphere2Diffuse = glm::vec3(1.0);
+auto Sphere2Specular = glm::vec3(1.0);
+// Sphere3
+auto Sphere3ModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.25f));
+auto Sphere3NormalMatrix = glm::transpose(glm::inverse(Sphere1ModelMatrix));
+auto Sphere3Diffuse = glm::vec3(1.0);
+auto Sphere3Specular = glm::vec3(1.0);
 
 // Dome
 auto DomeModelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(10.0f));
@@ -74,18 +74,18 @@ auto WatchPosPtr = glm::value_ptr(WatchPos);
 auto ProjectionMatrixPtr = glm::value_ptr(ProjectionMatrix);
 auto ViewMatrixPtr = glm::value_ptr(ViewMatrix);
 auto ViewInverseMatrixPtr = glm::value_ptr(ViewInverseMatrix);
-auto Bunny1ModelMatrixPtr = glm::value_ptr(Bunny1ModelMatrix);
-auto Bunny1NormalMatrixPtr = glm::value_ptr(Bunny1NormalMatrix);
-auto Bunny1DiffusePtr = glm::value_ptr(Bunny1Diffuse);
-auto Bunny1SpecularPtr = glm::value_ptr(Bunny1Specular);
-auto Bunny2ModelMatrixPtr = glm::value_ptr(Bunny2ModelMatrix);
-auto Bunny2NormalMatrixPtr = glm::value_ptr(Bunny2NormalMatrix);
-auto Bunny2DiffusePtr = glm::value_ptr(Bunny2Diffuse);
-auto Bunny2SpecularPtr = glm::value_ptr(Bunny2Specular);
-auto Bunny3ModelMatrixPtr = glm::value_ptr(Bunny3ModelMatrix);
-auto Bunny3NormalMatrixPtr = glm::value_ptr(Bunny3NormalMatrix);
-auto Bunny3DiffusePtr = glm::value_ptr(Bunny3Diffuse);
-auto Bunny3SpecularPtr = glm::value_ptr(Bunny3Specular);
+auto Sphere1ModelMatrixPtr = glm::value_ptr(Sphere1ModelMatrix);
+auto Sphere1NormalMatrixPtr = glm::value_ptr(Sphere1NormalMatrix);
+auto Sphere1DiffusePtr = glm::value_ptr(Sphere1Diffuse);
+auto Sphere1SpecularPtr = glm::value_ptr(Sphere1Specular);
+auto Sphere2ModelMatrixPtr = glm::value_ptr(Sphere2ModelMatrix);
+auto Sphere2NormalMatrixPtr = glm::value_ptr(Sphere2NormalMatrix);
+auto Sphere2DiffusePtr = glm::value_ptr(Sphere2Diffuse);
+auto Sphere2SpecularPtr = glm::value_ptr(Sphere2Specular);
+auto Sphere3ModelMatrixPtr = glm::value_ptr(Sphere3ModelMatrix);
+auto Sphere3NormalMatrixPtr = glm::value_ptr(Sphere3NormalMatrix);
+auto Sphere3DiffusePtr = glm::value_ptr(Sphere3Diffuse);
+auto Sphere3SpecularPtr = glm::value_ptr(Sphere3Specular);
 auto DomeModelMatrixPtr = glm::value_ptr(DomeModelMatrix);
 auto DomeNormalMatrixPtr = glm::value_ptr(DomeNormalMatrix);
 
@@ -191,16 +191,13 @@ int main(int argc, char * argv[]) {
     
 	// --------------SHADER LOADING--------------------------
 
-	GET_MODEL_PATH(path, 256, "bunny_smooth.ply");
-	Mesh bunny1, bunny2, bunny3;
-    
-	bunny1.Load(path);
-	bunny2.Load(path);
-	bunny3.Load(path);
-
 
 	GET_MODEL_PATH(path, 256, "sphere.ply");
-	Mesh dome;
+	Mesh dome, sphere1, sphere2, sphere3;
+    sphere1.Load(path);
+    sphere2.Load(path);
+    sphere3.Load(path);
+
     dome.Load(path);
 
 	Mesh AmbientFSQ;
@@ -211,11 +208,11 @@ int main(int argc, char * argv[]) {
 
 	// ---------------MODEL LOADING--------------------------
 
-	Scene bunnyScene;
-	bunnyScene.addObject(&bunny1);
-	bunnyScene.addObject(&bunny2);
-	bunnyScene.addObject(&bunny3);
-    bunnyScene.addObject(&dome);
+	Scene SphereScene;
+	SphereScene.addObject(&sphere1);
+	SphereScene.addObject(&sphere2);
+	SphereScene.addObject(&sphere3);
+    SphereScene.addObject(&dome);
 
 
 	Scene ambientScene;
@@ -226,7 +223,7 @@ int main(int argc, char * argv[]) {
 
 	// --------------SCENE LOADING --------------------------
 
-	Pass gbufferPass(defergbufferShader, &bunnyScene);
+	Pass gbufferPass(defergbufferShader, &SphereScene);
 	Pass ambientPass(ambientShader, &ambientScene);
 	Pass shadowRenderPass(shadowRenderShader, &shadowRenderScene);
 	gbufferPass.SetTarget(&g_buffer);
@@ -250,27 +247,35 @@ int main(int argc, char * argv[]) {
 
 	// ------------- BIND PASS-WISE UNIFORMS---------------
 
-	gbufferPass.MeshBindUniformMatrix4(&bunny1, "ModelMatrix", &Bunny1ModelMatrixPtr);
-	gbufferPass.MeshBindUniformMatrix4(&bunny1, "NormalMatrix", &Bunny1NormalMatrixPtr);
-	gbufferPass.MeshBindUniformVec3(&bunny1, "diffuse", &Bunny1DiffusePtr);
-	gbufferPass.MeshBindUniformVec3(&bunny1, "specular", &Bunny1SpecularPtr);
-    gbufferPass.MeshBindUniformInt1(&bunny1, "isDome", 0);
-	gbufferPass.MeshBindUniformMatrix4(&bunny2, "ModelMatrix", &Bunny2ModelMatrixPtr);
-	gbufferPass.MeshBindUniformMatrix4(&bunny2, "NormalMatrix", &Bunny2NormalMatrixPtr);
-	gbufferPass.MeshBindUniformVec3(&bunny2, "diffuse", &Bunny2DiffusePtr);
-	gbufferPass.MeshBindUniformVec3(&bunny2, "specular", &Bunny2SpecularPtr);
-    gbufferPass.MeshBindUniformInt1(&bunny2, "isDome", 0);
+	gbufferPass.MeshBindUniformMatrix4(&sphere1, "ModelMatrix", &Sphere1ModelMatrixPtr);
+	gbufferPass.MeshBindUniformMatrix4(&sphere1, "NormalMatrix", &Sphere1NormalMatrixPtr);
+	gbufferPass.MeshBindUniformVec3(&sphere1, "diffuse", &Sphere1DiffusePtr);
+	gbufferPass.MeshBindUniformVec3(&sphere1, "specular", &Sphere1SpecularPtr);
+    gbufferPass.MeshBindUniformInt1(&sphere1, "isDome", 0);
+    shadowRenderPass.MeshBindUniformInt1(&sphere1, "roughness", 10);
+    
+	gbufferPass.MeshBindUniformMatrix4(&sphere2, "ModelMatrix", &Sphere2ModelMatrixPtr);
+	gbufferPass.MeshBindUniformMatrix4(&sphere2, "NormalMatrix", &Sphere2NormalMatrixPtr);
+	gbufferPass.MeshBindUniformVec3(&sphere2, "diffuse", &Sphere2DiffusePtr);
+	gbufferPass.MeshBindUniformVec3(&sphere2, "specular", &Sphere2SpecularPtr);
+    gbufferPass.MeshBindUniformInt1(&sphere2, "isDome", 0);
+    shadowRenderPass.MeshBindUniformInt1(&sphere2, "roughness", 100);
 
-	gbufferPass.MeshBindUniformMatrix4(&bunny3, "ModelMatrix", &Bunny3ModelMatrixPtr);
-	gbufferPass.MeshBindUniformMatrix4(&bunny3, "NormalMatrix", &Bunny3NormalMatrixPtr);
-	gbufferPass.MeshBindUniformVec3(&bunny3, "diffuse", &Bunny3DiffusePtr);
-	gbufferPass.MeshBindUniformVec3(&bunny3, "specular", &Bunny3SpecularPtr);
-    gbufferPass.MeshBindUniformInt1(&bunny3, "isDome", 0);
+
+	gbufferPass.MeshBindUniformMatrix4(&sphere3, "ModelMatrix", &Sphere3ModelMatrixPtr);
+	gbufferPass.MeshBindUniformMatrix4(&sphere3, "NormalMatrix", &Sphere3NormalMatrixPtr);
+	gbufferPass.MeshBindUniformVec3(&sphere3, "diffuse", &Sphere3DiffusePtr);
+	gbufferPass.MeshBindUniformVec3(&sphere3, "specular", &Sphere3SpecularPtr);
+    gbufferPass.MeshBindUniformInt1(&sphere3, "isDome", 0);
+    shadowRenderPass.MeshBindUniformInt1(&sphere3, "roughness", 1000);
+
 
 	gbufferPass.MeshBindUniformMatrix4(&dome, "ModelMatrix", &DomeModelMatrixPtr);
 	gbufferPass.MeshBindUniformMatrix4(&dome, "NormalMatrix", &DomeNormalMatrixPtr);
     gbufferPass.MeshBindUniformInt1(&dome, "isDome", 1);
 	
+    
+    // ------------ BIND MESH-WISE UNIFORMS ----------------
 	char* block = buildHammersleyRandom(20);
 	shadowRenderPass.GlobalBindUniformBlock("HammersleyBlock", block, sizeof(Hammersley_block));
     // ------------BIND GLOBAL UNIFROMS -------------------

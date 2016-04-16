@@ -12,6 +12,8 @@ uniform sampler2D normalTexture;
 uniform sampler2D specularTexture;
 uniform sampler2D domeTexture;
 
+uniform int roughness;
+
 uniform HammersleyBlock
 {
 	float Number;
@@ -20,8 +22,8 @@ uniform HammersleyBlock
 
 out vec4 outputColor;
 
-float g = 10;
-float alpha = pow(8192, g);
+
+//float alpha = roughness;
 vec3 lightValue = vec3(1.0);
 
 vec3 MonteBRDF(vec3 Ks, vec3 L, vec3 V, vec3 N)
@@ -66,6 +68,9 @@ float scaleToInterval(float value, float minDepth, float maxDepth)
 
 void main()
 {
+    float g = 0.5;
+    float alpha = pow(8192, g);
+    
     vec4 positionVec = texture(positionTexture, texture_coord.st);
     positionVec.w = 1.0;
     vec3 normalVec = texture(normalTexture, texture_coord.st).xyz;
