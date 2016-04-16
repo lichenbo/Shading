@@ -476,8 +476,9 @@ int main(int argc, char * argv[]) {
 	blurVerticalPass.BindImage("dst", blurredShadowVertical);
 
 	ambientPass.BindTexture("diffuseTexture", diffuseTex);
+    ambientPass.BindTexture("domeIrrTexture", domeIrrTex);
+	ambientPass.BindTexture("normalTexture", normalTex);
     gbufferPass.BindTexture("domeTexture", domeTex);
-    gbufferPass.BindTexture("domeIrrTexture", domeIrrTex);
 
 #ifdef _WIN32
 	shadowRenderPass.BindTexture("shadowTexture", blurredShadowVertical);

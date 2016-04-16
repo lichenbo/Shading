@@ -31,6 +31,9 @@
     <Filter Include="Shader\VisBuffer">
       <UniqueIdentifier>{68a8aae7-fb9a-4ba5-a1a0-744fcb10601c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader\AO">
+      <UniqueIdentifier>{91b957c5-875c-4cc4-a37a-d3fe293917c6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -246,6 +249,42 @@
     </None>
     <None Include="Shader\VisibilityBuffer\defergbuffer.frag">
       <Filter>Shader\VisBuffer</Filter>
+    </None>
+    <None Include="Shader\AmbientOcclusion\gaussianBlurVertical.comp">
+      <Filter>Shader\AO</Filter>
+    </None>
+    <None Include="Shader\AmbientOcclusion\gaussianBlurHorizontal.comp">
+      <Filter>Shader\AO</Filter>
+    </None>
+    <None Include="Shader\AmbientOcclusion\expShadowRender.vert">
+      <Filter>Shader\AO</Filter>
+    </None>
+    <None Include="Shader\AmbientOcclusion\expShadowRender.frag">
+      <Filter>Shader\AO</Filter>
+    </None>
+    <None Include="Shader\AmbientOcclusion\expShadow.vert">
+      <Filter>Shader\AO</Filter>
+    </None>
+    <None Include="Shader\AmbientOcclusion\expShadow.frag">
+      <Filter>Shader\AO</Filter>
+    </None>
+    <None Include="Shader\AmbientOcclusion\deferIBL.vert">
+      <Filter>Shader\AO</Filter>
+    </None>
+    <None Include="Shader\AmbientOcclusion\deferIBL.frag">
+      <Filter>Shader\AO</Filter>
+    </None>
+    <None Include="Shader\AmbientOcclusion\defergbufferDome.vert">
+      <Filter>Shader\AO</Filter>
+    </None>
+    <None Include="Shader\AmbientOcclusion\defergbufferDome.frag">
+      <Filter>Shader\AO</Filter>
+    </None>
+    <None Include="Shader\AmbientOcclusion\deferAmbientLight.vert">
+      <Filter>Shader\AO</Filter>
+    </None>
+    <None Include="Shader\AmbientOcclusion\deferAmbientLight.frag">
+      <Filter>Shader\AO</Filter>
     </None>
   </ItemGroup>
 </Project>
