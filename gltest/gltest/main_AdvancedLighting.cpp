@@ -128,6 +128,32 @@ void readHDR(const char* path, std::vector<float>& data, int& width, int& height
     return;
 }
 
+typedef struct Hammersley_block
+{
+	float N;
+	float hammersley[100*2];
+} Hammersley_block;
+
+char* buildHammersleyRandom(float N)
+{
+	struct Hammersley_block* block = (struct Hammersley_block*)malloc(sizeof(Hammersley_block));
+	block->N = N;
+    int kk;
+    float p, u;
+	int pos = 0;
+
+	for (int k = 0; k < N; ++k)
+	{
+		for (p = 0.5f, kk = k, u = 0.0f; kk; p *= 0.5f, kk >>= 1)
+			if (kk & 1)
+				u += p;
+		float v = (k + 0.5) / N;
+		block->hammersley[pos++] = u;
+		block->hammersley[pos++] = v;
+	}
+	return (char*)block;
+}
+
 int main(int argc, char * argv[]) {
 
 	char path[256];
@@ -174,11 +200,7 @@ int main(int argc, char * argv[]) {
 
 
 	GET_MODEL_PATH(path, 256, "sphere.ply");
-	Mesh Light1, Light2, Light3;
 	Mesh dome;
-	Light1.Load(path);
-	Light2.Load(path);
-	Light3.Load(path);
     dome.Load(path);
 
 	Mesh AmbientFSQ;
@@ -193,9 +215,6 @@ int main(int argc, char * argv[]) {
 	bunnyScene.addObject(&bunny1);
 	bunnyScene.addObject(&bunny2);
 	bunnyScene.addObject(&bunny3);
-	bunnyScene.addObject(&Light1);
-	bunnyScene.addObject(&Light2);
-	bunnyScene.addObject(&Light3);
     bunnyScene.addObject(&dome);
 
 
@@ -252,6 +271,8 @@ int main(int argc, char * argv[]) {
 	gbufferPass.MeshBindUniformMatrix4(&dome, "NormalMatrix", &DomeNormalMatrixPtr);
     gbufferPass.MeshBindUniformInt1(&dome, "isDome", 1);
 	
+	char* block = buildHammersleyRandom(20);
+	shadowRenderPass.GlobalBindUniformBlock("HammersleyBlock", block, sizeof(Hammersley_block));
     // ------------BIND GLOBAL UNIFROMS -------------------
 
     GET_HDR_PATH(path, 256, "Alexs_Apt_2k.hdr");

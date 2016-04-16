@@ -99,11 +99,9 @@ void main()
 		vec4 LightColor = textureLod(domeTexture, getSphereMapCoord(L) ,level);
 		LightColor.xyz = Linear2sRGB(LightColor);
         if (dot(L, N) > 0) {
-            outputColor.xyz += MonteBRDF(Ks,L,V,N) * LightColor.xyz *dot(L,N)* I / Number ;
+            outputColor.xyz += MonteBRDF(Ks,L,V,N) * LightColor.xyz *dot(L,N)*I / Number;
 		}
 		
 	}
-	
-
 }
 
