@@ -67,7 +67,6 @@ auto Sphere3Diffuse = glm::vec3(1.0);
 auto Sphere3Specular = glm::vec3(1.0);
 auto Sphere3Gloss = glm::vec3(1.0);
 
-
 // Dome
 auto DomeModelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(10.0f));
 auto DomeNormalMatrix = glm::transpose(glm::inverse(DomeModelMatrix));
@@ -168,7 +167,7 @@ int main(int argc, char * argv[]) {
 	engine = new Engine(argc, argv);
 
 	ShaderProgram* defergbufferShader = new ShaderProgram();
-	FBO g_buffer(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT), 4);
+	FBO g_buffer(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT), 5);
 
 	GET_SHADER_IMAGELIGHT_PATH(path, 256, "defergbufferDome.vert");
 	if (!defergbufferShader->AddVertexShaderPath(path)) return 0;
@@ -199,7 +198,6 @@ int main(int argc, char * argv[]) {
     
 	// --------------SHADER LOADING--------------------------
 
-
 	GET_MODEL_PATH(path, 256, "sphere.ply");
 	Mesh dome, sphere1, sphere2, sphere3;
     sphere1.Load(path);
@@ -221,7 +219,6 @@ int main(int argc, char * argv[]) {
 	SphereScene.addObject(&sphere2);
 	SphereScene.addObject(&sphere3);
     SphereScene.addObject(&dome);
-
 
 	Scene ambientScene;
 	ambientScene.addObject(&AmbientFSQ);
@@ -260,14 +257,14 @@ int main(int argc, char * argv[]) {
 	gbufferPass.MeshBindUniformVec3(&sphere1, "diffuse", &Sphere1DiffusePtr);
 	gbufferPass.MeshBindUniformVec3(&sphere1, "specular", &Sphere1SpecularPtr);
     gbufferPass.MeshBindUniformInt1(&sphere1, "isDome", 0);
-    shadowRenderPass.MeshBindUniformVec3(&sphere1, "gloss", &Sphere1GlossPtr);
+    gbufferPass.MeshBindUniformVec3(&sphere1, "gloss", &Sphere1GlossPtr);
     
 	gbufferPass.MeshBindUniformMatrix4(&sphere2, "ModelMatrix", &Sphere2ModelMatrixPtr);
 	gbufferPass.MeshBindUniformMatrix4(&sphere2, "NormalMatrix", &Sphere2NormalMatrixPtr);
 	gbufferPass.MeshBindUniformVec3(&sphere2, "diffuse", &Sphere2DiffusePtr);
 	gbufferPass.MeshBindUniformVec3(&sphere2, "specular", &Sphere2SpecularPtr);
     gbufferPass.MeshBindUniformInt1(&sphere2, "isDome", 0);
-    shadowRenderPass.MeshBindUniformVec3(&sphere2, "gloss", &Sphere2GlossPtr);
+	gbufferPass.MeshBindUniformVec3(&sphere2, "gloss", &Sphere2GlossPtr);
 
 
 	gbufferPass.MeshBindUniformMatrix4(&sphere3, "ModelMatrix", &Sphere3ModelMatrixPtr);
@@ -275,7 +272,7 @@ int main(int argc, char * argv[]) {
 	gbufferPass.MeshBindUniformVec3(&sphere3, "diffuse", &Sphere3DiffusePtr);
 	gbufferPass.MeshBindUniformVec3(&sphere3, "specular", &Sphere3SpecularPtr);
     gbufferPass.MeshBindUniformInt1(&sphere3, "isDome", 0);
-    shadowRenderPass.MeshBindUniformVec3(&sphere3, "gloss", &Sphere3GlossPtr);
+	gbufferPass.MeshBindUniformVec3(&sphere3, "gloss", &Sphere3GlossPtr);
 
 
 	gbufferPass.MeshBindUniformMatrix4(&dome, "ModelMatrix", &DomeModelMatrixPtr);
@@ -304,6 +301,7 @@ int main(int argc, char * argv[]) {
 	Texture* normalTex = g_buffer.GetTexture(1);
 	Texture* diffuseTex = g_buffer.GetTexture(2);
 	Texture* specularTex = g_buffer.GetTexture(3);
+	Texture* glossTex = g_buffer.GetTexture(4);
 
     gbufferPass.BindTexture("domeTexture", domeTex);
 
@@ -315,6 +313,7 @@ int main(int argc, char * argv[]) {
 	shadowRenderPass.BindTexture("normalTexture", normalTex);
 	shadowRenderPass.BindTexture("specularTexture", specularTex);
     shadowRenderPass.BindTexture("domeTexture", domeTex);
+	shadowRenderPass.BindTexture("glossTexture", glossTex);
 	
 	gbufferPass.SetBlend(false);
 	gbufferPass.SetDepthTest(true);

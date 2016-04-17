@@ -4,6 +4,7 @@
 
 uniform vec3 diffuse;
 uniform vec3 specular;
+uniform vec3 gloss;
 uniform sampler2D domeTexture;
 uniform int isDome;
 uniform vec3 eyePos;
@@ -17,6 +18,7 @@ layout(location = 0) out vec4 gposition;
 layout(location = 1) out vec4 gnormal;
 layout(location = 2) out vec3 gdiffuse;
 layout(location = 3) out vec3 gspecular;
+layout(location = 4) out vec3 ggloss;
 
 vec3 sRGB2Linear(vec4 pixel);
 vec3 Linear2sRGB(vec4 pixel);
@@ -28,6 +30,7 @@ void main(void)
 	gnormal.xyz = worldSpaceNormal;
 	gnormal.w = 0.0;
 	gspecular = specular;
+	ggloss = gloss;
     
     vec3 D = worldSpacePosition - eyePos;
     D = normalize(D);
