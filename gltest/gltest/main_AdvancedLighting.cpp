@@ -187,14 +187,14 @@ int main(int argc, char * argv[]) {
 	ambientShader->SetAttribVertex("vertex_coord");
 	ambientShader->SetAttribTexture("texture_coordinate");
 
-	ShaderProgram* shadowRenderShader = new ShaderProgram();
-	GET_SHADER_IMAGELIGHT_PATH(path, 256, "expShadowRender.vert");
-	if (!shadowRenderShader->AddVertexShaderPath(path)) return 0;
-	GET_SHADER_IMAGELIGHT_PATH(path, 256, "expShadowRender.frag");
-	if (!shadowRenderShader->AddFragmentShaderPath(path)) return 0;
-	if (!shadowRenderShader->Link()) return 0;
-	shadowRenderShader->SetAttribVertex("vertex");
-	shadowRenderShader->SetAttribTexture("texture_coordinate");
+	ShaderProgram* iblSpecularShader = new ShaderProgram();
+	GET_SHADER_IMAGELIGHT_PATH(path, 256, "IBLSpecular.vert");
+	if (!iblSpecularShader->AddVertexShaderPath(path)) return 0;
+	GET_SHADER_IMAGELIGHT_PATH(path, 256, "IBLSpecular.frag");
+	if (!iblSpecularShader->AddFragmentShaderPath(path)) return 0;
+	if (!iblSpecularShader->Link()) return 0;
+	iblSpecularShader->SetAttribVertex("vertex");
+	iblSpecularShader->SetAttribTexture("texture_coordinate");
     
 	// --------------SHADER LOADING--------------------------
 
@@ -209,8 +209,8 @@ int main(int argc, char * argv[]) {
 	Mesh AmbientFSQ;
 	AmbientFSQ.LoadSquare();
 
-	Mesh ShadowRenderFSQ;
-	ShadowRenderFSQ.LoadSquare();
+	Mesh SpecularFSQ;
+	SpecularFSQ.LoadSquare();
 
 	// ---------------MODEL LOADING--------------------------
 
@@ -223,14 +223,14 @@ int main(int argc, char * argv[]) {
 	Scene ambientScene;
 	ambientScene.addObject(&AmbientFSQ);
 
-	Scene shadowRenderScene;
-	shadowRenderScene.addObject(&ShadowRenderFSQ);
+	Scene iblSpecularScene;
+	iblSpecularScene.addObject(&SpecularFSQ);
 
 	// --------------SCENE LOADING --------------------------
 
 	Pass gbufferPass(defergbufferShader, &SphereScene);
 	Pass ambientPass(ambientShader, &ambientScene);
-	Pass shadowRenderPass(shadowRenderShader, &shadowRenderScene);
+	Pass iblSpecularPass(iblSpecularShader, &iblSpecularScene);
 	gbufferPass.SetTarget(&g_buffer);
 
 	gbufferPass.BindAttribNormal();
@@ -238,8 +238,8 @@ int main(int argc, char * argv[]) {
     gbufferPass.BindAttribTexture();
 	ambientPass.BindAttribVertex();
 	ambientPass.BindAttribTexture();
-	shadowRenderPass.BindAttribVertex();
-	shadowRenderPass.BindAttribTexture();
+	iblSpecularPass.BindAttribVertex();
+	iblSpecularPass.BindAttribTexture();
 
 	// --------------- BIND ATTRIBUTES ---------------------
 
@@ -247,7 +247,7 @@ int main(int argc, char * argv[]) {
 	gbufferPass.BindUniformMatrix4("ProjectionMatrix", &ProjectionMatrixPtr);
     gbufferPass.BindUniformVec3("eyePos", &EyePosPtr);
 
-	shadowRenderPass.BindUniformVec3("eyePos", &EyePosPtr);
+	iblSpecularPass.BindUniformVec3("eyePos", &EyePosPtr);
 
 
 	// ------------- BIND PASS-WISE UNIFORMS---------------
@@ -282,7 +282,7 @@ int main(int argc, char * argv[]) {
     
     // ------------ BIND MESH-WISE UNIFORMS ----------------
 	char* block = buildHammersleyRandom(20);
-	shadowRenderPass.GlobalBindUniformBlock("HammersleyBlock", block, sizeof(Hammersley_block));
+	iblSpecularPass.GlobalBindUniformBlock("HammersleyBlock", block, sizeof(Hammersley_block));
     // ------------BIND GLOBAL UNIFROMS -------------------
 
     GET_HDR_PATH(path, 256, "Alexs_Apt_2k.hdr");
@@ -309,11 +309,11 @@ int main(int argc, char * argv[]) {
     ambientPass.BindTexture("domeIrrTexture", domeIrrTex);
 	ambientPass.BindTexture("normalTexture", normalTex);
 
-	shadowRenderPass.BindTexture("positionTexture", positionTex);
-	shadowRenderPass.BindTexture("normalTexture", normalTex);
-	shadowRenderPass.BindTexture("specularTexture", specularTex);
-    shadowRenderPass.BindTexture("domeTexture", domeTex);
-	shadowRenderPass.BindTexture("glossTexture", glossTex);
+	iblSpecularPass.BindTexture("positionTexture", positionTex);
+	iblSpecularPass.BindTexture("normalTexture", normalTex);
+	iblSpecularPass.BindTexture("specularTexture", specularTex);
+    iblSpecularPass.BindTexture("domeTexture", domeTex);
+	iblSpecularPass.BindTexture("glossTexture", glossTex);
 	
 	gbufferPass.SetBlend(false);
 	gbufferPass.SetDepthTest(true);
@@ -321,14 +321,14 @@ int main(int argc, char * argv[]) {
 	ambientPass.SetBlend(false);
 	ambientPass.SetDepthTest(false);
 	ambientPass.SetClear(true);
-	shadowRenderPass.SetBlend(true);
-	shadowRenderPass.SetDepthTest(false);
-	shadowRenderPass.SetClear(false);
+	iblSpecularPass.SetBlend(true);
+	iblSpecularPass.SetDepthTest(false);
+	iblSpecularPass.SetClear(false);
 
 	// ---------------PASS CONFIG --------------------------
 	engine->addPass(&gbufferPass);
 	engine->addPass(&ambientPass);
-	engine->addPass(&shadowRenderPass);
+	engine->addPass(&iblSpecularPass);
 
 	// ----------------ENGINE------------------------------
 

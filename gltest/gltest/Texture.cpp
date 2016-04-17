@@ -7,25 +7,27 @@
 //
 
 #include "Texture.hpp"
+#include <iostream>
 
 Texture::Texture(const int w, const int h): w(w), h(h), unit(0)
 {
     glGenTextures(1, &renderedTexture);
     glBindTexture(GL_TEXTURE_2D, renderedTexture);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, w, h, 0, GL_RGBA, GL_FLOAT, 0);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glBindTexture(GL_TEXTURE_2D, 0);
-
+	CHECK_ERROR;
 }
 
 void Texture::LoadData(float* data)
 {
     glBindTexture(GL_TEXTURE_2D, renderedTexture);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, w, h, 0, GL_RGBA, GL_FLOAT, data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 

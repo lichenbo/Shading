@@ -160,12 +160,6 @@
     <None Include="Shader\DeferredShading\deferAmbientLight.frag">
       <Filter>Shader\Defer</Filter>
     </None>
-    <None Include="Shader\ImageBasedLighting\expShadowRender.vert">
-      <Filter>Shader\IBL</Filter>
-    </None>
-    <None Include="Shader\ImageBasedLighting\expShadowRender.frag">
-      <Filter>Shader\IBL</Filter>
-    </None>
     <None Include="Shader\ImageBasedLighting\defergbufferDome.vert">
       <Filter>Shader\IBL</Filter>
     </None>
@@ -267,6 +261,12 @@
     </None>
     <None Include="Shader\AmbientOcclusion\deferAmbientLight.frag">
       <Filter>Shader\AO</Filter>
+    </None>
+    <None Include="Shader\ImageBasedLighting\IBLSpecular.frag">
+      <Filter>Shader\IBL</Filter>
+    </None>
+    <None Include="Shader\ImageBasedLighting\IBLSpecular.vert">
+      <Filter>Shader\IBL</Filter>
     </None>
   </ItemGroup>
 </Project>

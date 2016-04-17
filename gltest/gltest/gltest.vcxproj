@@ -220,8 +220,8 @@
     <None Include="Shader\ImageBasedLighting\deferAmbientLight.vert" />
     <None Include="Shader\ImageBasedLighting\defergbufferDome.frag" />
     <None Include="Shader\ImageBasedLighting\defergbufferDome.vert" />
-    <None Include="Shader\ImageBasedLighting\expShadowRender.frag" />
-    <None Include="Shader\ImageBasedLighting\expShadowRender.vert" />
+    <None Include="Shader\ImageBasedLighting\IBLSpecular.frag" />
+    <None Include="Shader\ImageBasedLighting\IBLSpecular.vert" />
     <None Include="Shader\VisibilityBuffer\defergbuffer.frag" />
     <None Include="Shader\VisibilityBuffer\defergbuffer.vert" />
     <None Include="Shader\VisibilityBuffer\shadow.frag" />
