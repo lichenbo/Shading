@@ -3,17 +3,15 @@
 #define M_PI 3.1415926535897932384626433832795
 
 in vec2 texture_coord;
-uniform mat4 shadowMatrix;
 uniform vec3 eyePos;
-uniform vec3 lightValue;
 
 uniform vec3 blurFactor;
 
-uniform sampler2D shadowTexture;
 uniform sampler2D positionTexture;
 uniform sampler2D normalTexture;
 uniform sampler2D specularTexture;
 uniform sampler2D domeTexture;
+uniform sampler2D glossTexture;
 
 uniform HammersleyBlock
 {
@@ -23,8 +21,7 @@ uniform HammersleyBlock
 
 out vec4 outputColor;
 
-float g = 10;
-float alpha = pow(8192, g);
+vec3 lightValue = vec3(1.0);
 
 vec3 MonteBRDF(vec3 Ks, vec3 L, vec3 V, vec3 N)
 {
@@ -68,11 +65,13 @@ float scaleToInterval(float value, float minDepth, float maxDepth)
 
 void main()
 {
+    float g = texture(glossTexture, texture_coord.st).x;
+    float alpha = pow(8192, g);
+    
     vec4 positionVec = texture(positionTexture, texture_coord.st);
     positionVec.w = 1.0;
     vec3 normalVec = texture(normalTexture, texture_coord.st).xyz;
     vec3 eyeVec = eyePos - positionVec.xyz;
-    vec4 shadowCoord = shadowMatrix * positionVec;
     
     vec3 N = normalize(normalVec);
     vec3 V = normalize(eyeVec);
@@ -81,16 +80,8 @@ void main()
     vec3 I = lightValue;
 
     
-    vec2 shadowIndex = shadowCoord.xy/shadowCoord.w;
     outputColor = vec4(0.0, 0.0, 0.0, 0.7);
     
-    float filteredLightDepth = texture(shadowTexture, shadowIndex).w;
-    float pixelDepth = scaleToInterval(shadowCoord.w, 0.1, 20);
-
-    float shadowFactor = filteredLightDepth * exp(-blurFactor.x*pixelDepth);
-    if (shadowFactor > 1.0)
-        shadowFactor = 1.0;
-
 	vec3 R = 2*dot(N,V)*N - V; // reflection vector
 	vec3 A = normalize(cross(vec3(0,1,0),R));   //R as up dir, A is bi-up
 	vec3 B = normalize(cross(R,A)); // third axis
@@ -106,16 +97,15 @@ void main()
 		int HEIGHT = 1200;
 		vec3 H = normalize(L+V);
 		float D = (alpha+2)/(2*M_PI)*pow(max(0.0,dot(N,H)),alpha);
-		float level = 0.5*log2(WIDTH*HEIGHT/Number)-0.5*log2(D/4);
-		vec4 LightColor = textureLod(domeTexture, getSphereMapCoord(L) ,level);
+		float level = max(0.5*log2(WIDTH*HEIGHT/Number)-0.5*log2(D/4),0.0);
+		//level = 7.0;
+		//vec4 LightColor = textureLod(domeTexture, getSphereMapCoord(L), level);
+		vec4 LightColor = texture(domeTexture, getSphereMapCoord(L));
 		LightColor.xyz = Linear2sRGB(LightColor);
         if (dot(L, N) > 0) {
-            outputColor.xyz += MonteBRDF(Ks,L,V,N) * LightColor.xyz *dot(L,N)* I / Number ;
-            //outputColor.xyz += MonteBRDF(Ks,L,V,N) * LightColor.xyz *dot(L,N) * I * shadowFactor / Number;
+            outputColor.xyz += MonteBRDF(Ks,L,V,N) * LightColor.xyz *dot(L,N)*I / Number;
 		}
 		
 	}
-	
-
 }
 

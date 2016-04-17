@@ -5,7 +5,7 @@
 //  Created by Chenbo Li on 11/2/15.
 //  Copyright ? 2015 binarythink. All rights reserved.
 //
-//#define __MAIN_ENTRY
+#define __MAIN_ENTRY
 #ifdef __MAIN_ENTRY
 
 #include "gl.h"
@@ -169,9 +169,9 @@ int main(int argc, char * argv[]) {
 	ShaderProgram* defergbufferShader = new ShaderProgram();
 	FBO g_buffer(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT), 5);
 
-	GET_SHADER_IMAGELIGHT_PATH(path, 256, "defergbufferDome.vert");
+	GET_SHADER_AO_PATH(path, 256, "defergbufferDome.vert");
 	if (!defergbufferShader->AddVertexShaderPath(path)) return 0;
-	GET_SHADER_IMAGELIGHT_PATH(path, 256, "defergbufferDome.frag");
+	GET_SHADER_AO_PATH(path, 256, "defergbufferDome.frag");
 	if (!defergbufferShader->AddFragmentShaderPath(path)) return 0;
 	if (!defergbufferShader->Link()) return 0;
 
@@ -179,18 +179,18 @@ int main(int argc, char * argv[]) {
 	defergbufferShader->SetAttribNormal("normal_coord");
 
 	ShaderProgram* ambientShader = new ShaderProgram();
-	GET_SHADER_IMAGELIGHT_PATH(path, 256, "deferAmbientLight.vert");
+	GET_SHADER_AO_PATH(path, 256, "deferAmbientLight.vert");
 	if (!ambientShader->AddVertexShaderPath(path)) return 0;
-	GET_SHADER_IMAGELIGHT_PATH(path, 256, "deferAmbientLight.frag");
+	GET_SHADER_AO_PATH(path, 256, "deferAmbientLight.frag");
 	if (!ambientShader->AddFragmentShaderPath(path)) return 0;
 	if (!ambientShader->Link()) return 0;
 	ambientShader->SetAttribVertex("vertex_coord");
 	ambientShader->SetAttribTexture("texture_coordinate");
 
 	ShaderProgram* iblSpecularShader = new ShaderProgram();
-	GET_SHADER_IMAGELIGHT_PATH(path, 256, "IBLSpecular.vert");
+	GET_SHADER_AO_PATH(path, 256, "IBLSpecular.vert");
 	if (!iblSpecularShader->AddVertexShaderPath(path)) return 0;
-	GET_SHADER_IMAGELIGHT_PATH(path, 256, "IBLSpecular.frag");
+	GET_SHADER_AO_PATH(path, 256, "IBLSpecular.frag");
 	if (!iblSpecularShader->AddFragmentShaderPath(path)) return 0;
 	if (!iblSpecularShader->Link()) return 0;
 	iblSpecularShader->SetAttribVertex("vertex");

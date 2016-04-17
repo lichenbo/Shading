@@ -100,7 +100,7 @@ void main()
 		float level = max(0.5*log2(WIDTH*HEIGHT/Number)-0.5*log2(D/4),0.0);
 		//level = 7.0;
 		//vec4 LightColor = textureLod(domeTexture, getSphereMapCoord(L), level);
-		vec4 LightColor = texture2D(domeTexture, getSphereMapCoord(L));
+		vec4 LightColor = texture(domeTexture, getSphereMapCoord(L));
 		LightColor.xyz = Linear2sRGB(LightColor);
         if (dot(L, N) > 0) {
             outputColor.xyz += MonteBRDF(Ks,L,V,N) * LightColor.xyz *dot(L,N)*I / Number;

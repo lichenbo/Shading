@@ -12,6 +12,7 @@
 		EB0C4B581C7DBDAC00AF0BA6 /* Engine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB0C4B561C7DBDAC00AF0BA6 /* Engine.cpp */; };
 		EB0C4B5B1C7DBF4A00AF0BA6 /* ShaderProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB0C4B591C7DBF4A00AF0BA6 /* ShaderProgram.cpp */; };
 		EB6D56711C79C8ED000E35E6 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB6D56701C79C8ED000E35E6 /* OpenGL.framework */; };
+		EB75333F1CC369B900D709C1 /* main_AmbientOcclusion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB75333E1CC369B900D709C1 /* main_AmbientOcclusion.cpp */; };
 		EB94510F1CAA84C90081C137 /* main_ExpShadowMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB94510E1CAA84C90081C137 /* main_ExpShadowMap.cpp */; };
 		EB9451131CB0DFCD0081C137 /* main_AdvancedLighting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB9451101CB0DFCD0081C137 /* main_AdvancedLighting.cpp */; };
 		EB9451141CB0DFCD0081C137 /* rgbe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB9451111CB0DFCD0081C137 /* rgbe.cpp */; };
@@ -45,6 +46,7 @@
 		EB0C4B5A1C7DBF4A00AF0BA6 /* ShaderProgram.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ShaderProgram.hpp; sourceTree = "<group>"; };
 		EB166A1A1BE788B700ED754D /* gltest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = gltest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB6D56701C79C8ED000E35E6 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		EB75333E1CC369B900D709C1 /* main_AmbientOcclusion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main_AmbientOcclusion.cpp; sourceTree = "<group>"; };
 		EB94510E1CAA84C90081C137 /* main_ExpShadowMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main_ExpShadowMap.cpp; sourceTree = "<group>"; };
 		EB9451101CB0DFCD0081C137 /* main_AdvancedLighting.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main_AdvancedLighting.cpp; sourceTree = "<group>"; };
 		EB9451111CB0DFCD0081C137 /* rgbe.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rgbe.cpp; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 		EB166A1C1BE788B700ED754D /* gltest */ = {
 			isa = PBXGroup;
 			children = (
+				EB75333E1CC369B900D709C1 /* main_AmbientOcclusion.cpp */,
 				EB9451101CB0DFCD0081C137 /* main_AdvancedLighting.cpp */,
 				EB9451111CB0DFCD0081C137 /* rgbe.cpp */,
 				EB9451121CB0DFCD0081C137 /* rgbe.h */,
@@ -189,6 +192,7 @@
 			files = (
 				EB0C4B551C7DBD8300AF0BA6 /* Mesh.cpp in Sources */,
 				EBBFA6E41CA52BB7008C5807 /* main_deferredShading.cpp in Sources */,
+				EB75333F1CC369B900D709C1 /* main_AmbientOcclusion.cpp in Sources */,
 				EB9451131CB0DFCD0081C137 /* main_AdvancedLighting.cpp in Sources */,
 				EB0C4B5B1C7DBF4A00AF0BA6 /* ShaderProgram.cpp in Sources */,
 				EB0C4B581C7DBDAC00AF0BA6 /* Engine.cpp in Sources */,

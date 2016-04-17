@@ -20,7 +20,7 @@ void main(void)
 {
 	vec3 gnormal = texture(normalTexture, texture_coord).xyz;
 	vec4 pixel= texture(domeIrrTexture, vec2(0.5+atan(gnormal.z, gnormal.x)/(2*M_PI), 0.5-asin(gnormal.y)/M_PI));
-    //vec3 ambientColor = Linear2sRGB(pixel) * 4;
-    vec3 ambientColor = Linear2sRGB(pixel) / M_PI;
+    vec3 ambientColor = Linear2sRGB(pixel) * 4;
+    //vec3 ambientColor = Linear2sRGB(pixel) / M_PI;
     outputColor.xyz = ambientColor * texture(diffuseTexture, texture_coord.st).xyz;
 }
