@@ -10,6 +10,7 @@ uniform mat4 NormalMatrix;
 
 out vec3 worldSpacePosition;
 out vec3 worldSpaceNormal;
+out float depth;
 
 void main(void)
 {
@@ -22,4 +23,5 @@ void main(void)
 	worldSpaceNormal = normalize(mat3(NormalMatrix)*normal_coord);    
 
     gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * homo_vertex;
+	depth = gl_Position.w;
 }

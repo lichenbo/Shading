@@ -11,6 +11,7 @@ uniform vec3 eyePos;
 
 in vec3 worldSpacePosition;
 in vec3 worldSpaceNormal;
+in float depth;
 
 out vec4 outputColor;
 
@@ -19,6 +20,7 @@ layout(location = 1) out vec4 gnormal;
 layout(location = 2) out vec3 gdiffuse;
 layout(location = 3) out vec3 gspecular;
 layout(location = 4) out vec3 ggloss;
+layout(location = 5) out vec3 gdepth;
 
 vec3 sRGB2Linear(vec4 pixel);
 vec3 Linear2sRGB(vec4 pixel);
@@ -31,6 +33,7 @@ void main(void)
 	gnormal.w = 0.0;
 	gspecular = specular;
 	ggloss = gloss;
+	gdepth = vec3(depth);
     
     vec3 D = worldSpacePosition - eyePos;
     D = normalize(D);

@@ -167,7 +167,7 @@ int main(int argc, char * argv[]) {
 	engine = new Engine(argc, argv);
 
 	ShaderProgram* defergbufferShader = new ShaderProgram();
-	FBO g_buffer(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT), 5);
+	FBO g_buffer(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT), 6);
 
 	GET_SHADER_AO_PATH(path, 256, "defergbufferDome.vert");
 	if (!defergbufferShader->AddVertexShaderPath(path)) return 0;
@@ -247,6 +247,9 @@ int main(int argc, char * argv[]) {
 	gbufferPass.BindUniformMatrix4("ProjectionMatrix", &ProjectionMatrixPtr);
     gbufferPass.BindUniformVec3("eyePos", &EyePosPtr);
 
+	ambientPass.BindUniformInt1("windowHeight", GLUT_WINDOW_HEIGHT);
+	ambientPass.BindUniformInt1("windowWidth", GLUT_WINDOW_WIDTH);
+
 	iblSpecularPass.BindUniformVec3("eyePos", &EyePosPtr);
 
 
@@ -302,12 +305,15 @@ int main(int argc, char * argv[]) {
 	Texture* diffuseTex = g_buffer.GetTexture(2);
 	Texture* specularTex = g_buffer.GetTexture(3);
 	Texture* glossTex = g_buffer.GetTexture(4);
+	Texture* depthTex = g_buffer.GetTexture(5);
 
     gbufferPass.BindTexture("domeTexture", domeTex);
 
 	ambientPass.BindTexture("diffuseTexture", diffuseTex);
     ambientPass.BindTexture("domeIrrTexture", domeIrrTex);
 	ambientPass.BindTexture("normalTexture", normalTex);
+	ambientPass.BindTexture("positionTexture", positionTex);
+	ambientPass.BindTexture("depthTexture", depthTex);
 
 	iblSpecularPass.BindTexture("positionTexture", positionTex);
 	iblSpecularPass.BindTexture("normalTexture", normalTex);

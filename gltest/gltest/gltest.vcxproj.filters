@@ -113,6 +113,9 @@
     <ClCompile Include="main_visBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="main_AmbientOcclusion.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Model\bunny.ply">
@@ -226,28 +229,16 @@
     <None Include="Shader\VisibilityBuffer\defergbuffer.frag">
       <Filter>Shader\VisBuffer</Filter>
     </None>
-    <None Include="Shader\AmbientOcclusion\gaussianBlurVertical.comp">
+    <None Include="Shader\ImageBasedLighting\IBLSpecular.frag">
+      <Filter>Shader\IBL</Filter>
+    </None>
+    <None Include="Shader\ImageBasedLighting\IBLSpecular.vert">
+      <Filter>Shader\IBL</Filter>
+    </None>
+    <None Include="Shader\AmbientOcclusion\IBLSpecular.vert">
       <Filter>Shader\AO</Filter>
     </None>
-    <None Include="Shader\AmbientOcclusion\gaussianBlurHorizontal.comp">
-      <Filter>Shader\AO</Filter>
-    </None>
-    <None Include="Shader\AmbientOcclusion\expShadowRender.vert">
-      <Filter>Shader\AO</Filter>
-    </None>
-    <None Include="Shader\AmbientOcclusion\expShadowRender.frag">
-      <Filter>Shader\AO</Filter>
-    </None>
-    <None Include="Shader\AmbientOcclusion\expShadow.vert">
-      <Filter>Shader\AO</Filter>
-    </None>
-    <None Include="Shader\AmbientOcclusion\expShadow.frag">
-      <Filter>Shader\AO</Filter>
-    </None>
-    <None Include="Shader\AmbientOcclusion\deferIBL.vert">
-      <Filter>Shader\AO</Filter>
-    </None>
-    <None Include="Shader\AmbientOcclusion\deferIBL.frag">
+    <None Include="Shader\AmbientOcclusion\IBLSpecular.frag">
       <Filter>Shader\AO</Filter>
     </None>
     <None Include="Shader\AmbientOcclusion\defergbufferDome.vert">
@@ -261,12 +252,6 @@
     </None>
     <None Include="Shader\AmbientOcclusion\deferAmbientLight.frag">
       <Filter>Shader\AO</Filter>
-    </None>
-    <None Include="Shader\ImageBasedLighting\IBLSpecular.frag">
-      <Filter>Shader\IBL</Filter>
-    </None>
-    <None Include="Shader\ImageBasedLighting\IBLSpecular.vert">
-      <Filter>Shader\IBL</Filter>
     </None>
   </ItemGroup>
 </Project>
