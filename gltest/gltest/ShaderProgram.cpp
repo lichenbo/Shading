@@ -12,37 +12,45 @@
 
 ShaderProgram::ShaderProgram():attribNormalLoc(-1), attribVertexLoc(-1), attribTangentLoc(-1), attribTextureLoc(-1), num_groups_x(0), num_groups_y(0), num_groups_z(0)
 {
+    CHECK_ERROR;
     programId = glCreateProgram();
+    CHECK_ERROR;
+
 }
 
 bool ShaderProgram::AddVertexShaderPath(const char* path)
 {
+    CHECK_ERROR;
     const char* vertexShader = readFile(path);
     const char * src = vertexShader;
     vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShaderId, 1, &src, NULL);
+    CHECK_ERROR;
     return compileShader(vertexShaderId);
 }
 
 bool ShaderProgram::AddFragmentShaderPath(const char* path)
 {
+    CHECK_ERROR;
     const char* fragmentShader = readFile(path);
     const char* src = fragmentShader;
     fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentShaderId, 1, &src, NULL);
-    
+    CHECK_ERROR;
     return compileShader(fragmentShaderId);
 }
 
 bool ShaderProgram::SetComputeShaderPath(const char* path)
 {
 #ifdef _WIN32
+    CHECK_ERROR;
 	const char* computeShader = readFile(path);
 	GLuint computeShaderId = glCreateShader(GL_COMPUTE_SHADER);
 	glShaderSource(computeShaderId, 1, &computeShader, NULL);
 	compileShader(computeShaderId);
 	glLinkProgram(programId);
 	glDetachShader(programId, computeShaderId);
+    CHECK_ERROR;
 #endif
 	return true;
 }
@@ -59,6 +67,8 @@ bool ShaderProgram::SetupComputeShader(int num_groups_x, int num_groups_y, int n
 
 bool ShaderProgram::compileShader(GLuint shaderId)
 {
+    CHECK_ERROR;
+
     glCompileShader(shaderId);
     
     GLint info;
@@ -72,10 +82,13 @@ bool ShaderProgram::compileShader(GLuint shaderId)
         std::cout << "shader compilation error" << std::endl;
         std::cout << logBuffer <<std::endl;
         delete logBuffer;
+        CHECK_ERROR;
         return false;
     }
     
     glAttachShader(programId, shaderId);
+    CHECK_ERROR;
+
     return true;
 }
 
@@ -93,6 +106,7 @@ bool ShaderProgram::Link()
         std::cout << "shader linking error" << std::endl;
         std::cout << logBuffer <<std::endl;
         delete logBuffer;
+        CHECK_ERROR;
         return false;
     }
     
@@ -133,19 +147,25 @@ void ShaderProgram::Use()
 
 GLint ShaderProgram::GetAttribute(const char* attr_name)
 {
+    CHECK_ERROR;
+
     GLint attributeLoc;
     attributeLoc = glGetAttribLocation(programId, attr_name);
     if (attributeLoc == -1) std::cout << attr_name << " is invalid in shader" << std::endl;
+    CHECK_ERROR;
 
     return attributeLoc;
 }
 
 GLint ShaderProgram::GetUniform(const char* uniform_name)
 {
+    CHECK_ERROR;
+
     GLint uniformLoc;
     uniformLoc = glGetUniformLocation(programId, uniform_name);
     if (uniformLoc == -1) std::cout << uniform_name << " is invalid in shader" << std::endl;
-    
+    CHECK_ERROR;
+
     return uniformLoc;
 }
 
@@ -208,6 +228,9 @@ GLint ShaderProgram::GetAttribTexture()
 
 void ShaderProgram::BindUniformBlockToPoint(const char* block_name, int uniform_binding_point)
 {
+    CHECK_ERROR;
 	int loc = GetUniformBlock(block_name);
 	glUniformBlockBinding(programId, loc, uniform_binding_point);
+    CHECK_ERROR;
+
 }

@@ -11,6 +11,8 @@
 
 Texture::Texture(const int w, const int h): w(w), h(h), unit(0)
 {
+    CHECK_ERROR;
+
     glGenTextures(1, &renderedTexture);
     glBindTexture(GL_TEXTURE_2D, renderedTexture);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, w, h, 0, GL_RGBA, GL_FLOAT, 0);
@@ -24,31 +26,47 @@ Texture::Texture(const int w, const int h): w(w), h(h), unit(0)
 
 void Texture::LoadData(float* data)
 {
+    CHECK_ERROR;
+
     glBindTexture(GL_TEXTURE_2D, renderedTexture);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, w, h, 0, GL_RGBA, GL_FLOAT, data);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
     glBindTexture(GL_TEXTURE_2D, 0);
+    CHECK_ERROR;
+
 }
 
 void Texture::BindToUnit(const int unit)
 {
+    CHECK_ERROR;
+
     this->unit = unit;
     glActiveTexture(GL_TEXTURE0 + unit);
     glBindTexture(GL_TEXTURE_2D, renderedTexture);
+    CHECK_ERROR;
+
 }
 
 void Texture::BindToImageUnit(const int unit)
 {
 #ifdef _WIN32
+    CHECK_ERROR;
+
 	glBindImageTexture(unit, renderedTexture, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
+    CHECK_ERROR;
+
 #endif
 }
 
 void Texture::Unbind()
 {
+    CHECK_ERROR;
+
     glActiveTexture(GL_TEXTURE0 + unit);
     glBindTexture(GL_TEXTURE_2D, 0);
+    CHECK_ERROR;
+
 }
 
 GLuint Texture::textureId() const

@@ -12,6 +12,8 @@
 
 FBO::FBO(const int w, const int h, const int numOfTex):w(w), h(h), numOfTex(numOfTex)
 {
+    CHECK_ERROR;
+
     glGenFramebuffers(1, &fbo);
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
     
@@ -41,6 +43,8 @@ FBO::FBO(const int w, const int h, const int numOfTex):w(w), h(h), numOfTex(numO
         std::cout << "FBO Error:" << status << std::endl;
     
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    CHECK_ERROR;
+
 }
 
 Texture* FBO::GetTexture(int index)
@@ -55,13 +59,20 @@ Texture* FBO::GetTexture(int index)
 
 void FBO::Bind()
 {
+    CHECK_ERROR;
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 	glViewport(0, 0, w, h);
+    CHECK_ERROR;
+
 }
 
 void FBO::Unbind()
 {
+    CHECK_ERROR;
+
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_WIDTH));
+    CHECK_ERROR;
+
 }
 

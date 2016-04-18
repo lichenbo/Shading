@@ -40,11 +40,15 @@ void Mesh::BindVertexAttribute(GLint loc)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glEnableVertexAttribArray(loc);
     glBindVertexArray(0);
+    CHECK_ERROR;
+
 }
 
 // 3 floats, NO TRANSPOSE
 void Mesh::BindNormalAttribute(GLint loc)
 {
+    CHECK_ERROR;
+
     glBindVertexArray(vao);
     glGenBuffers(1, &vbo_normal);
     const GLfloat* normal_buffer_data = normal_data;
@@ -56,10 +60,14 @@ void Mesh::BindNormalAttribute(GLint loc)
     glEnableVertexAttribArray(loc);
     
     glBindVertexArray(0);
+    CHECK_ERROR;
+
 }
 
 void Mesh::BindTextureAttribute(GLint loc)
 {
+    CHECK_ERROR;
+
     glBindVertexArray(vao);
     glGenBuffers(1, &vbo_texture);
     const GLfloat* texture_buffer_data = texture_data;
@@ -70,6 +78,8 @@ void Mesh::BindTextureAttribute(GLint loc)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glEnableVertexAttribArray(loc);
     glBindVertexArray(0);
+    CHECK_ERROR;
+
 }
 
 void Mesh::BindTangentAttribute(GLint loc)
@@ -149,14 +159,18 @@ void Mesh::LoadSquare()
 
 void Mesh::Draw()
 {
+    CHECK_ERROR;
     RebindUniforms();
 	glBindVertexArray(vao);
     glDrawArrays(GL_TRIANGLES, 0, numberOfVertices);
 	glBindVertexArray(0);
+    CHECK_ERROR;
+
 }
 
 void Mesh::RebindUniforms()
 {
+    CHECK_ERROR;
     for (auto item : UniformMatrix4Mapper)
     {
         glUniformMatrix4fv(item.first, 1, GL_FALSE, *(item.second));
@@ -169,5 +183,6 @@ void Mesh::RebindUniforms()
     {
         glUniform1i(item.first, item.second);
     }
-    
+    CHECK_ERROR;
+
 }

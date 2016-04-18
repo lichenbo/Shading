@@ -22,11 +22,15 @@ Pass::Pass(ShaderProgram* shader, Scene* scene) : shader(shader), scene(scene), 
 
 void Pass::GlobalBindUniformBlock(const char* block_name, char* buf, int sizeInBytes)
 {
+    CHECK_ERROR;
+
 	GLuint blockID;
 	glGenBuffers(1, &blockID);
 	shader->BindUniformBlockToPoint(block_name, uniform_binding_point);
 	glBindBufferBase(GL_UNIFORM_BUFFER, uniform_binding_point, blockID);
 	glBufferData(GL_UNIFORM_BUFFER, sizeInBytes, buf, GL_STATIC_DRAW);
+    CHECK_ERROR;
+
 }
 
 // Refresh Pass-Scope Uniforms on Every Pass Draw
@@ -85,6 +89,8 @@ void Pass::BindImage(const char* uniform_image_name, Texture* texture)
 
 void Pass::Draw()
 {
+    CHECK_ERROR;
+
 	glViewport(0, 0, glutGet(GLUT_WINDOW_HEIGHT), glutGet(GLUT_WINDOW_WIDTH));
     shader->Use();
     
@@ -131,6 +137,8 @@ void Pass::Draw()
         targetFBO->Unbind();
 	
     shader->Unuse();
+    CHECK_ERROR;
+
 }
 
 void Pass::BindAttribVertex()
