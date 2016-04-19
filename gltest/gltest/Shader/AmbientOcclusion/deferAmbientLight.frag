@@ -25,7 +25,7 @@ float ambientFactor(float range, float numSamplePoints)
 {
 	vec2 frag_window_coord = gl_FragCoord.xy; //Relative to window coordinate
 	vec2 frag_coord = vec2(float(frag_window_coord.x)/windowWidth, float(frag_window_coord.y)/windowHeight); // Clamp to 0..1
-	frag_coord = texture_coord;
+	//frag_coord = texture_coord;
 	vec3 position = texture(positionTexture, frag_coord.st).xyz;
 	vec3 normal = texture(normalTexture, frag_coord.st).xyz;
 	float depth = texture(depthTexture, frag_coord.st).x;

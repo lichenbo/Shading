@@ -264,8 +264,8 @@ int main(int argc, char * argv[]) {
 	gbufferPass.BindUniformMatrix4("ProjectionMatrix", &ProjectionMatrixPtr);
     gbufferPass.BindUniformVec3("eyePos", &EyePosPtr);
 
-	ambientPass.BindUniformInt1("windowHeight", GLUT_WINDOW_HEIGHT);
-	ambientPass.BindUniformInt1("windowWidth", GLUT_WINDOW_WIDTH);
+	ambientPass.BindUniformInt1("windowHeight", glutGet(GLUT_WINDOW_HEIGHT));
+	ambientPass.BindUniformInt1("windowWidth", glutGet(GLUT_WINDOW_WIDTH));
 
 	iblSpecularPass.BindUniformVec3("eyePos", &EyePosPtr);
 
