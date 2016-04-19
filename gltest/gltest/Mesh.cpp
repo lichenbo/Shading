@@ -97,6 +97,18 @@ void Mesh::Load(const char* filename)
 	texture_data = model->Textures;
 }
 
+//void Mesh::LoadPoint()
+//{
+//	vertex_data = new GLfloat[3];
+//	vertex_data[0] = 0.0f;
+//	vertex_data[1] = 0.0f;
+//	vertex_data[2] = 0.0f;
+//
+//	normal_data[0] = 0.0f;
+//
+//
+//}
+
 void Mesh::LoadSquare()
 {
     numberOfVertices = 6;

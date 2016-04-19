@@ -21,6 +21,7 @@ public:
     ShaderProgram();
     bool AddVertexShaderPath(const char* path);
     bool AddFragmentShaderPath(const char* path);
+	bool AddGeometryShaderPath(const char* path);
 	bool SetComputeShaderPath(const char* path);
 	bool AddComputeShaderPath(const char* path);
 	bool SetupComputeShader(int num_groups_x, int num_groups_y, int num_groups_z);
@@ -45,8 +46,8 @@ public:
 private:
     GLuint vertexShaderId;
     GLuint fragmentShaderId;
-    
-    char* readFile(const char* path);
+	GLuint geometryShaderId;
+	char* readFile(const char* path);
     bool compileShader(GLuint shaderId);
     
     GLuint programId;

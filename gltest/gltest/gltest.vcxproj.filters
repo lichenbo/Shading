@@ -34,6 +34,9 @@
     <Filter Include="Shader\AO">
       <UniqueIdentifier>{91b957c5-875c-4cc4-a37a-d3fe293917c6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader\VolumetricFire">
+      <UniqueIdentifier>{c367410f-10e8-45ce-8ad4-0d745249c8f8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

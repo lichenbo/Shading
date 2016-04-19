@@ -10,7 +10,7 @@
 #include <iostream>
 #include "Texture.hpp"
 
-ShaderProgram::ShaderProgram():attribNormalLoc(-1), attribVertexLoc(-1), attribTangentLoc(-1), attribTextureLoc(-1), num_groups_x(0), num_groups_y(0), num_groups_z(0)
+ShaderProgram::ShaderProgram():attribNormalLoc(-1), attribVertexLoc(-1), attribTangentLoc(-1), attribTextureLoc(-1), num_groups_x(0), num_groups_y(0), num_groups_z(0), vertexShaderId(-1), fragmentShaderId(-1), geometryShaderId(-1)
 {
     CHECK_ERROR;
     programId = glCreateProgram();
@@ -38,6 +38,17 @@ bool ShaderProgram::AddFragmentShaderPath(const char* path)
     glShaderSource(fragmentShaderId, 1, &src, NULL);
     CHECK_ERROR;
     return compileShader(fragmentShaderId);
+}
+
+bool ShaderProgram::AddGeometryShaderPath(const char* path)
+{
+	CHECK_ERROR;
+	const char* geometryShader = readFile(path);
+	const char* src = geometryShader;
+	geometryShaderId = glCreateShader(GL_GEOMETRY_SHADER);
+	glShaderSource(geometryShaderId, 1, &src, NULL);
+	CHECK_ERROR;
+	return compileShader(geometryShaderId);
 }
 
 bool ShaderProgram::SetComputeShaderPath(const char* path)
@@ -94,6 +105,7 @@ bool ShaderProgram::compileShader(GLuint shaderId)
 
 bool ShaderProgram::Link()
 {
+    CHECK_ERROR;
     glLinkProgram(programId);
     
     GLint info;
@@ -113,7 +125,9 @@ bool ShaderProgram::Link()
     // Detach shader after linking successfully
     glDetachShader(programId, fragmentShaderId);
     glDetachShader(programId, vertexShaderId);
+	glDetachShader(programId, geometryShaderId);
     
+    CHECK_ERROR;
     return true;
 }
 
@@ -142,7 +156,9 @@ char* ShaderProgram::readFile(const char * path)
 
 void ShaderProgram::Use()
 {
+    CHECK_ERROR;
     glUseProgram(programId);
+    CHECK_ERROR;
 }
 
 GLint ShaderProgram::GetAttribute(const char* attr_name)
@@ -172,8 +188,10 @@ GLint ShaderProgram::GetUniform(const char* uniform_name)
 GLint ShaderProgram::GetUniformBlock(const char* block_name)
 {
 	GLint blockLoc;
+    CHECK_ERROR;
 	blockLoc = glGetUniformBlockIndex(programId, block_name);
 	if (blockLoc == -1) std::cout << block_name << " is invalid in shader" << std::endl;
+    CHECK_ERROR;
 	return blockLoc;
 }
 
@@ -185,7 +203,9 @@ void ShaderProgram::Unuse()
 void ShaderProgram::Compute()
 {
 #ifdef _WIN32
+    CHECK_ERROR;
 	glDispatchCompute(num_groups_x, num_groups_y, num_groups_z);
+    CHECK_ERROR;
 #endif
 }
 

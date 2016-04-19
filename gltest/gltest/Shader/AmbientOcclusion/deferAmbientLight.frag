@@ -21,21 +21,21 @@ vec3 Linear2sRGB(vec4 pixel)
     return vec3(pow(converted.x, 1/2.2),pow(converted.y, 1/2.2),pow(converted.z, 1/2.2));
 }
 
-float selectPi(float range, float numSamplePoints)
+float ambientFactor(float range, float numSamplePoints)
 {
 	vec2 frag_window_coord = gl_FragCoord.xy; //Relative to window coordinate
-	vec2 frag_coord = vec2(frag_window_coord.x/windowWidth, frag_window_coord.y/windowHeight); // Clamp to 0..1
+	vec2 frag_coord = vec2(float(frag_window_coord.x)/windowWidth, float(frag_window_coord.y)/windowHeight); // Clamp to 0..1
 	frag_coord = texture_coord;
 	vec3 position = texture(positionTexture, frag_coord.st).xyz;
 	vec3 normal = texture(normalTexture, frag_coord.st).xyz;
 	float depth = texture(depthTexture, frag_coord.st).x;
 
-	float phi = (30*int(frag_window_coord.x)^int(frag_window_coord.y))+10*frag_window_coord.x*frag_window_coord.y;
+	float phi = (30*(int(frag_window_coord.x)^int(frag_window_coord.y)))+10*frag_window_coord.x*frag_window_coord.y;
 	float S = 0.0;
 	float c = 0.1*range;
 	float delta = 0.001;
 	float s = 0.1; // adjustable scale;
-	float k = 100; // adjustable contrast;s
+	float k = 50; // adjustable contrast;
 	for (int i = 0; i < numSamplePoints; ++i)
 	{
 		float alpha = (i+0.5)/numSamplePoints;
@@ -50,14 +50,8 @@ float selectPi(float range, float numSamplePoints)
 		}
 	}
 	S *= 2*M_PI*c/numSamplePoints;
-	if (1 - s*S > 0)
-	{
-		return pow(1-s*S,k);
-	}
-	else
-	{
-		return 0;
-	}
+	return (1-s*S > 0) ? pow(1-s*S,k):0;
+
 }
 
 void main(void)
@@ -66,5 +60,6 @@ void main(void)
 	vec4 pixel= texture(domeIrrTexture, vec2(0.5+atan(gnormal.z, gnormal.x)/(2*M_PI), 0.5-asin(gnormal.y)/M_PI));
     vec3 ambientColor = Linear2sRGB(pixel) * 4;
     //vec3 ambientColor = Linear2sRGB(pixel) / M_PI;
-    outputColor.xyz = selectPi(1,15) * ambientColor * texture(diffuseTexture, texture_coord.st).xyz;
+    outputColor.xyz = ambientFactor(0.5,15) * ambientColor * texture(diffuseTexture, texture_coord.st).xyz;
+
 }

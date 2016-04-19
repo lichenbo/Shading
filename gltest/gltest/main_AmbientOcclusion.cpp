@@ -48,20 +48,20 @@ auto ViewMatrix = glm::lookAt(EyePos, WatchPos, UpPos);
 auto ViewInverseMatrix = glm::inverse(ViewMatrix);
 
 // Sphere1
-auto Sphere1ModelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(0.25f));
+auto Sphere1ModelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(5.0f));
 auto Sphere1NormalMatrix = glm::transpose(glm::inverse(Sphere1ModelMatrix));
 auto Sphere1Diffuse = glm::vec3(1.0);
 auto Sphere1Specular = glm::vec3(1.0);
 auto Sphere1Gloss = glm::vec3(0.1);
 // Sphere2
-auto Sphere2ModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(-0.5f)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.25f));
+auto Sphere2ModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(-0.25f)) * glm::scale(glm::mat4(1.0f), glm::vec3(5.0f));
 auto Sphere2NormalMatrix = glm::transpose(glm::inverse(Sphere1ModelMatrix));
 auto Sphere2Diffuse = glm::vec3(1.0);
 auto Sphere2Specular = glm::vec3(1.0);
 auto Sphere2Gloss = glm::vec3(0.5);
 
 // Sphere3
-auto Sphere3ModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.25f));
+auto Sphere3ModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.25f)) * glm::scale(glm::mat4(1.0f), glm::vec3(5.0f));
 auto Sphere3NormalMatrix = glm::transpose(glm::inverse(Sphere1ModelMatrix));
 auto Sphere3Diffuse = glm::vec3(1.0);
 auto Sphere3Specular = glm::vec3(1.0);
@@ -70,6 +70,13 @@ auto Sphere3Gloss = glm::vec3(1.0);
 // Dome
 auto DomeModelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(10.0f));
 auto DomeNormalMatrix = glm::transpose(glm::inverse(DomeModelMatrix));
+
+// Ground
+auto GroundModelMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+auto GroundNormalMatrix = glm::transpose(glm::inverse(GroundModelMatrix));
+auto GroundDiffuse = glm::vec3(1.0, 0.0, 0.0);
+auto GroundSpecular = glm::vec3(0.0);
+auto GroundGloss = glm::vec3(1.0);
 
 // -------------------- POINTERS ZONE ------------------------
 auto EyePosPtr = glm::value_ptr(EyePos);
@@ -95,6 +102,11 @@ auto Sphere3SpecularPtr = glm::value_ptr(Sphere3Specular);
 auto Sphere3GlossPtr = glm::value_ptr(Sphere3Gloss);
 auto DomeModelMatrixPtr = glm::value_ptr(DomeModelMatrix);
 auto DomeNormalMatrixPtr = glm::value_ptr(DomeNormalMatrix);
+auto GroundModelMatrixPtr = glm::value_ptr(GroundModelMatrix);
+auto GroundNormalMatrixPtr = glm::value_ptr(GroundNormalMatrix);
+auto GroundDiffusePtr = glm::value_ptr(GroundDiffuse);
+auto GroundSpecularPtr = glm::value_ptr(GroundSpecular);
+auto GroundGlossPtr = glm::value_ptr(GroundGloss);
 
 // --------------------------------------------------------
 
@@ -198,13 +210,17 @@ int main(int argc, char * argv[]) {
     
 	// --------------SHADER LOADING--------------------------
 
-	GET_MODEL_PATH(path, 256, "sphere.ply");
-	Mesh dome, sphere1, sphere2, sphere3;
+	GET_MODEL_PATH(path, 256, "bunny_smooth.ply");
+	Mesh sphere1, sphere2, sphere3;
     sphere1.Load(path);
     sphere2.Load(path);
     sphere3.Load(path);
-
+	GET_MODEL_PATH(path, 256, "sphere.ply");
+	Mesh dome;
     dome.Load(path);
+	
+	Mesh Ground;
+	Ground.LoadSquare();
 
 	Mesh AmbientFSQ;
 	AmbientFSQ.LoadSquare();
@@ -219,6 +235,7 @@ int main(int argc, char * argv[]) {
 	SphereScene.addObject(&sphere2);
 	SphereScene.addObject(&sphere3);
     SphereScene.addObject(&dome);
+	SphereScene.addObject(&Ground);
 
 	Scene ambientScene;
 	ambientScene.addObject(&AmbientFSQ);
@@ -282,6 +299,10 @@ int main(int argc, char * argv[]) {
 	gbufferPass.MeshBindUniformMatrix4(&dome, "NormalMatrix", &DomeNormalMatrixPtr);
     gbufferPass.MeshBindUniformInt1(&dome, "isDome", 1);
 	
+	gbufferPass.MeshBindUniformMatrix4(&Ground, "ModelMatrix", &GroundModelMatrixPtr);
+	gbufferPass.MeshBindUniformMatrix4(&Ground, "NormalMatrix", &GroundNormalMatrixPtr);
+	gbufferPass.MeshBindUniformInt1(&Ground, "isDome", 0);
+	gbufferPass.MeshBindUniformVec3(&Ground, "diffuse", &GroundDiffusePtr);
     
     // ------------ BIND MESH-WISE UNIFORMS ----------------
 	char* block = buildHammersleyRandom(20);
