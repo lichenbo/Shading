@@ -24,8 +24,8 @@ vec3 Linear2sRGB(vec4 pixel)
 float ambientFactor(float range, float numSamplePoints)
 {
 	vec2 frag_window_coord = gl_FragCoord.xy; //Relative to window coordinate
-	vec2 frag_coord = vec2(float(frag_window_coord.x)/windowWidth, float(frag_window_coord.y)/windowHeight); // Clamp to 0..1
-	//frag_coord = texture_coord;
+	//vec2 frag_coord = vec2(float(frag_window_coord.x)/windowWidth, float(frag_window_coord.y)/windowHeight); // Clamp to 0..1
+	vec2 frag_coord = texture_coord;
 	vec3 position = texture(positionTexture, frag_coord.st).xyz;
 	vec3 normal = texture(normalTexture, frag_coord.st).xyz;
 	float depth = texture(depthTexture, frag_coord.st).x;
@@ -35,13 +35,13 @@ float ambientFactor(float range, float numSamplePoints)
 	float c = 0.1*range;
 	float delta = 0.001;
 	float s = 0.1; // adjustable scale;
-	float k = 50; // adjustable contrast;
+	float k = 10; // adjustable contrast;
 	for (int i = 0; i < numSamplePoints; ++i)
 	{
 		float alpha = (i+0.5)/numSamplePoints;
 		float h = alpha*range/depth;
 		float theta = 2*M_PI*alpha*(7*numSamplePoints/9)+phi;
-		vec3 Pi = texture(diffuseTexture, frag_coord+h*vec2(cos(theta),sin(theta))).xyz;
+		vec3 Pi = texture(positionTexture, frag_coord+h*vec2(cos(theta),sin(theta))).xyz;
 		
 		vec3 OmegaI = (Pi - position).xyz;
 		if (range > length(OmegaI))

@@ -48,7 +48,7 @@ auto ViewMatrix = glm::lookAt(EyePos, WatchPos, UpPos);
 auto ViewInverseMatrix = glm::inverse(ViewMatrix);
 
 // Sphere1
-auto Sphere1ModelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(5.0f));
+auto Sphere1ModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -0.25f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(5.0f));
 auto Sphere1NormalMatrix = glm::transpose(glm::inverse(Sphere1ModelMatrix));
 auto Sphere1Diffuse = glm::vec3(1.0);
 auto Sphere1Specular = glm::vec3(1.0);
@@ -61,7 +61,7 @@ auto Sphere2Specular = glm::vec3(1.0);
 auto Sphere2Gloss = glm::vec3(0.5);
 
 // Sphere3
-auto Sphere3ModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.25f)) * glm::scale(glm::mat4(1.0f), glm::vec3(5.0f));
+auto Sphere3ModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.25f, -0.25f, .25f)) * glm::scale(glm::mat4(1.0f), glm::vec3(5.0f));
 auto Sphere3NormalMatrix = glm::transpose(glm::inverse(Sphere1ModelMatrix));
 auto Sphere3Diffuse = glm::vec3(1.0);
 auto Sphere3Specular = glm::vec3(1.0);
@@ -74,7 +74,7 @@ auto DomeNormalMatrix = glm::transpose(glm::inverse(DomeModelMatrix));
 // Ground
 auto GroundModelMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 auto GroundNormalMatrix = glm::transpose(glm::inverse(GroundModelMatrix));
-auto GroundDiffuse = glm::vec3(1.0, 0.0, 0.0);
+auto GroundDiffuse = glm::vec3(1.0, 1.0, 1.0);
 auto GroundSpecular = glm::vec3(0.0);
 auto GroundGloss = glm::vec3(1.0);
 
