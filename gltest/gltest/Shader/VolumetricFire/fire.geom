@@ -1,7 +1,7 @@
 #version 330 core
 
-layout (points) in;
-layout (points, max_vertices = 1) out;
+layout(points) in;
+layout(points, max_vertices = 1) out;
 
 void main()
 {

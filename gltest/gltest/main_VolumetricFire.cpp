@@ -59,8 +59,8 @@ int main(int argc, char * argv[]) {
 
 	std::vector<glm::vec3> FireControlPoints;
 	FireControlPoints.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
-	FireControlPoints.push_back(glm::vec3(1.0f, 0.0f, 0.2f));
-	FireControlPoints.push_back(glm::vec3(-1.0f, 0.0f, 0.6f));
+	FireControlPoints.push_back(glm::vec3(1.0f, 0.2f, 0.2f));
+	FireControlPoints.push_back(glm::vec3(-1.0f, 0.6f, -0.2f));
 	FireControlPoints.push_back(glm::vec3(0.0f, 1.0f, 0.0f));
 
 	char path[256];

@@ -44,7 +44,10 @@ float BSpline::N(float t, int p, int i)
 	{
 		if (memoN[p][i] == -1)
 		{
-			memoN[p][i] = (t - T(i)) / (T(i + p) - T(i))*N(t, p - 1, i) + (T(i + p + 1) - t) / (T(i + p + 1) - T(i + 1))*N(t, p - 1, i + 1);
+            if (T(i+p) == T(i)) memoN[p][i] = 0.0f;
+            else memoN[p][i] = (t - T(i)) / (T(i + p) - T(i))*N(t, p - 1, i);
+            if (T(i + p + 1) != T(i + 1))
+                memoN[p][i] += (T(i + p + 1) - t) / (T(i + p + 1) - T(i + 1))*N(t, p - 1, i + 1);
 		}
 		return memoN[p][i];
 	}
