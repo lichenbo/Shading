@@ -4,10 +4,11 @@
 
 in vec2 texture_coord;
 uniform vec3 eyePos;
+uniform sampler2D firetex;
 
 out vec4 outputColor;
 
 void main()
 {
-	outputColor.xyz = vec3(1.0f, 0.0f, 0.0f);
+	outputColor.xyz = texture(firetex, texture_coord.st);
 }

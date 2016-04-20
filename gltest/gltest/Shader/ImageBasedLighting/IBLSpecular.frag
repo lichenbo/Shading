@@ -85,7 +85,7 @@ void main()
 	vec3 R = 2*dot(N,V)*N - V; // reflection vector
 	vec3 A = normalize(cross(vec3(0,1,0),R));   //R as up dir, A is bi-up
 	vec3 B = normalize(cross(R,A)); // third axis
-	// [A R B] is the new transformation matrix, world coord -> refl coord
+	// [A R B] is the new transformation matrix, refl coord -> world coord
 
 	for (int i = 0; i < Number; ++i)
 	{

@@ -22,6 +22,7 @@
 		EBA25ABD1C9D8F260025CD64 /* FBO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EBA25ABB1C9D8F260025CD64 /* FBO.cpp */; };
 		EBA25AC01C9E17A60025CD64 /* Pass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EBA25ABE1C9E17A60025CD64 /* Pass.cpp */; };
 		EBA25AC31CA022140025CD64 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EBA25AC11CA022140025CD64 /* Texture.cpp */; };
+		EBBB54741CC83CAC0086BF1B /* libSOIL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EBBB54731CC83CAC0086BF1B /* libSOIL.a */; };
 		EBBFA6E31CA52BB7008C5807 /* main_basiclighting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EBBFA6E11CA52BB7008C5807 /* main_basiclighting.cpp */; };
 		EBBFA6E41CA52BB7008C5807 /* main_deferredShading.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EBBFA6E21CA52BB7008C5807 /* main_deferredShading.cpp */; };
 /* End PBXBuildFile section */
@@ -69,6 +70,7 @@
 		EBA25ABF1C9E17A60025CD64 /* Pass.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Pass.hpp; sourceTree = "<group>"; };
 		EBA25AC11CA022140025CD64 /* Texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Texture.cpp; sourceTree = "<group>"; };
 		EBA25AC21CA022140025CD64 /* Texture.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Texture.hpp; sourceTree = "<group>"; };
+		EBBB54731CC83CAC0086BF1B /* libSOIL.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSOIL.a; path = SOIL/MacLib/libSOIL.a; sourceTree = "<group>"; };
 		EBBFA6E01CA16324008C5807 /* gl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = gl.h; sourceTree = "<group>"; };
 		EBBFA6E11CA52BB7008C5807 /* main_basiclighting.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main_basiclighting.cpp; sourceTree = "<group>"; };
 		EBBFA6E21CA52BB7008C5807 /* main_deferredShading.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main_deferredShading.cpp; sourceTree = "<group>"; };
@@ -79,6 +81,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EBBB54741CC83CAC0086BF1B /* libSOIL.a in Frameworks */,
 				EB0C4B521C79DB6B00AF0BA6 /* GLUT.framework in Frameworks */,
 				EB6D56711C79C8ED000E35E6 /* OpenGL.framework in Frameworks */,
 			);
@@ -90,6 +93,7 @@
 		EB166A111BE788B700ED754D = {
 			isa = PBXGroup;
 			children = (
+				EBBB54731CC83CAC0086BF1B /* libSOIL.a */,
 				EB9451151CB201010081C137 /* IBL */,
 				EBA252C51C8C71240025CD64 /* Shader */,
 				EBA252C41C8C71030025CD64 /* Model */,
@@ -255,7 +259,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = ./glm;
+				HEADER_SEARCH_PATHS = (
+					./glm,
+					./SOIL/include,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -293,7 +300,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = ./glm;
+				HEADER_SEARCH_PATHS = (
+					./glm,
+					./SOIL/include,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
@@ -303,6 +313,10 @@
 		EB166A221BE788B700ED754D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SOIL/MacLib",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -310,6 +324,10 @@
 		EB166A231BE788B700ED754D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SOIL/MacLib",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

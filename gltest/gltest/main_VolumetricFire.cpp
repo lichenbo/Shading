@@ -17,6 +17,7 @@
 #include "Pass.hpp"
 #include "Texture.hpp"
 #include <iostream>
+#include "SOIL.h"
 
 
 #ifdef _WIN32
@@ -52,6 +53,12 @@ auto ProjectionMatrixPtr = glm::value_ptr(ProjectionMatrix);
 auto ViewMatrixPtr = glm::value_ptr(ViewMatrix);
 auto ViewInverseMatrixPtr = glm::value_ptr(ViewInverseMatrix);
 
+int pngwidth, pngheight;
+char* LoadPNG(const char* filename)
+{
+    unsigned char* image = SOIL_load_image(filename, &pngwidth, &pngheight, 0, SOIL_LOAD_RGBA);
+    return (char*)image;
+}
 
 // --------------------------------------------------------
 
@@ -65,6 +72,11 @@ int main(int argc, char * argv[]) {
 
 	char path[256];
 	engine = new Engine(argc, argv);
+    
+    GET_SHADER_PATH(path, 256, "../PNG/firetex.png");
+    char* pixels = LoadPNG(path);
+    Texture fireTexture(pngwidth, pngheight);
+    fireTexture.LoadData((float*)pixels);
 
 	ShaderProgram* fireShader = new ShaderProgram();
 	GET_SHADER_VOLFIRE_PATH(path, 256, "fire.vert");
@@ -98,7 +110,7 @@ int main(int argc, char * argv[]) {
 	directPass.BindUniformMatrix4("ViewMatrix", &ViewMatrixPtr);
 	directPass.BindUniformMatrix4("ProjectionMatrix", &ProjectionMatrixPtr);
     directPass.BindUniformVec3("eyePos", &EyePosPtr);
-
+    directPass.BindTexture("firetex", &fireTexture);
 
 	// ------------- BIND PASS-WISE UNIFORMS---------------
 

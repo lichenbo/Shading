@@ -212,8 +212,9 @@ void Mesh::Draw()
     CHECK_ERROR;
     RebindUniforms();
 	glBindVertexArray(vao);
-    glDrawArrays(GL_TRIANGLES, 0, numberOfVertices);
-	glBindVertexArray(0);
+    //glDrawArrays(GL_TRIANGLES, 0, numberOfVertices);
+    glDrawArrays(GL_POINTS, 0, numberOfVertices);
+    glBindVertexArray(0);
     CHECK_ERROR;
 
 }
