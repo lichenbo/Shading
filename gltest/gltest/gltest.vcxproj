@@ -172,6 +172,7 @@
     <ClCompile Include="main_deferredShading.cpp" />
     <ClCompile Include="main_ExpShadowMap.cpp" />
     <ClCompile Include="main_visBuffer.cpp" />
+    <ClCompile Include="main_VolumetricFire.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Pass.cpp" />
     <ClCompile Include="rgbe.cpp" />
@@ -225,6 +226,9 @@
     <None Include="Shader\VisibilityBuffer\shadow.vert" />
     <None Include="Shader\VisibilityBuffer\shadowRender.frag" />
     <None Include="Shader\VisibilityBuffer\shadowRender.vert" />
+    <None Include="Shader\VolumetricFire\fire.frag" />
+    <None Include="Shader\VolumetricFire\fire.geom" />
+    <None Include="Shader\VolumetricFire\fire.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

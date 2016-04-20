@@ -3,8 +3,8 @@
 
 BSpline::BSpline(std::vector<glm::vec3> uniformControlPoints, int degree) : n(uniformControlPoints.size()), degree(degree), controlPoints(uniformControlPoints)
 {
-	memoN = new float*[degree];
-	for (int i = 0; i < degree; ++i)
+	memoN = new float*[degree+1];
+	for (int i = 0; i < degree+1; ++i)
 	{
 		memoN[i] = new float[n+2]{-1};
 	}
@@ -12,14 +12,14 @@ BSpline::BSpline(std::vector<glm::vec3> uniformControlPoints, int degree) : n(un
 
 void BSpline::resetMemo()
 {
-	for (int i = 0; i < degree; ++i)
+	for (int i = 0; i < degree+1; ++i)
 		for (int j = 0; j < n+2; ++j)
 			memoN[i][j] = -1;
 }
 
 BSpline::~BSpline()
 {
-	for (int i = 0; i < degree; ++i)
+	for (int i = 0; i < degree+1; ++i)
 	{
 		delete[] memoN[i];
 	}

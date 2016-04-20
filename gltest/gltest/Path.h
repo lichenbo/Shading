@@ -18,6 +18,7 @@ const char* SHADER_EXPONENTIAL_PATH= "Shader/ExponentialShadowMap/";
 const char* SHADER_IMAGELIGHT_PATH= "Shader/ImageBasedLighting/";
 const char* SHADER_VISBUFFER_PATH= "Shader/VisibilityBuffer/";
 const char* SHADER_AO_PATH = "Shader/AmbientOcclusion/";
+const char* SHADER_VOLFIRE_PATH = "Shader/VolumetricFire/";
 const char* MODEL_PATH = "Model/";
 const char* HDR_PATH = "IBL/";
 
@@ -30,6 +31,7 @@ const char* SHADER_EXPONENTIAL_PATH = "../../gltest/Shader/ExponentialShadowMap/
 const char* SHADER_IMAGELIGHT_PATH = "../../gltest/Shader/ImageBasedLighting/";
 const char* SHADER_VISBUFFER_PATH= "../../gltest/Shader/VisibilityBuffer/";
 const char* SHADER_AO_PATH = "../../gltest/Shader/AmbientOcclusion/";
+const char* SHADER_VOLFIRE_PATH = "../../gltest/Shader/VolumetricFire/";
 
 const char* MODEL_PATH = "../../gltest/Model/";
 const char* HDR_PATH = "../../gltest/IBL/";
@@ -57,6 +59,11 @@ const char* HDR_PATH = "../../gltest/IBL/";
     memset(path, 0, n); \
     strcat(path, SHADER_AO_PATH); \
     strcat(path, str);
+
+#define GET_SHADER_VOLFIRE_PATH(path, n, str) \
+	memset(path, 0, n); \
+	strcat(path, SHADER_VOLFIRE_PATH); \
+	strcat(path, str);
 
 #define GET_SHADER_VISBUFFER_PATH(path, n, str) \
     memset(path, 0, n); \

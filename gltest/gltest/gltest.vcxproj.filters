@@ -125,6 +125,9 @@
     <ClCompile Include="BSpline.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="main_VolumetricFire.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Model\bunny.ply">
@@ -261,6 +264,15 @@
     </None>
     <None Include="Shader\AmbientOcclusion\deferAmbientLight.frag">
       <Filter>Shader\AO</Filter>
+    </None>
+    <None Include="Shader\VolumetricFire\fire.vert">
+      <Filter>Shader\VolumetricFire</Filter>
+    </None>
+    <None Include="Shader\VolumetricFire\fire.geom">
+      <Filter>Shader\VolumetricFire</Filter>
+    </None>
+    <None Include="Shader\VolumetricFire\fire.frag">
+      <Filter>Shader\VolumetricFire</Filter>
     </None>
   </ItemGroup>
 </Project>

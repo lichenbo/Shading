@@ -176,14 +176,15 @@ void Mesh::LoadBSpline(std::vector<glm::vec3> uniformControlPoints, int degree)
 	BSpline b(uniformControlPoints, degree);
 	float interval = 1.0 / numberOfVertices;
 	vertex_data = new GLfloat[3 * numberOfVertices];
-	int data_index = 0;
-	for (float i = 0.0f; i < 1.0f; i+=interval)
+	
+	float t = 0.0f;
+	for (int i = 0; i < numberOfVertices; ++i)
 	{
-		glm::vec3 point = b.Value(i);
-		vertex_data[data_index] = point.x;
-		vertex_data[data_index + 1] = point.y;
-		vertex_data[data_index + 2] = point.z;
-		data_index += 3;
+		glm::vec3 point = b.Value(t);
+		vertex_data[3*i] = point.x;
+		vertex_data[3*i + 1] = point.y;
+		vertex_data[3*i + 2] = point.z;
+		t += interval;
 	}
 
 	normal_data = new GLfloat[3 * numberOfVertices];
