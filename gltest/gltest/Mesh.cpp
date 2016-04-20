@@ -10,6 +10,7 @@
 #include "Model_PLY.h"
 #include "ShaderProgram.hpp"
 #include "gl.h"
+#include "BSpline.h"
 
 Mesh::Mesh(): vao(0)
 {
@@ -167,6 +168,42 @@ void Mesh::LoadSquare()
     texture_data[10] = 1.0f;
     texture_data[11] = 0.0f;
     
+}
+
+void Mesh::LoadBSpline(std::vector<glm::vec3> uniformControlPoints, int degree)
+{
+	numberOfVertices = uniformControlPoints.size() * 50;
+	BSpline b(uniformControlPoints, degree);
+	float interval = 1.0 / numberOfVertices;
+	vertex_data = new GLfloat[3 * numberOfVertices];
+	int data_index = 0;
+	for (float i = 0.0f; i < 1.0f; i+=interval)
+	{
+		glm::vec3 point = b.Value(i);
+		vertex_data[data_index] = point.x;
+		vertex_data[data_index + 1] = point.y;
+		vertex_data[data_index + 2] = point.z;
+		data_index += 3;
+	}
+
+	normal_data = new GLfloat[3 * numberOfVertices];
+	for (int i = 1; i < numberOfVertices-1; ++i)
+	{
+		glm::vec3 prevPoint(vertex_data[3 * i - 3], vertex_data[3 * i - 2], vertex_data[3 * i - 1]);
+		glm::vec3 nextPoint(vertex_data[3 * i + 3], vertex_data[3 * i + 4], vertex_data[3 * i + 5]);
+		glm::vec3 dirVec = nextPoint - prevPoint;
+		normal_data[3 * i] = dirVec.x;
+		normal_data[3 * i + 1] = dirVec.y;
+		normal_data[3 * i + 2] = dirVec.z;
+	}
+	normal_data[0] = 0.0f;
+	normal_data[1] = 1.0f;
+	normal_data[2] = 0.0f;
+	normal_data[3 * numberOfVertices - 3] = 0.0f;
+	normal_data[3 * numberOfVertices - 2] = 1.0f;
+	normal_data[3 * numberOfVertices - 1] = 0.0f;
+	
+	
 }
 
 void Mesh::Draw()

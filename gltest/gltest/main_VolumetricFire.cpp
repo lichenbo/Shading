@@ -5,8 +5,7 @@
 //  Created by Chenbo Li on 11/2/15.
 //  Copyright ? 2015 binarythink. All rights reserved.
 //
-//
-//#define __MAIN_ENTRY
+#define __MAIN_ENTRY
 #ifdef __MAIN_ENTRY
 
 #include "gl.h"
@@ -35,10 +34,6 @@ void mouseMove(int x, int y);
 void mouseClick(int button, int state, int x, int y);
 void mouseWheel(int, int dir, int, int);
 void keyboardPress(unsigned char c, int x, int y);
-void readHDR(const char* path, float* data, int& width, int& height);
-glm::vec3 RGB2Linear(glm::vec3 rgb);
-glm::vec3 Linear2RGB(glm::vec3 linear);
-
 
 // ----------------- VARIABLE ZONE --------------------------
 auto EyePos = glm::vec3(0.0f, 0.0f, 3.0f);

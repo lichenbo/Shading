@@ -21,6 +21,8 @@ public:
     Mesh();
     void Load(const char* filename);
     void LoadSquare();
+	float getBSplineT(int i, int n, int degree);
+	void LoadBSpline(std::vector<glm::vec3> controlPoints, int degree);
     void Draw();
     void BindVertexAttribute(GLint loc);
     void BindNormalAttribute(GLint loc);
