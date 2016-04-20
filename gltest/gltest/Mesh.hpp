@@ -10,6 +10,7 @@
 #define Mesh_hpp
 #include "glm.hpp"
 #include <unordered_map>
+#include <vector>
 #include "gl.h"
 
 class Model_PLY;

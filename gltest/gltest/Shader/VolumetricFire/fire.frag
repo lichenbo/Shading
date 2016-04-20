@@ -5,7 +5,9 @@
 in vec2 texture_coord;
 uniform vec3 eyePos;
 
+out vec4 outputColor;
+
 void main()
 {
-	gl_FragColor.xyz = vec3(1.0f, 0.0f, 0.0f);
+	outputColor.xyz = vec3(1.0f, 0.0f, 0.0f);
 }

@@ -13,6 +13,8 @@
 		EB0C4B5B1C7DBF4A00AF0BA6 /* ShaderProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB0C4B591C7DBF4A00AF0BA6 /* ShaderProgram.cpp */; };
 		EB6D56711C79C8ED000E35E6 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB6D56701C79C8ED000E35E6 /* OpenGL.framework */; };
 		EB75333F1CC369B900D709C1 /* main_AmbientOcclusion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB75333E1CC369B900D709C1 /* main_AmbientOcclusion.cpp */; };
+		EB7533431CC7589400D709C1 /* BSpline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB7533401CC7589400D709C1 /* BSpline.cpp */; };
+		EB7533441CC7589400D709C1 /* main_VolumetricFire.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB7533421CC7589400D709C1 /* main_VolumetricFire.cpp */; };
 		EB94510F1CAA84C90081C137 /* main_ExpShadowMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB94510E1CAA84C90081C137 /* main_ExpShadowMap.cpp */; };
 		EB9451131CB0DFCD0081C137 /* main_AdvancedLighting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB9451101CB0DFCD0081C137 /* main_AdvancedLighting.cpp */; };
 		EB9451141CB0DFCD0081C137 /* rgbe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB9451111CB0DFCD0081C137 /* rgbe.cpp */; };
@@ -47,6 +49,9 @@
 		EB166A1A1BE788B700ED754D /* gltest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = gltest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB6D56701C79C8ED000E35E6 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		EB75333E1CC369B900D709C1 /* main_AmbientOcclusion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main_AmbientOcclusion.cpp; sourceTree = "<group>"; };
+		EB7533401CC7589400D709C1 /* BSpline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BSpline.cpp; sourceTree = "<group>"; };
+		EB7533411CC7589400D709C1 /* BSpline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSpline.h; sourceTree = "<group>"; };
+		EB7533421CC7589400D709C1 /* main_VolumetricFire.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main_VolumetricFire.cpp; sourceTree = "<group>"; };
 		EB94510E1CAA84C90081C137 /* main_ExpShadowMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main_ExpShadowMap.cpp; sourceTree = "<group>"; };
 		EB9451101CB0DFCD0081C137 /* main_AdvancedLighting.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main_AdvancedLighting.cpp; sourceTree = "<group>"; };
 		EB9451111CB0DFCD0081C137 /* rgbe.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rgbe.cpp; sourceTree = "<group>"; };
@@ -106,6 +111,9 @@
 		EB166A1C1BE788B700ED754D /* gltest */ = {
 			isa = PBXGroup;
 			children = (
+				EB7533401CC7589400D709C1 /* BSpline.cpp */,
+				EB7533411CC7589400D709C1 /* BSpline.h */,
+				EB7533421CC7589400D709C1 /* main_VolumetricFire.cpp */,
 				EB75333E1CC369B900D709C1 /* main_AmbientOcclusion.cpp */,
 				EB9451101CB0DFCD0081C137 /* main_AdvancedLighting.cpp */,
 				EB9451111CB0DFCD0081C137 /* rgbe.cpp */,
@@ -191,10 +199,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB0C4B551C7DBD8300AF0BA6 /* Mesh.cpp in Sources */,
+				EB7533431CC7589400D709C1 /* BSpline.cpp in Sources */,
 				EBBFA6E41CA52BB7008C5807 /* main_deferredShading.cpp in Sources */,
 				EB75333F1CC369B900D709C1 /* main_AmbientOcclusion.cpp in Sources */,
 				EB9451131CB0DFCD0081C137 /* main_AdvancedLighting.cpp in Sources */,
 				EB0C4B5B1C7DBF4A00AF0BA6 /* ShaderProgram.cpp in Sources */,
+				EB7533441CC7589400D709C1 /* main_VolumetricFire.cpp in Sources */,
 				EB0C4B581C7DBDAC00AF0BA6 /* Engine.cpp in Sources */,
 				EB9451141CB0DFCD0081C137 /* rgbe.cpp in Sources */,
 				EBBFA6E31CA52BB7008C5807 /* main_basiclighting.cpp in Sources */,
