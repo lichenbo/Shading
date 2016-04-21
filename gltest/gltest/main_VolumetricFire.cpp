@@ -66,14 +66,14 @@ int main(int argc, char * argv[]) {
 
 	std::vector<glm::vec3> FireControlPoints;
 	FireControlPoints.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
-	FireControlPoints.push_back(glm::vec3(1.0f, 0.2f, 0.2f));
-	FireControlPoints.push_back(glm::vec3(-1.0f, 0.6f, -0.2f));
+	FireControlPoints.push_back(glm::vec3(0.5f, 0.2f, 0.2f));
+	FireControlPoints.push_back(glm::vec3(-0.5f, 0.6f, -0.2f));
 	FireControlPoints.push_back(glm::vec3(0.0f, 1.0f, 0.0f));
 
 	char path[256];
 	engine = new Engine(argc, argv);
     
-    GET_SHADER_PATH(path, 256, "../PNG/firetex_trans.png");
+    GET_SHADER_PATH(path, 256, "../PNG/firetex.png");
     char* pixels = LoadPNG(path);
     Texture fireTexture(pngwidth, pngheight);
     fireTexture.LoadData((float*)pixels);

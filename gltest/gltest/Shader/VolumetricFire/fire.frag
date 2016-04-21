@@ -10,8 +10,8 @@ out vec4 outputColor;
 
 void main()
 {
-	outputColor = texture(firetex, texture_coord.st);
-	//outputColor.xy = texture_coord.st;
-	//outputColor.z = 0.0;
-	//outputColor.w = 1.0;
+	vec2 new_coord = vec2(texture_coord.s, 1-texture_coord.t);
+	//vec2 new_coord = texture_coord;
+	outputColor = texture(firetex, new_coord.st);
+
 }
