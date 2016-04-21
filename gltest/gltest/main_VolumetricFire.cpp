@@ -73,7 +73,7 @@ int main(int argc, char * argv[]) {
 	char path[256];
 	engine = new Engine(argc, argv);
     
-    GET_SHADER_PATH(path, 256, "../PNG/firetex.png");
+    GET_SHADER_PATH(path, 256, "../PNG/firetex_trans.png");
     char* pixels = LoadPNG(path);
     Texture fireTexture(pngwidth, pngheight);
     fireTexture.LoadData((float*)pixels);
@@ -112,6 +112,7 @@ int main(int argc, char * argv[]) {
     directPass.BindUniformVec3("eyePos", &EyePosPtr);
     directPass.BindTexture("firetex", &fireTexture);
 
+	directPass.SetBlend(true);
 	// ------------- BIND PASS-WISE UNIFORMS---------------
 
 	// ---------------PASS CONFIG --------------------------
