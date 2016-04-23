@@ -5,7 +5,7 @@
 //  Created by Chenbo Li on 11/2/15.
 //  Copyright ? 2015 binarythink. All rights reserved.
 //
-#define __MAIN_ENTRY
+//#define __MAIN_ENTRY
 #ifdef __MAIN_ENTRY
 
 #include "gl.h"

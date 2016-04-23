@@ -6,7 +6,7 @@
 //  Copyright ? 2015 binarythink. All rights reserved.
 //
 //
-//#define __MAIN_ENTRY
+#define __MAIN_ENTRY
 #ifdef __MAIN_ENTRY
 
 #include "gl.h"
@@ -181,15 +181,24 @@ int main(int argc, char * argv[]) {
 
 	ShaderProgram* defergbufferShader = new ShaderProgram();
 	FBO g_buffer(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT), 6);
+	FBO ambient_buffer(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT), 1);
 
 	GET_SHADER_AO_PATH(path, 256, "defergbufferDome.vert");
 	if (!defergbufferShader->AddVertexShaderPath(path)) return 0;
 	GET_SHADER_AO_PATH(path, 256, "defergbufferDome.frag");
 	if (!defergbufferShader->AddFragmentShaderPath(path)) return 0;
 	if (!defergbufferShader->Link()) return 0;
-
 	defergbufferShader->SetAttribVertex("vertex_coord");
 	defergbufferShader->SetAttribNormal("normal_coord");
+
+	ShaderProgram* aoShader = new ShaderProgram();
+	GET_SHADER_AO_PATH(path, 256, "aomap.vert");
+	if (!aoShader->AddVertexShaderPath(path)) return 0;
+	GET_SHADER_AO_PATH(path, 256, "aomap.frag");
+	if (!aoShader->AddFragmentShaderPath(path)) return 0;
+	if (!aoShader->Link()) return 0;
+	aoShader->SetAttribVertex("vertex_coord");
+	aoShader->SetAttribTexture("texture_coordinate");
 
 	ShaderProgram* ambientShader = new ShaderProgram();
 	GET_SHADER_AO_PATH(path, 256, "deferAmbientLight.vert");
@@ -223,6 +232,9 @@ int main(int argc, char * argv[]) {
 	Mesh Ground;
 	Ground.LoadSquare();
 
+	Mesh AOFSQ;
+	AOFSQ.LoadSquare();
+
 	Mesh AmbientFSQ;
 	AmbientFSQ.LoadSquare();
 
@@ -238,6 +250,9 @@ int main(int argc, char * argv[]) {
     SphereScene.addObject(&dome);
 	SphereScene.addObject(&Ground);
 
+	Scene aoScene;
+	aoScene.addObject(&AOFSQ);
+
 	Scene ambientScene;
 	ambientScene.addObject(&AmbientFSQ);
 
@@ -247,13 +262,17 @@ int main(int argc, char * argv[]) {
 	// --------------SCENE LOADING --------------------------
 
 	Pass gbufferPass(defergbufferShader, &SphereScene);
+	Pass aoPass(aoShader, &aoScene);
 	Pass ambientPass(ambientShader, &ambientScene);
 	Pass iblSpecularPass(iblSpecularShader, &iblSpecularScene);
 	gbufferPass.SetTarget(&g_buffer);
+	aoPass.SetTarget(&ambient_buffer);
 
 	gbufferPass.BindAttribNormal();
 	gbufferPass.BindAttribVertex();
     gbufferPass.BindAttribTexture();
+	aoPass.BindAttribVertex();
+	aoPass.BindAttribTexture();
 	ambientPass.BindAttribVertex();
 	ambientPass.BindAttribTexture();
 	iblSpecularPass.BindAttribVertex();
@@ -264,9 +283,8 @@ int main(int argc, char * argv[]) {
 	gbufferPass.BindUniformMatrix4("ViewMatrix", &ViewMatrixPtr);
 	gbufferPass.BindUniformMatrix4("ProjectionMatrix", &ProjectionMatrixPtr);
     gbufferPass.BindUniformVec3("eyePos", &EyePosPtr);
-
-	ambientPass.BindUniformInt1("windowHeight", glutGet(GLUT_WINDOW_HEIGHT));
-	ambientPass.BindUniformInt1("windowWidth", glutGet(GLUT_WINDOW_WIDTH));
+	aoPass.BindUniformInt1("windowHeight", glutGet(GLUT_WINDOW_HEIGHT));
+	aoPass.BindUniformInt1("windowWidth", glutGet(GLUT_WINDOW_WIDTH));
 
 	iblSpecularPass.BindUniformVec3("eyePos", &EyePosPtr);
 
@@ -328,14 +346,18 @@ int main(int argc, char * argv[]) {
 	Texture* specularTex = g_buffer.GetTexture(3);
 	Texture* glossTex = g_buffer.GetTexture(4);
 	Texture* depthTex = g_buffer.GetTexture(5);
+	Texture* aoTex = ambient_buffer.GetTexture(0);
 
     gbufferPass.BindTexture("domeTexture", domeTex);
+
+	aoPass.BindTexture("normalTexture", normalTex);
+	aoPass.BindTexture("positionTexture", positionTex);
+	aoPass.BindTexture("depthTexture", depthTex);
 
 	ambientPass.BindTexture("diffuseTexture", diffuseTex);
     ambientPass.BindTexture("domeIrrTexture", domeIrrTex);
 	ambientPass.BindTexture("normalTexture", normalTex);
-	ambientPass.BindTexture("positionTexture", positionTex);
-	ambientPass.BindTexture("depthTexture", depthTex);
+	ambientPass.BindTexture("aoTexture", aoTex);
 
 	iblSpecularPass.BindTexture("positionTexture", positionTex);
 	iblSpecularPass.BindTexture("normalTexture", normalTex);
@@ -346,6 +368,9 @@ int main(int argc, char * argv[]) {
 	gbufferPass.SetBlend(false);
 	gbufferPass.SetDepthTest(true);
 	gbufferPass.SetClear(true);
+	aoPass.SetBlend(false);
+	aoPass.SetDepthTest(false);
+	aoPass.SetClear(true);
 	ambientPass.SetBlend(false);
 	ambientPass.SetDepthTest(false);
 	ambientPass.SetClear(true);
@@ -355,6 +380,7 @@ int main(int argc, char * argv[]) {
 
 	// ---------------PASS CONFIG --------------------------
 	engine->addPass(&gbufferPass);
+	engine->addPass(&aoPass);
 	engine->addPass(&ambientPass);
 	engine->addPass(&iblSpecularPass);
 
