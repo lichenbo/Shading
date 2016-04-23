@@ -192,6 +192,8 @@
     <None Include="Shader\AmbientOcclusion\deferAmbientLight.vert" />
     <None Include="Shader\AmbientOcclusion\defergbufferDome.frag" />
     <None Include="Shader\AmbientOcclusion\defergbufferDome.vert" />
+    <None Include="Shader\AmbientOcclusion\gaussianBlurHorizontal.comp" />
+    <None Include="Shader\AmbientOcclusion\gaussianBlurVertical.comp" />
     <None Include="Shader\AmbientOcclusion\IBLSpecular.frag" />
     <None Include="Shader\AmbientOcclusion\IBLSpecular.vert" />
     <None Include="Shader\DeferredShading\deferAmbientLight.frag" />

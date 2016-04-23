@@ -280,5 +280,11 @@
     <None Include="Shader\AmbientOcclusion\aomap.vert">
       <Filter>Shader\AO</Filter>
     </None>
+    <None Include="Shader\AmbientOcclusion\gaussianBlurHorizontal.comp">
+      <Filter>Shader\AO</Filter>
+    </None>
+    <None Include="Shader\AmbientOcclusion\gaussianBlurVertical.comp">
+      <Filter>Shader\AO</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -38,7 +38,7 @@ float ambientFactor(float range, float numSamplePoints)
 		vec3 OmegaI = (Pi - position).xyz;
 		if (range > length(OmegaI))
 		{
-			S += max(0.0, dot(normal,OmegaI)-delta*depth)/max(c*c, dot(OmegaI,OmegaI));
+			S += max(0.0, dot(normal,OmegaI)-delta*position.z)/max(c*c, dot(OmegaI,OmegaI));
 		}
 	}
 	S *= 2*M_PI*c/numSamplePoints;

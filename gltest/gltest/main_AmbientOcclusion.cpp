@@ -174,6 +174,25 @@ char* buildHammersleyRandom(float N)
 	return (char*)block;
 }
 
+
+float* buildGaussianWeight(int w, float s)
+{
+	float* weights = new float[2 * w + 1];
+
+	for (int i = 0; i < 2 * w + 1; ++i)
+	{
+		weights[i] = exp(-0.5*((w - i) / s)*((w - i) / s)) / (2.50662827463 * s);
+	}
+	float sum = 0.0f;
+	for (int i = 0; i < w; ++i)
+	{
+		sum += weights[i];
+	}
+	weights[w] = 1.0 - 2 * sum;
+	return weights;
+}
+
+
 int main(int argc, char * argv[]) {
 
 	char path[256];
@@ -181,7 +200,8 @@ int main(int argc, char * argv[]) {
 
 	ShaderProgram* defergbufferShader = new ShaderProgram();
 	FBO g_buffer(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT), 6);
-	FBO ambient_buffer(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT), 1);
+	//FBO ambient_buffer(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT), 1);
+	FBO ambient_buffer(1024,1024, 1);
 
 	GET_SHADER_AO_PATH(path, 256, "defergbufferDome.vert");
 	if (!defergbufferShader->AddVertexShaderPath(path)) return 0;
@@ -217,6 +237,14 @@ int main(int argc, char * argv[]) {
 	if (!iblSpecularShader->Link()) return 0;
 	iblSpecularShader->SetAttribVertex("vertex");
 	iblSpecularShader->SetAttribTexture("texture_coordinate");
+
+	ShaderProgram* blurShaderHorizontal = new ShaderProgram();
+	GET_SHADER_AO_PATH(path, 256, "gaussianBlurHorizontal.comp");
+	blurShaderHorizontal->SetComputeShaderPath(path);
+
+	ShaderProgram* blurShaderVertical = new ShaderProgram();
+	GET_SHADER_AO_PATH(path, 256, "gaussianBlurVertical.comp");
+	blurShaderVertical->SetComputeShaderPath(path);
     
 	// --------------SHADER LOADING--------------------------
 
@@ -265,6 +293,8 @@ int main(int argc, char * argv[]) {
 	Pass aoPass(aoShader, &aoScene);
 	Pass ambientPass(ambientShader, &ambientScene);
 	Pass iblSpecularPass(iblSpecularShader, &iblSpecularScene);
+	Pass blurHorizontalPass(blurShaderHorizontal, NULL);
+	Pass blurVerticalPass(blurShaderVertical, NULL);
 	gbufferPass.SetTarget(&g_buffer);
 	aoPass.SetTarget(&ambient_buffer);
 
@@ -326,6 +356,12 @@ int main(int argc, char * argv[]) {
     // ------------ BIND MESH-WISE UNIFORMS ----------------
 	char* block = buildHammersleyRandom(20);
 	iblSpecularPass.GlobalBindUniformBlock("HammersleyBlock", block, sizeof(Hammersley_block));
+
+	int blurWidth = 10; // kenel half width
+	float h = 2 * blurWidth + 1; // What's this?
+	float* blurKernel = buildGaussianWeight(blurWidth, h / 2.0);
+	//blurHorizontalPass.GlobalBindUniformBlock("blurKernel", (char*)blurKernel, sizeof(float)*(2 * blurWidth + 1));
+	//blurVerticalPass.GlobalBindUniformBlock("blurKernel", (char*)blurKernel, sizeof(float)*(2 * blurWidth + 1));
     // ------------BIND GLOBAL UNIFROMS -------------------
 
     GET_HDR_PATH(path, 256, "Alexs_Apt_2k.hdr");
@@ -347,6 +383,17 @@ int main(int argc, char * argv[]) {
 	Texture* glossTex = g_buffer.GetTexture(4);
 	Texture* depthTex = g_buffer.GetTexture(5);
 	Texture* aoTex = ambient_buffer.GetTexture(0);
+	Texture* blurredShadowHorizontal = new Texture(aoTex->Width(), aoTex->Height());
+	Texture* blurredShadowVertical = new Texture(aoTex->Width(), aoTex->Height());
+	blurShaderHorizontal->SetupComputeShader(aoTex->Width() / 128, aoTex->Height(), 1);
+	blurShaderVertical->SetupComputeShader(aoTex->Width(), aoTex->Height() / 128, 1);
+	blurHorizontalPass.BindUniformInt1("kernelWidth", blurWidth);
+	blurVerticalPass.BindUniformInt1("kernelWidth", blurWidth);
+
+	//blurHorizontalPass.BindImage("src", aoTex);
+	//blurHorizontalPass.BindImage("dst", blurredShadowHorizontal);
+	//blurVerticalPass.BindImage("src", blurredShadowHorizontal);
+	//blurVerticalPass.BindImage("dst", blurredShadowVertical);
 
     gbufferPass.BindTexture("domeTexture", domeTex);
 
@@ -381,6 +428,8 @@ int main(int argc, char * argv[]) {
 	// ---------------PASS CONFIG --------------------------
 	engine->addPass(&gbufferPass);
 	engine->addPass(&aoPass);
+	//engine->addPass(&blurHorizontalPass);
+	//engine->addPass(&blurVerticalPass);
 	engine->addPass(&ambientPass);
 	engine->addPass(&iblSpecularPass);
 

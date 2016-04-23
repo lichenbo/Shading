@@ -212,7 +212,7 @@ int main(int argc, char * argv[]) {
     
     ShaderProgram* defergbufferShader = new ShaderProgram();
     FBO g_buffer(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT), 4);
-    FBO shadow_buffer(1024, 1024, 1);
+    FBO shadow_buffer(1024, 1024, 2);
     
     GET_SHADER_EXPONENTIAL_PATH(path, 256, "defergbuffer.vert");
     if (!defergbufferShader->AddVertexShaderPath(path)) return 0;
@@ -468,6 +468,8 @@ int main(int argc, char * argv[]) {
     Texture* diffuseTex = g_buffer.GetTexture(2);
     Texture* specularTex = g_buffer.GetTexture(3);
     Texture* shadowTex = shadow_buffer.GetTexture(0);
+	Texture* shadowDebugTex = shadow_buffer.GetTexture(1);
+
     
 	Texture* blurredShadowHorizontal = new Texture(shadowTex->Width(), shadowTex->Height());
 	Texture* blurredShadowVertical= new Texture(shadowTex->Width(), shadowTex->Height());
