@@ -1,47 +1,82 @@
 #version 430 core
+#define M_PI 3.1415926535897932384626433832795
 
-layout (local_size_x = 1, local_size_y = 128, local_size_z = 1) in; 
+layout (local_size_x = 1, local_size_y = 128, local_size_z = 1) in;
 
 uniform blurKernel
 {
-	float weights[101];
-}; 
+float weights[101];
+};
 
 uniform int kernelWidth;
 
 layout (rgba32f) uniform readonly image2D src;
 layout (rgba32f) uniform writeonly image2D dst;
+layout (rgba32f) uniform readonly image2D normal;
+layout (rgba32f) uniform readonly image2D depth;
 
 shared float v[128+101]; // Variable shared with other threads in the 128x1 thread group
 
+float Range(int gpos, int i)
+{
+vec3 Ni = imageLoad(normal, gpos + ivec(0,-kernelWidth+i)).xyz;
+vec3 N = imageLoad(normal, gpos).xyz;
+float di = imageLoad(depth, gpos+ivec(0,-kernelWidth+i)).x;
+float d = imageLoad(depth, gpos).xyz;
+float s = 0.01;
+return max(dot(Ni,N),0.0)*exp(-(di-d)*(di-d)/(2*s))/sqrt(2*M_PI*s);
+}
+
+float Spatial(int i)
+{
+return weights[i];
+}
+
+float Image(int localID, int i)
+{
+return v[localID + i];
+}
+
+float Weight(int gpos, int i)
+{
+return Spatial(i)*Range(gpos, i);
+}
+
 void main() {
 
-	 ivec2 gpos = ivec2(gl_GlobalInvocationID.xy); // Combo of groupID, groupSize and localID
+ivec2 gpos = ivec2(gl_GlobalInvocationID.xy); // Combo of groupID, groupSize and localID
 
-	 uint localID = gl_LocalInvocationID.y; // Local thread id in the 1x128 thread groups1x128
+int int(localID = gl_LocalInvocationID.x); // Local thread id in the 128x1 thread groups128x1
 
-	 if (gpos.y >= kernelWidth)
-		v[localID] = imageLoad(src, gpos+ivec2(0,-kernelWidth)).x;
+if (gpos.y >= kernelWidth)
+v[localID] = imageLoad(src, gpos + ivec2(0,-kernelWidth)).x;
 
-	if (localID < 2*kernelWidth)
-	{
-		v[localID+128] = imageLoad(src, gpos + ivec2(0, 128-kernelWidth)).x;
-	}
+if (localID < 2 * kernelWidth)
+{
+v[localID+128] = imageLoad(src, gpos + ivec2(0,128-kernelWidth)).x;
+}
 
-	barrier();
+barrier(); // Wait for all threads to catchup before reading v[]
 
-	float sumVertical = 0.0;
+float sumVertical = 0.0;
+float sumWeight = 0.0;
+for (int j = 0; j < 2*kernelWidth+1; ++j)
+{
+float w = Weight(gpos, j);
+sumWeight += w;
+if (gpos.y + j > kernelWidth && gpos.y + j < imageSize(src).y-kernelWidth)
+{
+sumVertical += w * Image(localID, j);
 
-	for (int j = 0; j < 2*kernelWidth+1; ++j)
-	{
-		if (gpos.y + j > kernelWidth && gpos.y + j < imageSize(src).y-kernelWidth)
-			sumVertical +=  weights[j] * v[localID+j];
-		else
-			sumVertical += weights[j] * v[localID + kernelWidth];
-	}
+}
+else
+{
+sumVertical += w * Image(localID, kernelWidth);
 
-	float sum = sumVertical;
-	
-	imageStore(dst, gpos, vec4(sum, sum, sum,sum));
+}
+}
 
+float sum = sumHorizontal/sumWeight;
+
+imageStore(dst, gpos, vec4(sum, sum, sum,sum));
 }

@@ -200,8 +200,8 @@ int main(int argc, char * argv[]) {
 
 	ShaderProgram* defergbufferShader = new ShaderProgram();
 	FBO g_buffer(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT), 6);
-	//FBO ambient_buffer(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT), 1);
-	FBO ambient_buffer(1024,1024, 1);
+	FBO ambient_buffer(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT), 1);
+	//FBO ambient_buffer(1024,1024, 1);
 
 	GET_SHADER_AO_PATH(path, 256, "defergbufferDome.vert");
 	if (!defergbufferShader->AddVertexShaderPath(path)) return 0;
@@ -392,8 +392,13 @@ int main(int argc, char * argv[]) {
 
 	blurHorizontalPass.BindImage("src", aoTex);
 	blurHorizontalPass.BindImage("dst", blurredShadowHorizontal);
+    blurHorizontalPass.BindImage("depth", depthTex);
+    blurHorizontalPass.BindImage("normal", normalTex);
 	blurVerticalPass.BindImage("src", blurredShadowHorizontal);
 	blurVerticalPass.BindImage("dst", blurredShadowVertical);
+    blurVerticalPass.BindImage("depth", depthTex);
+    blurVerticalPass.BindImage("normal", normalTex);
+
 
     gbufferPass.BindTexture("domeTexture", domeTex);
 
