@@ -186,6 +186,8 @@
     <None Include="Model\cube1.ply" />
     <None Include="Model\cube2.ply" />
     <None Include="Model\dragon.ply" />
+    <None Include="Shader\AmbientOcclusion\aomap.frag" />
+    <None Include="Shader\AmbientOcclusion\aomap.vert" />
     <None Include="Shader\AmbientOcclusion\deferAmbientLight.frag" />
     <None Include="Shader\AmbientOcclusion\deferAmbientLight.vert" />
     <None Include="Shader\AmbientOcclusion\defergbufferDome.frag" />

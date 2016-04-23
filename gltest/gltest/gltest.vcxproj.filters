@@ -274,5 +274,11 @@
     <None Include="Shader\VolumetricFire\fire.frag">
       <Filter>Shader\VolumetricFire</Filter>
     </None>
+    <None Include="Shader\AmbientOcclusion\aomap.frag">
+      <Filter>Shader\AO</Filter>
+    </None>
+    <None Include="Shader\AmbientOcclusion\aomap.vert">
+      <Filter>Shader\AO</Filter>
+    </None>
   </ItemGroup>
 </Project>
