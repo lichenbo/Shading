@@ -23,7 +23,7 @@ Pass::Pass(ShaderProgram* shader, Scene* scene) : shader(shader), scene(scene), 
 void Pass::GlobalBindUniformBlock(const char* block_name, char* buf, int sizeInBytes)
 {
     CHECK_ERROR;
-
+	uniform_binding_point++;
 	GLuint blockID;
 	glGenBuffers(1, &blockID);
 	shader->BindUniformBlockToPoint(block_name, uniform_binding_point);

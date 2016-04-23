@@ -27,7 +27,7 @@ float ambientFactor(float range, float numSamplePoints)
 	float c = 0.1*range;
 	float delta = 0.001;
 	float s = 0.1; // adjustable scale;
-	float k = 10; // adjustable contrast;
+	float k = 100; // adjustable contrast;
 	for (int i = 0; i < numSamplePoints; ++i)
 	{
 		float alpha = (i+0.5)/numSamplePoints;

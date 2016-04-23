@@ -360,8 +360,8 @@ int main(int argc, char * argv[]) {
 	int blurWidth = 10; // kenel half width
 	float h = 2 * blurWidth + 1; // What's this?
 	float* blurKernel = buildGaussianWeight(blurWidth, h / 2.0);
-	//blurHorizontalPass.GlobalBindUniformBlock("blurKernel", (char*)blurKernel, sizeof(float)*(2 * blurWidth + 1));
-	//blurVerticalPass.GlobalBindUniformBlock("blurKernel", (char*)blurKernel, sizeof(float)*(2 * blurWidth + 1));
+	blurHorizontalPass.GlobalBindUniformBlock("blurKernel", (char*)blurKernel, sizeof(float)*(2 * blurWidth + 1));
+	blurVerticalPass.GlobalBindUniformBlock("blurKernel", (char*)blurKernel, sizeof(float)*(2 * blurWidth + 1));
     // ------------BIND GLOBAL UNIFROMS -------------------
 
     GET_HDR_PATH(path, 256, "Alexs_Apt_2k.hdr");
@@ -390,10 +390,10 @@ int main(int argc, char * argv[]) {
 	blurHorizontalPass.BindUniformInt1("kernelWidth", blurWidth);
 	blurVerticalPass.BindUniformInt1("kernelWidth", blurWidth);
 
-	//blurHorizontalPass.BindImage("src", aoTex);
-	//blurHorizontalPass.BindImage("dst", blurredShadowHorizontal);
-	//blurVerticalPass.BindImage("src", blurredShadowHorizontal);
-	//blurVerticalPass.BindImage("dst", blurredShadowVertical);
+	blurHorizontalPass.BindImage("src", aoTex);
+	blurHorizontalPass.BindImage("dst", blurredShadowHorizontal);
+	blurVerticalPass.BindImage("src", blurredShadowHorizontal);
+	blurVerticalPass.BindImage("dst", blurredShadowVertical);
 
     gbufferPass.BindTexture("domeTexture", domeTex);
 
@@ -404,7 +404,7 @@ int main(int argc, char * argv[]) {
 	ambientPass.BindTexture("diffuseTexture", diffuseTex);
     ambientPass.BindTexture("domeIrrTexture", domeIrrTex);
 	ambientPass.BindTexture("normalTexture", normalTex);
-	ambientPass.BindTexture("aoTexture", aoTex);
+	ambientPass.BindTexture("aoTexture", blurredShadowVertical);
 
 	iblSpecularPass.BindTexture("positionTexture", positionTex);
 	iblSpecularPass.BindTexture("normalTexture", normalTex);
@@ -428,8 +428,8 @@ int main(int argc, char * argv[]) {
 	// ---------------PASS CONFIG --------------------------
 	engine->addPass(&gbufferPass);
 	engine->addPass(&aoPass);
-	//engine->addPass(&blurHorizontalPass);
-	//engine->addPass(&blurVerticalPass);
+	engine->addPass(&blurHorizontalPass);
+	engine->addPass(&blurVerticalPass);
 	engine->addPass(&ambientPass);
 	engine->addPass(&iblSpecularPass);
 
