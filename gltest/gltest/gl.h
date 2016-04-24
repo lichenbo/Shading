@@ -17,12 +17,11 @@
 #include <GLUT/glut.h>
 #endif
 
+#include <iostream>
 #include "glm.hpp"
 #include "gtc/type_ptr.hpp"
 #include "gtc/matrix_transform.hpp";
 #include "gtc/matrix_inverse.hpp";
-#include <iostream>
-
 #define CHECK_ERROR \
 	if (int error = glGetError()) \
 	{	\

@@ -101,7 +101,7 @@ auto Light1Specular = glm::vec3(1.0, 1.0, 1.0);
 // For Shadow Pass
 auto Light1ViewMatrix = glm::lookAt(Light1Pos, WatchPos, UpPos);
 auto Light1ShadowMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.5f)) * ProjectionMatrix * Light1ViewMatrix;
-auto BlurFactor = glm::vec3(10.0f);
+auto BlurFactor = glm::vec3(60.0f);
 
 // Light2: Local light
 auto Light2Pos = glm::vec3(-0.5f);
@@ -212,7 +212,7 @@ int main(int argc, char * argv[]) {
     
     ShaderProgram* defergbufferShader = new ShaderProgram();
     FBO g_buffer(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT), 4);
-    FBO shadow_buffer(1024, 1024, 2);
+    FBO shadow_buffer(1024, 1024, 1);
     
     GET_SHADER_EXPONENTIAL_PATH(path, 256, "defergbuffer.vert");
     if (!defergbufferShader->AddVertexShaderPath(path)) return 0;
@@ -468,8 +468,6 @@ int main(int argc, char * argv[]) {
     Texture* diffuseTex = g_buffer.GetTexture(2);
     Texture* specularTex = g_buffer.GetTexture(3);
     Texture* shadowTex = shadow_buffer.GetTexture(0);
-	Texture* shadowDebugTex = shadow_buffer.GetTexture(1);
-
     
 	Texture* blurredShadowHorizontal = new Texture(shadowTex->Width(), shadowTex->Height());
 	Texture* blurredShadowVertical= new Texture(shadowTex->Width(), shadowTex->Height());
@@ -485,11 +483,10 @@ int main(int argc, char * argv[]) {
 
     ambientPass.BindTexture("diffuseTexture", diffuseTex);
 
-#ifdef _WIN32
-    shadowRenderPass.BindTexture("shadowTexture", blurredShadowVertical);
-#elif defined __APPLE__
-    shadowRenderPass.BindTexture("shadowTexture", shadowTex);
-#endif
+    //shadowRenderPass.BindTexture("shadowTexture", blurredShadowVertical);
+    shadowRenderPass.BindTexture("shadowTexture", blurredShadowHorizontal);
+    //shadowRenderPass.BindTexture("shadowTexture", shadowTex);
+
 
     shadowRenderPass.BindTexture("positionTexture", positionTex);
     shadowRenderPass.BindTexture("normalTexture", normalTex);

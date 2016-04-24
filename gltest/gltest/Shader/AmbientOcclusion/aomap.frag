@@ -25,7 +25,7 @@ float ambientFactor(float range, float numSamplePoints)
 	float phi = (30*(int(frag_window_coord.x)^int(frag_window_coord.y)))+10*frag_window_coord.x*frag_window_coord.y;
 	float S = 0.0;
 	float c = 0.1*range;
-	float delta = 0.001;
+	float delta = 0.1;
 	float s = 0.1; // adjustable scale;
 	float k = 100; // adjustable contrast;
 	for (int i = 0; i < numSamplePoints; ++i)
@@ -38,7 +38,7 @@ float ambientFactor(float range, float numSamplePoints)
 		vec3 OmegaI = (Pi - position).xyz;
 		if (range > length(OmegaI))
 		{
-			S += max(0.0, dot(normal,OmegaI)-delta*position.z)/max(c*c, dot(OmegaI,OmegaI));
+			S += max(0.0, dot(normal,OmegaI)-delta*depth)/max(c*c, dot(OmegaI,OmegaI));
 		}
 	}
 	S *= 2*M_PI*c/numSamplePoints;

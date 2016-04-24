@@ -8,7 +8,7 @@
 
 #include "Texture.hpp"
 #include <iostream>
-#include <SOIL.h>
+//#include <SOIL.h>
 
 Texture::Texture(const int w, const int h): w(w), h(h), unit(0)
 {

@@ -23,5 +23,5 @@ void main(void)
 	worldSpaceNormal = normalize(mat3(NormalMatrix)*normal_coord);    
 
     gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * homo_vertex;
-	depth = gl_Position.z;
+	depth = gl_Position.w;
 }

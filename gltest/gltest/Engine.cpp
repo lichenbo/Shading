@@ -26,7 +26,7 @@ Engine::Engine(int argc, char ** argv)
 #endif
 
     glutInitWindowPosition(100, 300);
-    glutInitWindowSize(800, 800);
+    glutInitWindowSize(1024, 1024);
 	//glutInitContextVersion(4, 3);
 	//glutInitContextProfile(GLUT_CORE_PROFILE);
     glutCreateWindow("Windows/OSX GL Demo");

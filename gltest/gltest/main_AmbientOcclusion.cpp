@@ -357,7 +357,7 @@ int main(int argc, char * argv[]) {
 	char* block = buildHammersleyRandom(20);
 	iblSpecularPass.GlobalBindUniformBlock("HammersleyBlock", block, sizeof(Hammersley_block));
 
-	int blurWidth = 10; // kenel half width
+	int blurWidth = 2; // kenel half width
 	float h = 2 * blurWidth + 1; // What's this?
 	float* blurKernel = buildGaussianWeight(blurWidth, h / 2.0);
 	blurHorizontalPass.GlobalBindUniformBlock("blurKernel", (char*)blurKernel, sizeof(float)*(2 * blurWidth + 1));
@@ -409,7 +409,7 @@ int main(int argc, char * argv[]) {
 	ambientPass.BindTexture("diffuseTexture", diffuseTex);
     ambientPass.BindTexture("domeIrrTexture", domeIrrTex);
 	ambientPass.BindTexture("normalTexture", normalTex);
-	ambientPass.BindTexture("aoTexture", blurredShadowVertical);
+	ambientPass.BindTexture("aoTexture",aoTex);
 
 	iblSpecularPass.BindTexture("positionTexture", positionTex);
 	iblSpecularPass.BindTexture("normalTexture", normalTex);
@@ -433,8 +433,8 @@ int main(int argc, char * argv[]) {
 	// ---------------PASS CONFIG --------------------------
 	engine->addPass(&gbufferPass);
 	engine->addPass(&aoPass);
-	engine->addPass(&blurHorizontalPass);
-	engine->addPass(&blurVerticalPass);
+	//engine->addPass(&blurHorizontalPass);
+	//engine->addPass(&blurVerticalPass);
 	engine->addPass(&ambientPass);
 	engine->addPass(&iblSpecularPass);
 

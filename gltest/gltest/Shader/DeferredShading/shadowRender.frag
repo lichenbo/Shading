@@ -42,7 +42,7 @@ void main()
     outputColor = vec4(0.0, 0.0, 0.0, 0.7);
     
     float lightDepth = texture(shadowTexture, shadowIndex).w;
-    float pixelDepth = shadowCoord.w/100;
+    float pixelDepth = shadowCoord.w/10;
     if (pixelDepth - lightDepth < 0.00001) {
         float g = 0.5;
         float alpha = pow(8192, g);

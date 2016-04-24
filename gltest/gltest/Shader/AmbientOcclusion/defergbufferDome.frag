@@ -29,7 +29,7 @@ void main(void)
 {
 	gposition.xyz = worldSpacePosition;
 	gposition.w = 1.0;
-	gnormal.xyz = worldSpaceNormal;
+	gnormal.xyz = normalize(worldSpaceNormal);
 	gnormal.w = 0.0;
 	gspecular = specular;
 	ggloss = gloss;

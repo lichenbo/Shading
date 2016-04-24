@@ -470,7 +470,7 @@ int main(int argc, char * argv[]) {
 	engine->addPass(&ambientPass);
 	engine->addPass(&shadowPass);
 	engine->addPass(&shadowRenderPass);
-    for (int i = 0; i < 1; ++i)
+    for (int i = 0; i < 100; ++i)
     {
         engine->addPass(&deferredBRDFPass1);
         engine->addPass(&deferredBRDFPass2);

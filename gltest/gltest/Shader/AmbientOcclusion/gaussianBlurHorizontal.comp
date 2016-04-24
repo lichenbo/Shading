@@ -17,12 +17,12 @@ layout (rgba32f) uniform readonly image2D depth;
 
 shared float v[128+101]; // Variable shared with other threads in the 128x1 thread group
 
-float Range(int gpos, int i)
+float Range(ivec2 gpos, int i)
 {
-    vec3 Ni = imageLoad(normal, gpos + ivec(-kernelWidth+i,0)).xyz;
-    vec3 N = imageLoad(normal, gpos).xyz;
-    float di = imageLoad(depth, gpos+ivec(-kernelWidth+i,0)).x;
-    float d = imageLoad(depth, gpos).xyz;
+    vec3 Ni = normalize(imageLoad(normal, gpos + ivec2(-kernelWidth+i,0)).xyz);
+    vec3 N = normalize(imageLoad(normal, gpos).xyz);
+    float di = imageLoad(depth, gpos+ivec2(-kernelWidth+i,0)).x;
+    float d = imageLoad(depth, gpos).x;
     float s = 0.01;
     return max(dot(Ni,N),0.0)*exp(-(di-d)*(di-d)/(2*s))/sqrt(2*M_PI*s);
 }
@@ -37,16 +37,18 @@ float Image(int localID, int i)
     return v[localID + i];
 }
 
-float Weight(int gpos, int i)
+float Weight(ivec2 gpos, int i)
 {
-    return Spatial(i)*Range(gpos, i);
+    //return Spatial(i)*Range(gpos, i);
+    //return Spatial(i);
+	return Range(gpos,i);
 }
 
 void main() {
 
 	 ivec2 gpos = ivec2(gl_GlobalInvocationID.xy); // Combo of groupID, groupSize and localID
 
-	 int int(localID = gl_LocalInvocationID.x); // Local thread id in the 128x1 thread groups128x1
+	 int localID = int( gl_LocalInvocationID.x); // Local thread id in the 128x1 thread groups128x1
 
 	 if (gpos.x >= kernelWidth)
 		 v[localID] = imageLoad(src, gpos + ivec2(-kernelWidth,0)).x;
